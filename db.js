@@ -8,8 +8,6 @@ const options = { useNewUrlParser: true };
 
 let _db;
 
-console.log('connectionString: ', connectionString);
-
 async function initDb() {
   if (_db) {
     console.warn('Database connection alread initialized! Returning existing connection.');
