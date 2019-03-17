@@ -8,15 +8,9 @@ async function find(query) {
   const db = getDb();
 
   try {
-    const result = await db.findOne(query);
-    const user = {
-      email: result.email,
-      password: result.password
-    };
+    const result = await db.collection(collection).findOne(query);
 
-    console.log('result: ', result);
-
-    return user;
+    return result;
   } catch(err) {
     throw err;
   }
@@ -27,7 +21,6 @@ async function save(user) {
 
   try {
     const result = await db.collection(collection).insertOne(user);
-    console.log('result: ', result);
 
     if (result.ops.length === 0) {
       throw Error('Error registering new user');
