@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
-const api = require('./routes/api/users');
+const users = require('./routes/api/users');
 const initDb = require('./db').initDb;
 const keys = require('./config/keys');
 
@@ -20,7 +20,7 @@ initDb()
     //app.use(passport.initialize());
     //require('./config/passport')(passport);
 
-    //app.use('/api', api);
+    app.use('/api/users', users);
 
     const port = keys.port || 5000;
 
