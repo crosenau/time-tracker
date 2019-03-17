@@ -12,9 +12,7 @@ const user = require('../../models/user');
 router.post('/register', async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
   
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
+  if (!isValid) return res.status(400).json(errors);
 
   try {
     const foundUser = await user.find({ email: req.body.email });
@@ -34,16 +32,70 @@ router.post('/register', async (req, res) => {
     });
 
     const newUser = {
+      name: req.body.name,
       email: req.body.email,
       password: hashedPassword
     };
 
     const saveResult = await user.save(newUser);
 
-    console.log(saveResult);
+    res.json(saveResult);
 
   } catch(err) {
     console.log(err);
   }
-
 });
+
+router.post('/login', async (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const foundUser = await user.find({ email });
+    console.log(foundUser);
+
+    if (!foundUser) {
+      return res.status(404).json({ emailnotfound: 'Email not found' });
+    }
+
+    const match = await bcrypt.compare(password, foundUser.password);
+
+    if (match) {
+      const payload = {
+        id: foundUser.id,
+        name: foundUser.name
+      };
+
+      const token = new Promise((resolve, reject) => { 
+        jwt.sign(
+          payload,
+          keys.secret,
+          { expiresIn: 31556926 },
+          (err, token) => {
+            // use async\
+            if (err) reject(err);
+            
+            resolve(token);
+          }
+        );
+      });
+
+      return res.json({
+        success: true,
+        token: 'Bearer ' + token
+      });
+    } else {
+      return res
+        .status(400)
+        .json({ passwordincorrect: 'Password is incorrect' });
+    }
+  } catch(err) {
+    console.log(err);
+  }
+});
+
+module.exports = router;
