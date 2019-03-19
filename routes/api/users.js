@@ -66,17 +66,16 @@ router.post('/login', async (req, res) => {
 
     if (match) {
       const payload = {
-        id: foundUser.id,
+        _id: foundUser._id,
         name: foundUser.name
       };
 
-      const token = new Promise((resolve, reject) => { 
+      const newToken = await new Promise((resolve, reject) => { 
         jwt.sign(
           payload,
-          keys.secret,
+          keys.secretOrKey,
           { expiresIn: 31556926 },
           (err, token) => {
-            // use async\
             if (err) reject(err);
             
             resolve(token);
@@ -86,7 +85,7 @@ router.post('/login', async (req, res) => {
 
       return res.json({
         success: true,
-        token: 'Bearer ' + token
+        token: 'Bearer ' + newToken
       });
     } else {
       return res

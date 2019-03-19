@@ -17,8 +17,8 @@ initDb()
   .then(db => {
     console.log('Successfully connected to database');
     
-    //app.use(passport.initialize());
-    //require('./config/passport')(passport);
+    app.use(passport.initialize());
+    require('./config/passport')(passport);
 
     app.use('/api/users', users);
 
