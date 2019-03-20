@@ -13,10 +13,10 @@ class Login extends Component {
       errors: ''
     };
 
-    this.update = this.update.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
-  update(event) {
+  onChange(event) {
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -34,7 +34,7 @@ class Login extends Component {
                 type='email'
                 id='email'
                 value={this.state.email}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <div className='field-container'>
@@ -43,7 +43,7 @@ class Login extends Component {
                 type='password'
                 id='password'
                 value={this.state.password}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <button

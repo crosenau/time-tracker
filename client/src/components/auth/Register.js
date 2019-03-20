@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
 
 import './form.css';
 
@@ -14,13 +17,45 @@ class Register extends Component {
       password2: ''
     };
 
-    this.update = this.update.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  update(event) {
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    console.log(this.props);
+  }
+
+  onChange(event) {
     this.setState({
       [event.target.id]: event.target.value
     });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
+    };
+
+    this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
@@ -28,14 +63,14 @@ class Register extends Component {
       <div className='form-container'>
         <div className='elements-container'>
           <h4>Registration</h4>
-          <form onSubmit={() => console.log('submit')}>
+          <form onSubmit={this.onSubmit}>
           <div className='field-container'>
               <label htmlFor='name'>Please enter your name</label>
               <input
                 type='text'
                 id='name'
                 value={this.state.name}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <div className='field-container'>
@@ -44,7 +79,7 @@ class Register extends Component {
                 type='email'
                 id='email'
                 value={this.state.email}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <div className='field-container'>
@@ -53,7 +88,7 @@ class Register extends Component {
                 type='password'
                 id='password'
                 value={this.state.password}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <div className='field-container'>
@@ -62,7 +97,7 @@ class Register extends Component {
                 type='password'
                 id='password2'
                 value={this.state.password2}
-                onChange={this.update}
+                onChange={this.onChange}
               />
             </div>
             <button
@@ -81,4 +116,18 @@ class Register extends Component {
   }
 };
 
-export default Register;
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(withRouter(Register));
