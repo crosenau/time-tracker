@@ -1,0 +1,17 @@
+#navbar {
+  background: #00aad4ff;
+  color: white;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  height: 3rem;
+  font-size: 2rem;
+  display: flex;
+}
+
+#icon {
+  margin-top: 0.5rem;
+}

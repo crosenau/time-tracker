@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 import './Landing.css';
+import Login from '../auth/Login';
 import tomato from './tomato.svg';
 
-class Landing extends Component {
-  render() {
-    return (
-      <div className='landing'>
+const Landing = () => {
+  return (
+    <div className='landing'>
+      <div className='intro'>
         <ul>
           <li>Set your goals</li>
           <li>Categorize your tasks</li>
@@ -21,8 +22,8 @@ class Landing extends Component {
           />
         </ul>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default Landing;

@@ -1,4 +1,9 @@
 .landing {
+  width: 100%;
+  display: flex;
+}
+
+.intro {
   background: #aaeeffff;
   font-size: 1.8rem;
   width: 100%;
