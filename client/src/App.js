@@ -11,6 +11,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css';
+// import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
@@ -43,10 +44,11 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Navbar />
+            <Route path='/' component={Navbar} />
             <Route exact path={['/', '/login', '/register']} component={Landing} />
             <Route exact path={['/', '/login']} component={Login} />
-            <Route exact path={'/register'} component={Register} />
+            <Route exact path='/register' component={Register} />
+            {/* <PrivateRoute path='/dashboard' component={Dashboard} /> */}
           </div>
         </Router>
       </Provider>

@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
     console.log(foundUser);
 
     if (!foundUser) {
-      return res.status(404).json({ emailnotfound: 'Email not found' });
+      return res.status(404).json({ email: 'Email not found' });
     }
 
     const match = await bcrypt.compare(password, foundUser.password);
@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
     } else {
       return res
         .status(400)
-        .json({ passwordincorrect: 'Password is incorrect' });
+        .json({ password: 'Password is incorrect' });
     }
   } catch(err) {
     console.log(err);

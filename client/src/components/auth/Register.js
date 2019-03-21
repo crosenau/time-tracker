@@ -14,7 +14,8 @@ class Register extends Component {
       name: '',
       email: '',
       password: '',
-      password2: ''
+      password2: '',
+      errors: ''
     };
 
     this.onChange = this.onChange.bind(this);
@@ -33,10 +34,6 @@ class Register extends Component {
         errors: nextProps.errors
       });
     }
-  }
-
-  componentDidUpdate() {
-    console.log(this.props);
   }
 
   onChange(event) {
@@ -59,6 +56,8 @@ class Register extends Component {
   }
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div className='form-container'>
         <div className='elements-container'>
@@ -72,6 +71,7 @@ class Register extends Component {
                 value={this.state.name}
                 onChange={this.onChange}
               />
+              <span className='error'>{errors.name}</span>
             </div>
             <div className='field-container'>
               <label htmlFor='email'>Email Address</label>
@@ -81,6 +81,7 @@ class Register extends Component {
                 value={this.state.email}
                 onChange={this.onChange}
               />
+              <span className='error'>{errors.email}</span>
             </div>
             <div className='field-container'>
               <label htmlFor='password'>Password</label>
@@ -90,6 +91,7 @@ class Register extends Component {
                 value={this.state.password}
                 onChange={this.onChange}
               />
+              <span className='error'>{errors.password}</span>
             </div>
             <div className='field-container'>
               <label htmlFor='password2'>Confirm Password</label>
@@ -99,6 +101,7 @@ class Register extends Component {
                 value={this.state.password2}
                 onChange={this.onChange}
               />
+              <span className='error'>{errors.password2}</span>
             </div>
             <button
               className='submit-btn'
