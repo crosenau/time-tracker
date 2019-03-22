@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
+
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
@@ -16,6 +18,7 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Focus from './components/focus/Focus';
 
 
 if (localStorage.jwtToken) {
@@ -45,10 +48,12 @@ class App extends Component {
         <Router>
           <div className="App">
             <Route path='/' component={Navbar} />
-            <Route exact path={['/', '/login', '/register']} component={Landing} />
-            <Route exact path={['/', '/login']} component={Login} />
-            <Route exact path='/register' component={Register} />
-            {/* <PrivateRoute path='/dashboard' component={Dashboard} /> */}
+            <div id='app-body'>
+              <Route exact path={['/', '/login', '/register']} component={Landing} />
+              <Route exact path={['/', '/login']} component={Login} />
+              <Route exact path='/register' component={Register} />
+              <PrivateRoute path='/focus' component={Focus} />
+            </div>
           </div>
         </Router>
       </Provider>

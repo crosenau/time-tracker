@@ -3,3 +3,7 @@
   overflow: hidden;
   display: flex;
 }
+
+#app-body {
+  margin-top: 3rem;
+}
