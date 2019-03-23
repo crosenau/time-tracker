@@ -6,6 +6,7 @@ import './Focus.css';
 
 class Focus extends Component {
   render() {
+    console.log('focus: ', this.props);
     return (
       <div id='focus'>
         <Timer />

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 // import actions
 
 // import css
+import './Timer.css'
+import ProgressRing from './ProgressRing';
 
 class Timer extends Component {
   constructor(props) {
@@ -123,6 +125,7 @@ class Timer extends Component {
   }
 
   render() {
+    console.log(this);
     const minutesLeft = Math.floor(this.state.timeRemaining / 60);
     const secondsLeft = this.state.timeRemaining % 60;
     const timeLeft = `${this.leadingZero(minutesLeft)}:${this.leadingZero(secondsLeft)}`;
@@ -131,7 +134,7 @@ class Timer extends Component {
 
     return (
       <div id='timer'>
-        {/* <ProgressRing percent={this.percentRemaining()} /> */}
+        <ProgressRing percent={this.percentRemaining()} />
         <div id='timer-elements'>
           <div id='timer-label'>{this.state.onBreak ? 'Break' : 'Session'}</div>
           <div id='time-left'>{timeLeft}</div>
@@ -144,14 +147,21 @@ class Timer extends Component {
   }
 }
 
+export default Timer;
+
+/*
 Timer.propTypes = {
-  breakLength: PropTypes.number.isRequired,
-  sessionLength: PropTypes.number.isRequired,
-  onBreak: PropTypes.bool.isRequired,
-  intervalId: PropTypes.number.isRequired,
-  timeRemaining: PropTypes.number.isRequired,
-  startTime: PropTypes.number.isRequired,
-  timeRemainingAtStart: PropTypes.number.isRequired,
+  auth: PropTypes.object.isRequired,
+  timer: PropTypes.timer.isRequired
 }
 
-export default Timer;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  timer: state.timer
+});
+
+export default connect(
+  mapStateToProps,
+  {  }
+)(Timer);
+*/
