@@ -61,7 +61,7 @@ class Register extends Component {
     return (
       <div className='form-container'>
         <div className='elements-container'>
-          <h4>Registration</h4>
+          <h2>Registration</h2>
           <form onSubmit={this.onSubmit}>
           <div className='field-container'>
               <label htmlFor='name'>Please enter your name</label>

@@ -19,12 +19,12 @@
   flex-direction: column;
 }
 
-input {
+.field-container input {
   padding: 0.5rem;
   font-size: 1.3rem;
 }
 
-h4 {
+.form-container h2 {
   font-size: 4rem;
 }
 

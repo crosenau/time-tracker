@@ -61,7 +61,7 @@ class Login extends Component {
     return (
       <div className='form-container'>
         <div className='elements-container'>
-          <h4>Log in now</h4>
+          <h2>Log in now</h2>
           <form onSubmit={this.onSubmit}>
             <div className='field-container'>
               <label htmlFor='email'>Email Address</label>
