@@ -3,17 +3,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import actions
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 // import css
 import './Timer.css'
 import ProgressRing from './ProgressRing';
+import TimerSettings from './TimerSettings';
 
 class Timer extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      breakLength: 5 * 60,
+      task: 'Work',
+      shortBreakLength: 5 * 60,
+      longBreakLength: 15 * 60,
       sessionLength: 25 * 60,
+      setLength: 4,
+      goal: 12,
+      alarm: null, // url
+      tick: null, // url
+      displaySettings: false,
       onBreak: false,
       intervalId: 0,
       timeRemaining: 25 * 60,
@@ -84,7 +94,7 @@ class Timer extends Component {
     });
   }
 
-  updateTimerLength(event) {
+  updateSettings(event) {
     if (this.state.active) {
       return;
     }
@@ -125,21 +135,43 @@ class Timer extends Component {
   }
 
   render() {
-    console.log(this);
     const minutesLeft = Math.floor(this.state.timeRemaining / 60);
     const secondsLeft = this.state.timeRemaining % 60;
     const timeLeft = `${this.leadingZero(minutesLeft)}:${this.leadingZero(secondsLeft)}`;
-    //const playButton = <button onClick={this.startTimer}>Play</button>
-    //const pauseButton = <button onClick={this.pauseTimer}>Pause</button>
+    const playButton = 
+      <button 
+        class='icon-btn' 
+        onClick={this.startTimer}
+      >
+        <FontAwesomeIcon icon='play' />
+      </button>;
+    const pauseButton = 
+      <button 
+        class='icon-btn' 
+        onClick={this.stopTimer}
+      >
+        <FontAwesomeIcon icon='pause' />
+      </button>;
+    const settings =         
+      <TimerSettings 
+        task={this.props.task}
+        session={this.props.sessionLength}
+        shortBreak={this.props.shortBreakLength}
+        longBreak={this.props.longBreakLength}
+        set={this.props.setLength}
+        goal={this.props.goal}
+        alarm={this.props.alarm}
+        tick={this.props.tick}
+      />;
 
     return (
       <div id='timer'>
+        {this.state.settings ? settings : null}
         <ProgressRing percent={this.percentRemaining()} />
         <div id='timer-elements'>
           <div id='timer-label'>{this.state.onBreak ? 'Break' : 'Session'}</div>
           <div id='time-left'>{timeLeft}</div>
-          {this.state.intervalId ? <button onClick={this.stopTimer}>Pause</button> : <button onClick={this.startTimer}>Play</button>}
-
+          {this.state.intervalId ? pauseButton : playButton}
           <audio id='beep' src='https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3' />
         </div>
       </div>

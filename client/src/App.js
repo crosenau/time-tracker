@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faCog, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css';
 // import PrivateRoute from './components/PrivateRoute';
@@ -20,6 +20,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Focus from './components/focus/Focus';
 
+library.add(faClock, faCog, faPlay, faPause);
 
 if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;
@@ -38,8 +39,6 @@ if (localStorage.jwtToken) {
     window.location.href = './login';
   }
 }
-
-library.add(faClock);
 
 class App extends Component {
   render() {

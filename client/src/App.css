@@ -5,7 +5,23 @@
 }
 
 #app-body {
+  background-color: #EFEFF0;
   width: 100%;
   margin-top: 3rem;
   display: flex;
+}
+
+.icon-btn {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  font-size: 1em;
+  user-select: none;
+}
+
+.icon-btn:hover {
+  cursor: pointer;
+}
+
+.icon-btn > i {
+  pointer-events: none;
 }

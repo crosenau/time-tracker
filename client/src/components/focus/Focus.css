@@ -1,7 +1,16 @@
 #focus {
-  background-color: lightgrey;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 2rem;
+  padding: 2rem;
+  background-color: white;
+  box-shadow: 2px 2px 4px grey;
   flex-grow: 1;
+  display: grid;
+  grid-template-columns: 4rem auto 4rem;
+  grid-template-rows: 1rem 1fr;
+}
+
+#settings-btn {
+  grid-column: 3 / 4;
+  display: flex;
+  justify-content: end;
 }
