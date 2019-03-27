@@ -23,7 +23,8 @@ class Timer extends Component {
       goal: 12,
       alarm: null, // url
       tick: null, // url
-      displaySettings: false,
+      completedSessions: 0,
+      settings: false,
       onBreak: false,
       intervalId: 0,
       timeRemaining: 25 * 60,
@@ -33,6 +34,8 @@ class Timer extends Component {
 
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
+    this.toggleSettings = this.toggleSettings.bind(this);
+    this.updateSettings = this.updateSettings.bind(this);
   }
 
   startTimer() {
@@ -95,7 +98,7 @@ class Timer extends Component {
   }
 
   updateSettings(event) {
-    if (this.state.active) {
+    if (this.state.intervalId) {
       return;
     }
 
@@ -134,6 +137,12 @@ class Timer extends Component {
     return String(num);
   }
 
+  toggleSettings() {
+    this.setState({
+      settings: !this.state.settings
+    });
+  }
+
   render() {
     const minutesLeft = Math.floor(this.state.timeRemaining / 60);
     const secondsLeft = this.state.timeRemaining % 60;
@@ -154,14 +163,17 @@ class Timer extends Component {
       </button>;
     const settings =         
       <TimerSettings 
-        task={this.props.task}
-        session={this.props.sessionLength}
-        shortBreak={this.props.shortBreakLength}
-        longBreak={this.props.longBreakLength}
-        set={this.props.setLength}
-        goal={this.props.goal}
-        alarm={this.props.alarm}
-        tick={this.props.tick}
+        task={this.state.task}
+        session={this.state.sessionLength}
+        shortBreak={this.state.shortBreakLength}
+        longBreak={this.state.longBreakLength}
+        set={this.state.setLength}
+        goal={this.state.goal}
+        alarm={this.state.alarm}
+        tick={this.state.tick}
+        active={Boolean(this.state.intervalId)}
+        toggleSettings={this.toggleSettings}
+        updateSettings={this.updateSettings}
       />;
 
     return (
@@ -172,6 +184,9 @@ class Timer extends Component {
           <div id='timer-label'>{this.state.onBreak ? 'Break' : 'Session'}</div>
           <div id='time-left'>{timeLeft}</div>
           {this.state.intervalId ? pauseButton : playButton}
+          <button class='icon-btn' id='settings-btn' onClick={this.toggleSettings}>
+            <FontAwesomeIcon icon='cog' />    
+          </button>
           <audio id='beep' src='https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3' />
         </div>
       </div>

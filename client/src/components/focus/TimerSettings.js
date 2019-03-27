@@ -17,19 +17,51 @@ class TimerSettings extends Component {
   constructor(props) {
     super(props);
 
+    this.resetFields();
+
+    this.handleChange = this.handleChange.bind(this);
+    this.resetFields = this.resetFields.bind(this);
+    this.save = this.save.bind(this);
+    this.cancel = this.cancel.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.resetFields();
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  }
+
+  save() {
+    this.props.updateSettings();
+    this.props.toggleSettings();
+  }
+
+  cancel() {
+    this.resetFields();
+    this.props.toggleSettings();
+  }
+
+  resetFields() {
     this.state = {
       task: this.props.task,
-      session: this.props.sessionLength / 60,
-      shortBreak: this.props.shortBreakLength / 60,
-      longBreak: this.props.longBreakLength / 60,
-      set: this.props.setLength,
+      session: String(this.props.session / 60),
+      shortBreak: String(this.props.shortBreak / 60),
+      longBreak: String(this.props.longBreak / 60),
+      set: this.props.set,
       goal: this.props.goal,
       alarm: this.props.alarm,
-      tick: this.props.tick
+      tick: this.props.tick,
+      active: this.props.active
     };
   }
 
   render() {
+    const warning = <p id='warning'>Timer is currently running. Saving changes will stop the timer and update it's settings.</p>;
+
     return (
       <div id='timer-settings'>
         <div id='settings-elements'>
@@ -37,22 +69,47 @@ class TimerSettings extends Component {
 
           <div className='section'>
             <h3>Task</h3>
-            <input id='task' type='text' defaultValue='Work'></input>
+            <input
+              id='task'
+              type='text'
+              value={this.state.task}
+              onChange={this.handleChange}
+            />
           </div>
 
           <div className='section'>
             <h3>Timer Length <span>(in minutes)</span></h3>
-            <div id='one' className='num-input'>
+            <div className='num-input'>
               <h4>Session</h4>
-              <input id='session' type='number' min='1' max='60' value='25' />
+              <input 
+                id='session' 
+                type='number' 
+                min='1' 
+                max='60' 
+                value={this.state.session}
+                onChange={this.handleChange}
+              />
             </div>
-            <div id='2' className='num-input'>
+            <div className='num-input'>
               <h4>Short Break</h4>
-              <input id='shortBreak' type='number' min='1' max='60' value='5' />
+              <input
+              id='shortBreak'
+              type='number'
+              min='1' max='60'
+              value={this.state.shortBreak}
+              onChange={this.handleChange}
+            />
             </div>
-            <div id='3' className='num-input'>
+            <div className='num-input'>
               <h4>Long Break</h4>
-              <input id='longBreak' type='number' min='1' max='60' value='15' />
+              <input
+                id='longBreak'
+                type='number'
+                min='1'
+                max='60'
+                value={this.state.longBreak}
+                onChange={this.handleChange}
+              />
             </div>
           </div>
           
@@ -60,11 +117,23 @@ class TimerSettings extends Component {
             <h3>Sessions</h3>
             <div className='num-input'>
               <h4>Sessions per Long Break</h4>
-              <input id='set' type='number' min='1' value='4' />
+              <input
+                id='set'
+                type='number'
+                min='1'
+                value={this.state.set}
+                onChange={this.handleChange}
+              />
             </div>
             <div className='num-input'>
               <h4>Daily Goal</h4>
-              <input id='goal' type='number' min='1' value='12' />
+              <input
+                id='goal'
+                type='number'
+                min='1'
+                value={this.state.goal}
+                onChange={this.handleChange} 
+              />
             </div>
           </div>
           
@@ -73,11 +142,7 @@ class TimerSettings extends Component {
             <div className='selection'>
               <h4>Alarm</h4>
               <select>
-                {alarmSounds.map(sound => <option>{sound.name}</option>)}
-                {/*<option value='deskBell'>Desk Bell</option>
-                <option value='chimes'>Chimes</option>
-                <option value='alarmClock'>Alarm clock</option>
-                <option value='none'>None</option>*/}
+                {alarmSounds.map((sound, i) => <option key={i}>{sound.name}</option>)}
               </select>
             </div>
             <div className='selection'>
@@ -92,7 +157,10 @@ class TimerSettings extends Component {
           </div>
           
           <div className='section'>
-            <button onClick={this.props.updateSettings}>Save</button>
+            {this.state.active ? warning : null}
+            <button onClick={this.save}>Save</button>
+            <button onClick={this.cancel}>Cancel</button>
+            <button>Defaults</button>
           </div>
         </div>
       </div>
