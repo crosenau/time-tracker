@@ -6,7 +6,7 @@ import './TimerSettings.css';
 const alarmSounds = [
   {
     name: 'Desk Bell',
-    url: ''
+    url: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3'
   },
   { name: 'none',
     url: ''
@@ -20,23 +20,43 @@ class TimerSettings extends Component {
     this.resetFields();
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.resetFields = this.resetFields.bind(this);
     this.save = this.save.bind(this);
     this.cancel = this.cancel.bind(this);
   }
 
   componentDidUpdate() {
-    this.resetFields();
+    console.log('componentDidUpate');
+    //this.resetFields();
   }
 
   handleChange(event) {
+    console.log(event);
     this.setState({
       [event.target.id]: event.target.value
     });
   }
 
+  handleSelect(event) {
+   this.setState({
+     alarm: event.target.value 
+   });
+  }
+
   save() {
-    this.props.updateSettings();
+    let settings = {
+      task: this.state.task,
+      sessionLength: Number(this.state.sessionLength) * 60,
+      shortBreakLength: Number(this.state.shortBreakLength) * 60,
+      longBreakLength: Number(this.state.longBreakLength) * 60,
+      setLength: Number(this.state.setLength),
+      goal: Number(this.state.goal),
+      alarm: this.state.alarm,
+      tick: this.state.tick
+    };
+
+    this.props.updateSettings(settings);
     this.props.toggleSettings();
   }
 
@@ -48,10 +68,10 @@ class TimerSettings extends Component {
   resetFields() {
     this.state = {
       task: this.props.task,
-      session: String(this.props.session / 60),
-      shortBreak: String(this.props.shortBreak / 60),
-      longBreak: String(this.props.longBreak / 60),
-      set: this.props.set,
+      sessionLength: String(this.props.sessionLength / 60),
+      shortBreakLength: String(this.props.shortBreakLength / 60),
+      longBreakLength: String(this.props.longBreakLength / 60),
+      setLength: this.props.setLength,
       goal: this.props.goal,
       alarm: this.props.alarm,
       tick: this.props.tick,
@@ -82,32 +102,32 @@ class TimerSettings extends Component {
             <div className='num-input'>
               <h4>Session</h4>
               <input 
-                id='session' 
+                id='sessionLength' 
                 type='number' 
                 min='1' 
                 max='60' 
-                value={this.state.session}
+                value={this.state.sessionLength}
                 onChange={this.handleChange}
               />
             </div>
             <div className='num-input'>
               <h4>Short Break</h4>
               <input
-              id='shortBreak'
+              id='shortBreakLength'
               type='number'
               min='1' max='60'
-              value={this.state.shortBreak}
+              value={this.state.shortBreakLength}
               onChange={this.handleChange}
             />
             </div>
             <div className='num-input'>
               <h4>Long Break</h4>
               <input
-                id='longBreak'
+                id='longBreakLength'
                 type='number'
                 min='1'
                 max='60'
-                value={this.state.longBreak}
+                value={this.state.longBreakLength}
                 onChange={this.handleChange}
               />
             </div>
@@ -118,10 +138,10 @@ class TimerSettings extends Component {
             <div className='num-input'>
               <h4>Sessions per Long Break</h4>
               <input
-                id='set'
+                id='setLength'
                 type='number'
                 min='1'
-                value={this.state.set}
+                value={this.state.setLength}
                 onChange={this.handleChange}
               />
             </div>
@@ -141,8 +161,8 @@ class TimerSettings extends Component {
             <h3>Sounds</h3>
             <div className='selection'>
               <h4>Alarm</h4>
-              <select>
-                {alarmSounds.map((sound, i) => <option key={i}>{sound.name}</option>)}
+              <select onChange={this.handleSelect}>
+                {alarmSounds.map((sound, i) => <option key={i} id={sound.name} value={sound.url}>{sound.name}</option>)}
               </select>
             </div>
             <div className='selection'>

@@ -10,24 +10,28 @@ import './Timer.css'
 import ProgressRing from './ProgressRing';
 import TimerSettings from './TimerSettings';
 
+const session = 'session';
+const shortBreak = 'Break';
+const longBreak = 'Long Break';
+
 class Timer extends Component {
   constructor(props) {
     super(props);
     
     this.state = {
       task: 'Work',
-      shortBreakLength: 5 * 60,
-      longBreakLength: 15 * 60,
-      sessionLength: 25 * 60,
+      shortBreakLength: 1,
+      longBreakLength: 2,
+      sessionLength: 3,
       setLength: 4,
       goal: 12,
-      alarm: null, // url
+      alarm: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3',
       tick: null, // url
       completedSessions: 0,
       settings: false,
-      onBreak: false,
+      currentTimer: session,
       intervalId: 0,
-      timeRemaining: 25 * 60,
+      timeRemaining: 3,
       startTime: null,
       timeRemainingAtStart: null,
     };
@@ -56,10 +60,10 @@ class Timer extends Component {
 
   timerTick() {
     console.log('timerTick');
-    let length = this.state.timeRemainingAtStart
+    const { timeRemainingAtStart, startTime } = this.state;
 
-    const secondsElapsed = Math.round((Date.now() - this.state.startTime) / 1000);
-    const timeRemaining = length - secondsElapsed;
+    const secondsElapsed = Math.round((Date.now() - startTime) / 1000);
+    const timeRemaining = timeRemainingAtStart - secondsElapsed;
 
     if (timeRemaining < 0) {
       this.stopTimer();
@@ -75,16 +79,34 @@ class Timer extends Component {
 
   playAlarm() {
     const alarm = document.querySelector('#beep');
-    alarm.currentTime = 0;
-    alarm.play();
+
+    if (alarm) {
+      alarm.currentTime = 0;
+     alarm.play();
+    }
   }
 
   switchTimer() {
-    let seconds = this.state.onBreak ? this.state.sessionLength : this.state.breakLength;
+    let { completedSessions, timeRemaining, currentTimer } = this.state;
+
+    if (currentTimer === session) {
+      completedSessions++;
+      if (completedSessions % this.state.setLength === 0) {
+        timeRemaining = this.state.longBreakLength;
+        currentTimer = longBreak;
+      } else {
+        timeRemaining = this.state.shortBreakLength;
+        currentTimer = shortBreak;
+      }
+    } else {
+      timeRemaining = this.state.sessionLength;
+      currentTimer = session;
+    }
 
     this.setState({
-      onBreak: !this.state.onBreak,
-      timeRemaining: seconds,
+      completedSessions,
+      timeRemaining,
+      currentTimer
     });
     this.startTimer();
   }
@@ -97,12 +119,33 @@ class Timer extends Component {
     });
   }
 
-  updateSettings(event) {
-    if (this.state.intervalId) {
-      return;
+  updateSettings(settings) {
+    console.log('passed settings: ', settings);
+    this.stopTimer();
+    this.setState(settings, () => this.resetCurrentTimer());
+  }
+
+  resetCurrentTimer() {
+    let timeRemaining;
+
+    switch (this.state.currentTimer) {
+      case session:
+        timeRemaining = this.state.sessionLength;
+        break;
+      case shortBreak:
+        timeRemaining = this.state.shortBreakLength;
+        break;
+      case longBreak:
+        timeRemaining = this.state.longBreakLength;
+        break;
     }
 
-    // Handle inputs
+    console.log('resetCurrentTimer() with ', timeRemaining);
+
+    this.setState({
+      timeRemaining,
+      timeRemainingAtStart: timeRemaining
+    });
   }
 
   resetApp() {
@@ -112,21 +155,18 @@ class Timer extends Component {
     alarm.currentTime = 0;
 
     this.setState({
-      breakLength: 5 * 60,
-      sessionLength: 25 * 60,
-      onBreak: false,
-      intervalId: 0,
-      startTime: null,
-      secondsReamining: 25 * 60
     });
   }
 
   percentRemaining() {
-    if (this.state.onBreak) {
-      return (this.state.timeRemaining / this.state.breakLength) * 100;
-    }
-
-    return (this.state.timeRemaining / this.state.sessionLength) * 100;
+   switch (this.state.currentTimer) {
+    case session:
+      return (this.state.timeRemaining / this.state.sessionLength) * 100;
+    case shortBreak:
+      return (this.state.timeRemaining / this.state.shortBreakLength) * 100;
+    case longBreak:
+      return (this.state.timeRemaining / this.state.longBreakLength) * 100;
+   }
   }
 
   leadingZero(num) {
@@ -148,26 +188,26 @@ class Timer extends Component {
     const secondsLeft = this.state.timeRemaining % 60;
     const timeLeft = `${this.leadingZero(minutesLeft)}:${this.leadingZero(secondsLeft)}`;
     const playButton = 
-      <button 
-        class='icon-btn' 
+      <button
+        class='icon-btn'
         onClick={this.startTimer}
       >
         <FontAwesomeIcon icon='play' />
       </button>;
-    const pauseButton = 
-      <button 
-        class='icon-btn' 
+    const pauseButton =
+      <button
+        class='icon-btn'
         onClick={this.stopTimer}
       >
         <FontAwesomeIcon icon='pause' />
       </button>;
     const settings =         
-      <TimerSettings 
+      <TimerSettings
         task={this.state.task}
-        session={this.state.sessionLength}
-        shortBreak={this.state.shortBreakLength}
-        longBreak={this.state.longBreakLength}
-        set={this.state.setLength}
+        sessionLength={this.state.sessionLength}
+        shortBreakLength={this.state.shortBreakLength}
+        longBreakLength={this.state.longBreakLength}
+        setLength={this.state.setLength}
         goal={this.state.goal}
         alarm={this.state.alarm}
         tick={this.state.tick}
@@ -181,13 +221,14 @@ class Timer extends Component {
         {this.state.settings ? settings : null}
         <ProgressRing percent={this.percentRemaining()} />
         <div id='timer-elements'>
-          <div id='timer-label'>{this.state.onBreak ? 'Break' : 'Session'}</div>
+          <div id='timer-label'>{this.state.currentTimer === session ? this.state.task : this.state.currentTimer}</div>
           <div id='time-left'>{timeLeft}</div>
           {this.state.intervalId ? pauseButton : playButton}
           <button class='icon-btn' id='settings-btn' onClick={this.toggleSettings}>
             <FontAwesomeIcon icon='cog' />    
           </button>
-          <audio id='beep' src='https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3' />
+
+          {this.state.alarm ? <audio id='beep' src={this.state.alarm} /> : null}
         </div>
       </div>
     );
