@@ -30,7 +30,7 @@ class Timer extends Component {
       completedSessions: 0,
       settings: false,
       currentTimer: session,
-      intervalId: 0,
+      active: false,
       timeRemaining: 3,
       startTime: null,
       timeRemainingAtStart: null,
@@ -42,23 +42,31 @@ class Timer extends Component {
     this.updateSettings = this.updateSettings.bind(this);
   }
 
+  componentDidMount() {
+    this.intervalId = setInterval(() => this.timerTick(), 1000);
+  }
+
   startTimer() {
-    console.log('startTimer');
-    if (this.state.intervalId) {
+    if (this.state.active) {
       return;
     }
 
+    console.log('startTimer');
+
     const startTime = Date.now();
-    const intervalId = setInterval(() => this.timerTick(), 1000);
 
     this.setState({
       timeRemainingAtStart: this.state.timeRemaining,
       startTime,
-      intervalId
+      active: true
     });
   }
 
   timerTick() {
+    if (!this.state.active) {
+      return;
+    }
+
     console.log('timerTick');
     const { timeRemainingAtStart, startTime } = this.state;
 
@@ -112,10 +120,8 @@ class Timer extends Component {
   }
 
   stopTimer() {
-    clearInterval(this.state.intervalId);
-
     this.setState({
-      intervalId: 0
+      active: false
     });
   }
 
@@ -211,7 +217,7 @@ class Timer extends Component {
         goal={this.state.goal}
         alarm={this.state.alarm}
         tick={this.state.tick}
-        active={Boolean(this.state.intervalId)}
+        active={Boolean(this.state.active)}
         toggleSettings={this.toggleSettings}
         updateSettings={this.updateSettings}
       />;
@@ -223,7 +229,7 @@ class Timer extends Component {
         <div id='timer-elements'>
           <div id='timer-label'>{this.state.currentTimer === session ? this.state.task : this.state.currentTimer}</div>
           <div id='time-left'>{timeLeft}</div>
-          {this.state.intervalId ? pauseButton : playButton}
+          {this.state.active ? pauseButton : playButton}
           <button class='icon-btn' id='settings-btn' onClick={this.toggleSettings}>
             <FontAwesomeIcon icon='cog' />    
           </button>
