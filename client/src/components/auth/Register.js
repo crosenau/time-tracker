@@ -18,7 +18,7 @@ class Register extends Component {
       errors: ''
     };
 
-    this.onChange = this.onChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -36,7 +36,7 @@ class Register extends Component {
     }
   }
 
-  onChange(event) {
+  handleChange(event) {
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -69,7 +69,7 @@ class Register extends Component {
                 type='text'
                 id='name'
                 value={this.state.name}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.name}</span>
             </div>
@@ -79,7 +79,7 @@ class Register extends Component {
                 type='email'
                 id='email'
                 value={this.state.email}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.email}</span>
             </div>
@@ -89,7 +89,7 @@ class Register extends Component {
                 type='password'
                 id='password'
                 value={this.state.password}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.password}</span>
             </div>
@@ -99,7 +99,7 @@ class Register extends Component {
                 type='password'
                 id='password2'
                 value={this.state.password2}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.password2}</span>
             </div>

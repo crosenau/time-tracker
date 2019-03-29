@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import React from 'react';
 
 import './Landing.css';
-import Login from '../auth/Login';
 import tomato from './tomato.svg';
 
 const Landing = () => {

@@ -16,7 +16,7 @@ class Login extends Component {
       errors: ''
     };
 
-    this.onChange = this.onChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -38,7 +38,7 @@ class Login extends Component {
     }
   }
 
-  onChange(event) {
+  handleChange(event) {
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -69,7 +69,7 @@ class Login extends Component {
                 type='email'
                 id='email'
                 value={this.state.email}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.email}</span>
             </div>
@@ -79,7 +79,7 @@ class Login extends Component {
                 type='password'
                 id='password'
                 value={this.state.password}
-                onChange={this.onChange}
+                onChange={this.handleChange}
               />
               <span className='error'>{errors.password}</span>
             </div>
