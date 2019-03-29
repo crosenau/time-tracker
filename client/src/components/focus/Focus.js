@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { toggleSettingsDisplay } from '../../actions/timerActions';
 
 import Timer from './Timer';
 
@@ -9,7 +12,7 @@ class Focus extends Component {
   render() {
     return (
       <div id='focus'>
-        <button class='icon-btn' id='settings-btn'>
+        <button className='icon-btn' id='settings-btn' onClick={this.props.toggleSettingsDisplay}>
           <FontAwesomeIcon icon='cog' />    
         </button>
         <Timer />
@@ -18,4 +21,19 @@ class Focus extends Component {
   }
 }
 
-export default Focus;
+Focus.propTypes = {
+  auth: PropTypes.object.isRequired,
+  timer: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  timer: state.timer
+});
+
+export default connect(
+  mapStateToProps,
+  { 
+    toggleSettingsDisplay
+  }
+)(Focus);

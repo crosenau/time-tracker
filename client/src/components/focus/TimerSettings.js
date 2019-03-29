@@ -1,4 +1,15 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  startTimer,
+  stopTimer,
+  updateTimeRemaining,
+  nextTimer,
+  resetCurrentTimer,
+  updateSettings,
+  toggleSettingsDisplay
+} from '../../actions/timerActions';
 
 import './TimerSettings.css';
 
@@ -17,7 +28,16 @@ class TimerSettings extends Component {
   constructor(props) {
     super(props);
 
-    this.resetFields();
+    this.state = {
+      task: this.props.timer.task,
+      sessionLength: String(this.props.timer.sessionLength / 60),
+      shortBreakLength: String(this.props.timer.shortBreakLength / 60),
+      longBreakLength: String(this.props.timer.longBreakLength / 60),
+      setLength: this.props.timer.setLength,
+      goal: this.props.timer.goal,
+      alarmSound: this.props.timer.alarmSound,
+      tickSound: this.props.timer.tickSound,
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -26,13 +46,7 @@ class TimerSettings extends Component {
     this.cancel = this.cancel.bind(this);
   }
 
-  componentDidUpdate() {
-    console.log('componentDidUpate');
-    //this.resetFields();
-  }
-
   handleChange(event) {
-    console.log(event);
     this.setState({
       [event.target.id]: event.target.value
     });
@@ -52,31 +66,32 @@ class TimerSettings extends Component {
       longBreakLength: Number(this.state.longBreakLength) * 60,
       setLength: Number(this.state.setLength),
       goal: Number(this.state.goal),
-      alarm: this.state.alarm,
-      tick: this.state.tick
+      alarmSound: this.state.alarmSound,
+      tickSound: this.state.tickSound
     };
 
+    this.props.stopTimer();
     this.props.updateSettings(settings);
-    this.props.toggleSettings();
+    this.props.toggleSettingsDisplay();
+    this.props.resetCurrentTimer();
   }
 
   cancel() {
     this.resetFields();
-    this.props.toggleSettings();
+    this.props.toggleSettingsDisplay();
   }
 
   resetFields() {
-    this.state = {
-      task: this.props.task,
-      sessionLength: String(this.props.sessionLength / 60),
-      shortBreakLength: String(this.props.shortBreakLength / 60),
-      longBreakLength: String(this.props.longBreakLength / 60),
-      setLength: this.props.setLength,
-      goal: this.props.goal,
-      alarm: this.props.alarm,
-      tick: this.props.tick,
-      active: this.props.active
-    };
+    this.setState({
+      task: this.props.timer.task,
+      sessionLength: String(this.props.timer.sessionLength / 60),
+      shortBreakLength: String(this.props.timer.shortBreakLength / 60),
+      longBreakLength: String(this.props.timer.longBreakLength / 60),
+      setLength: this.props.timer.setLength,
+      goal: this.props.timer.goal,
+      alarmSound: this.props.timer.alarmSound,
+      tickSound: this.props.timer.tickSound
+    });
   }
 
   render() {
@@ -177,7 +192,7 @@ class TimerSettings extends Component {
           </div>
           
           <div className='section'>
-            {this.state.active ? warning : null}
+            {this.props.timer.active ? warning : null}
             <button onClick={this.save}>Save</button>
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>
@@ -188,4 +203,23 @@ class TimerSettings extends Component {
   }
 };
 
-export default TimerSettings;
+TimerSettings.propTypes = {
+  timer: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  timer: state.timer
+});
+
+export default connect(
+  mapStateToProps,
+  { 
+    startTimer,
+    stopTimer,
+    updateTimeRemaining,
+    nextTimer,
+    resetCurrentTimer,
+    updateSettings,
+    toggleSettingsDisplay
+  }
+)(TimerSettings);
