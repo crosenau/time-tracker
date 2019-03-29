@@ -13,7 +13,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faClock, faCog, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 import './App.css';
-// import PrivateRoute from './components/PrivateRoute';
+import Timer from './components/Timer/Timer';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
@@ -46,6 +46,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
+            <Timer />
             <Route path='/' component={Navbar} />
             <div id='app-body'>
               <Route exact path={['/', '/login', '/register']} component={Landing} />

@@ -1,27 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  startTimer,
-  stopTimer,
-  updateTimeRemaining,
-  nextTimer,
-  resetCurrentTimer,
-  updateSettings,
-  toggleSettingsDisplay
-} from '../../actions/timerActions';
+import { startTimer, stopTimer } from '../../actions/timerActions';
 
 import ProgressRing from './ProgressRing';
 import TimerSettings from './TimerSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Timer.css'
-
+import './TimerUI.css'
 
 const session = 'session';
 const shortBreak = 'Break';
 const longBreak = 'Long Break';
-
 
 function leadingZero(num) {
   if (String(num).length < 2) {
@@ -31,33 +21,11 @@ function leadingZero(num) {
   return String(num);
 }
 
-class Timer extends Component {
-
-  componentDidMount() {
-    this.intervalId = setInterval(() => this.timerTick(), 1000);
-  }
-
-  componentWillUnmount() {
-    console.log('unmounting')
-    this.props.stopTimer();
-    clearInterval(this.intervalId);
-    this.intervalId = null;
-  }
-
-  timerTick() {
-    if (!this.props.timer.active) {
-      return;
-    }
-
-    if (this.props.timer.timeRemaining <= 0) {
-      this.props.stopTimer();
+class TimerUI extends Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.timer.currentTimer !== this.props.timer.currentTimer) {
       this.playAlarm();
-      this.props.nextTimer();
-      this.props.startTimer();
-      return;
     }
-
-    this.props.updateTimeRemaining();
   }
 
   playAlarm() {
@@ -116,7 +84,7 @@ class Timer extends Component {
   }
 }
 
-Timer.propTypes = {
+TimerUI.propTypes = {
   auth: PropTypes.object.isRequired,
   timer: PropTypes.object.isRequired
 }
@@ -128,13 +96,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { 
-    startTimer,
-    stopTimer,
-    updateTimeRemaining,
-    nextTimer,
-    resetCurrentTimer,
-    updateSettings,
-    toggleSettingsDisplay
-  }
-)(Timer);
+  { startTimer, stopTimer }
+)(TimerUI);

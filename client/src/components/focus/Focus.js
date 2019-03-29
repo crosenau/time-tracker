@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { toggleSettingsDisplay } from '../../actions/timerActions';
 
-import Timer from './Timer';
+import TimerUI from './TimerUI';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Focus.css';
@@ -15,7 +15,7 @@ class Focus extends Component {
         <button className='icon-btn' id='settings-btn' onClick={this.props.toggleSettingsDisplay}>
           <FontAwesomeIcon icon='cog' />    
         </button>
-        <Timer />
+        <TimerUI />
       </div>
     );
   }
