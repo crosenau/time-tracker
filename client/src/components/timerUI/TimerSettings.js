@@ -54,7 +54,7 @@ class TimerSettings extends Component {
 
   handleSelect(event) {
    this.setState({
-     alarm: event.target.value 
+     alarmSound: event.target.value 
    });
   }
 
