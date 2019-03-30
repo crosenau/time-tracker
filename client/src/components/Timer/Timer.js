@@ -43,6 +43,7 @@ class Timer extends Component {
 
     if (this.props.timer.timeRemaining <= 0) {
       this.props.stopTimer();
+      this.playAlarm();
       this.props.nextTimer();
       this.props.startTimer();
       return;
@@ -51,8 +52,21 @@ class Timer extends Component {
     this.props.updateTimeRemaining();
   }
 
+  playAlarm() {
+    const alarm = document.querySelector('#beep');
+
+    if (alarm) {
+      alarm.currentTime = 0;
+     alarm.play();
+    }
+  }
+
   render() {
-    return null;
+    const alarm = this.props.timer.alarmSound ? <audio id='beep' src={this.props.timer.alarmSound} /> : null;
+
+    return (
+        alarm
+    );
   }
 }
 
