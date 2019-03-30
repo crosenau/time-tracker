@@ -9,16 +9,16 @@ import { setCurrentUser, logoutUser } from './actions/authActions';
 import { Provider } from 'react-redux';
 import store from './store';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faCog, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
-
-import './App.css';
-import Timer from './components/Timer/Timer';
+import Timer from './components/timer/Timer';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import Focus from './components/focus/Focus';
+import TimerUI from './components/timerUI/TimerUI';
+
+import './App.css';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faClock, faCog, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faClock, faCog, faPlay, faPause);
 
@@ -52,7 +52,7 @@ class App extends Component {
               <Route exact path={['/', '/login', '/register']} component={Landing} />
               <Route exact path={['/', '/login']} component={Login} />
               <Route exact path='/register' component={Register} />
-              <PrivateRoute path='/focus' component={Focus} />
+              <PrivateRoute path='/timer' component={TimerUI} />
             </div>
           </div>
         </Router>

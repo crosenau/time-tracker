@@ -36,11 +36,11 @@ class Navbar extends Component {
             Dashboard
           </NavLink>
           <NavLink 
-            to='/focus'
+            to='/timer'
             className='nav-btn'
             activeClassName='nav-btn-selected' 
           >
-            Focus
+            Timer
           </NavLink>
           <button
             className='nav-btn'
