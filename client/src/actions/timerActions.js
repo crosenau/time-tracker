@@ -3,6 +3,7 @@ import {
   UPDATE_TIME_REMAINING,
   NEXT_TIMER,
   STOP_TIMER,
+  ADD_COMPLETED_SESSION,
   UPDATE_SETTINGS,
   RESET_CURRENT_TIMER,
   TOGGLE_SETTINGS_DISPLAY
@@ -35,6 +36,13 @@ export function nextTimer() {
 export function resetCurrentTimer() {
   return {
     type: RESET_CURRENT_TIMER
+  };
+}
+
+export function addCompletedSession(session) {
+  return {
+    type: ADD_COMPLETED_SESSION,
+    payload: session
   };
 }
 

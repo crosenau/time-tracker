@@ -7,6 +7,7 @@ import {
   updateTimeRemaining,
   nextTimer,
   resetCurrentTimer,
+  addCompletedSession,
   updateSettings,
   toggleSettingsDisplay
 } from '../../actions/timerActions';
@@ -44,6 +45,38 @@ class Timer extends Component {
     if (this.props.timer.timeRemaining <= 0) {
       this.props.stopTimer();
       this.playAlarm();
+
+      const { currentTimer, task, sessionLength, completedSessions } = this.props.timer;
+
+      // if new day, reset completedSessions
+      const today = new Date().getDay();
+      
+      let lastRecord;
+
+      if (completedSessions.length > 0) {
+        lastRecord = completedSessions[completedSessions.length-1].completionDate.getDay();
+      }
+
+      if (lastRecord && lastRecord !== today) {
+        this.props.clearCompletedSessions();
+      }
+
+      // cache completed session
+      if (currentTimer === 'session') {
+        const session = {
+          task,
+          sessionLength,
+          completionDate: new Date(),
+          userId: this.props.auth.user._id,
+          logged: false
+        };
+
+        this.props.addCompletedSession(session)
+      }
+
+      // save any unsaved completed sessions to db
+      //this.props.logCompletedSessions();
+
       this.props.nextTimer();
       this.props.startTimer();
       return;
@@ -88,6 +121,7 @@ export default connect(
     updateTimeRemaining,
     nextTimer,
     resetCurrentTimer,
+    addCompletedSession,
     updateSettings,
     toggleSettingsDisplay
   }

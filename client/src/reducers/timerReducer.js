@@ -3,9 +3,10 @@ import {
   UPDATE_TIME_REMAINING,
   NEXT_TIMER,
   STOP_TIMER,
+  ADD_COMPLETED_SESSION,
   UPDATE_SETTINGS,
   RESET_CURRENT_TIMER,
-  TOGGLE_SETTINGS_DISPLAY
+  TOGGLE_SETTINGS_DISPLAY,
 } from '../actions/types';
 
 const session = 'session';
@@ -21,7 +22,7 @@ const initialState = {
   goal: 12,
   alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3',
   tickSound: null, // url
-  completedSessions: 0,
+  completedSessions: [],
   displaySettings: false,
   currentTimer: session,
   active: false,
@@ -59,8 +60,7 @@ export default function(state = initialState, action) {
       let { completedSessions, timeRemaining, currentTimer, setLength, shortBreakLength, longBreakLength, sessionLength } = state;
 
       if (currentTimer === session) {
-        completedSessions++;
-        if (completedSessions % setLength === 0) {
+        if (completedSessions.length % setLength === 0) {
           timeRemaining = longBreakLength;
           currentTimer = longBreak;
         } else {
@@ -74,7 +74,6 @@ export default function(state = initialState, action) {
 
       return {
         ...state,
-        completedSessions,
         timeRemaining,
         currentTimer
       };
@@ -98,6 +97,18 @@ export default function(state = initialState, action) {
         ...state,
         timeRemaining,
         timeRemainingAtStart: timeRemaining
+      };
+    }
+    case ADD_COMPLETED_SESSION: {
+      let updatedSessions = [...state.completedSessions];
+      
+      updatedSessions.push(action.payload);
+      console.log('state: ', state.completedSessions);
+      console.log('new copy: ', updatedSessions);
+
+      return {
+        ...state,
+        completedSessions: updatedSessions
       };
     }
     case UPDATE_SETTINGS: {
