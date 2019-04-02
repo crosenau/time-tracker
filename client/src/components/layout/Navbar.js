@@ -29,11 +29,11 @@ class Navbar extends Component {
       navOpts = (
         <nav>
           <NavLink 
-            to='/dashboard'
+            to='/stats'
             className='nav-btn'
             activeClassName='nav-btn-selected' 
           >
-            Dashboard
+            Stats
           </NavLink>
           <NavLink 
             to='/timer'
@@ -73,7 +73,9 @@ class Navbar extends Component {
 
     return (
       <div id='navbar'>
-        <FontAwesomeIcon id='icon' icon='clock' />
+        <div id='clock'>
+          <FontAwesomeIcon icon='clock' />
+        </div>
         {navOpts}
       </div>
     );

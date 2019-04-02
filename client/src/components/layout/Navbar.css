@@ -1,25 +1,29 @@
 #navbar {
   color: white;
-  background: #00aad4ff;
+  background: black;
   position: fixed;
   top: 0px;
   left: 0px;
   right: 0px;
+  height: 3rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  height: 3rem;
   font-size: 2rem;
   display: flex;
+  justify-content: space-evenly;
 }
 
-#icon {
+#clock {
+  width: 60%;
   margin-top: 0.5rem;
+  display: flex;
+  justify-content: left;
 }
 
 nav {
+  flex-grow: 1;
   display: flex;
   justify-content: right;
-  flex-grow: 1;
 }
 
 .nav-btn {
@@ -29,10 +33,12 @@ nav {
   font-size: inherit;
   text-decoration: none;
   user-select: none;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  cursor: pointer;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .nav-btn-selected {
+  color: black;
   background: #00ccffff;
 }

@@ -6,6 +6,7 @@
 
 #app-body {
   background-color: #EFEFF0;
+  background-image: linear-gradient(45deg, #422c42, #456accfe, #25dbccff);
   width: 100%;
   margin-top: 3rem;
   display: flex;

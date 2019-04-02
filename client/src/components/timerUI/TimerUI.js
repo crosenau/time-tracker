@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { startTimer, stopTimer, toggleSettingsDisplay } from '../../actions/timerActions';
+import { startTimer, stopTimer, resetCurrentTimer, toggleSettingsDisplay } from '../../actions/timerActions';
 
 import ProgressRing from './ProgressRing';
 import TimerSettings from './TimerSettings';
@@ -29,15 +29,36 @@ const TimerUI = props => {
     <div id='container'>
       {props.timer.displaySettings ? <TimerSettings /> : null}
       <button className='icon-btn' id='settings-btn' onClick={props.toggleSettingsDisplay}>
-        <FontAwesomeIcon icon='cog' />    
+        <FontAwesomeIcon icon='ellipsis-v' />
       </button>
-      <div id='display'>
+      <div id='timer'>
         <ProgressRing />
-        <div id='timer-label'>{props.timer.currentTimer === 'session' ? props.timer.task : props.timer.currentTimer}
+        <div id='task-label'>{props.timer.currentTimer === 'session' ? props.timer.task : props.timer.currentTimer}
         </div>
-        {props.timer.active ? pauseButton : playButton}
+        <div id='controls'>
+          <button
+            className='icon-btn'
+            onClick={() => {
+              props.stopTimer();
+              props.resetCurrentTimer()
+            }
+          }
+          >
+            <FontAwesomeIcon icon='undo-alt' />
+          </button>
+          {props.timer.active ? pauseButton : playButton}
+          <button
+            className='icon-btn'
+            onClick={props.skip}
+          >
+            <FontAwesomeIcon icon='forward' />
+          </button>
+        </div>
       </div>
-
+      <div id='footer'>
+          <span>Goal: {props.timer.completedSessions}/{props.timer.goal}</span>
+          <span>hh:mm:ss</span>
+        </div>
     </div>
   );
 }
@@ -54,5 +75,8 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { startTimer, stopTimer, toggleSettingsDisplay }
+  { startTimer,
+    stopTimer,
+    resetCurrentTimer,
+    toggleSettingsDisplay }
 )(TimerUI);

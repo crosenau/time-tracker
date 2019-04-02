@@ -18,9 +18,10 @@ import TimerUI from './components/timerUI/TimerUI';
 
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faCog, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faEllipsisV, faForward, faUndoAlt, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
-library.add(faClock, faCog, faPlay, faPause);
+library.add(faClock, faEllipsisV, faForward, faUndoAlt, faPlay, faPause, faTimesCircle);
 
 if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;

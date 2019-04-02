@@ -12,7 +12,7 @@ import {
 } from '../../actions/timerActions';
 
 import './TimerSettings.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const alarmSounds = [
   {
@@ -98,9 +98,17 @@ class TimerSettings extends Component {
     const warning = <p id='warning'>Timer is currently running. Saving changes will stop the timer and update it's settings.</p>;
 
     return (
-      <div id='timer-settings'>
-        <div id='settings-elements'>
-          <h2>Settings</h2>
+      <div id='overlay'>
+        <div id='settings'>
+          <div id='header'>
+            <h2>Settings</h2>
+            <button
+              className='icon-btn'
+              onClick={this.cancel}
+            >
+              <FontAwesomeIcon icon={['far', 'times-circle']} />
+            </button>
+          </div>
 
           <div className='section'>
             <h3>Task</h3>
@@ -193,9 +201,9 @@ class TimerSettings extends Component {
           
           <div className='section'>
             {this.props.timer.active ? warning : null}
-            <button onClick={this.save}>Save</button>
-            <button onClick={this.cancel}>Cancel</button>
-            <button>Defaults</button>
+              <button onClick={this.save}>Save</button>
+              <button onClick={this.cancel}>Cancel</button>
+              <button>Defaults</button>
           </div>
         </div>
       </div>

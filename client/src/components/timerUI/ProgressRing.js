@@ -20,7 +20,7 @@ class ProgressRing extends Component {
 
     this.smallest = Math.min(window.innerWidth, window.innerHeight)
     this.diameter = Math.floor(this.smallest / 3);
-    this.stroke = 4;
+    this.stroke = 8;
     this.radius = this.diameter / 2 - this.stroke;
     this.center = this.diameter / 2;
     this.circumference = 2 * Math.PI * this.radius;
@@ -63,8 +63,8 @@ class ProgressRing extends Component {
       >
         <circle
           id='background-circle'
-          stroke='#00aad4ff'
-          strokeWidth={this.stroke * 2}
+          stroke='#999'
+          strokeWidth={this.stroke}
           fill='transparent'
           r={this.radius}
           cx={this.center}
@@ -73,8 +73,8 @@ class ProgressRing extends Component {
         />
         <circle
           id='progress-ring-circle'
-          stroke='#aaddffff'
-          strokeWidth={this.stroke}
+          stroke='#4520d9ff'
+          strokeWidth={this.stroke * 2}
           fill='transparent'
           r={this.radius}
           cx={this.center}

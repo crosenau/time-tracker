@@ -1,48 +1,56 @@
-#timer-settings {
+#overlay {
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 999;
   position: fixed;
   width: 100%;
   height: 100%;
-  top: 3rem;
+  top: 0;
   left: 0;
   font-size: 1rem;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-#settings-elements {
-  margin: 2rem;
+#settings {
   padding: 1rem;
   background-color: white;
   width: 40%;
+  background-color: #ebebebff;
+  box-shadow: 2px 2px 4px #223;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
-#settings-elements h2 {
+#header {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#header h2 {
   margin: 0rem;
 }
 
 .section {
-  margin-bottom: 1rem;
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: minmax(0.5rem, auto);
+  margin-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .section h3 {
-  color: red;
-  grid-column: 1 / 7;
-  margin-bottom: 0px;
+  margin-bottom: 0rem;
+  width: 100%;
 }
 
 .section h4 {
   margin-bottom: 0rem;
   font-size: 0.9rem;
   font-weight: normal;
-  
 }
 
 #task {
@@ -50,20 +58,10 @@
   height: 1rem;
 }
 
-.section button {
-  height: 3rem;
-  grid-column: span 2;
-}
-
-.num-input {
-  grid-column: span 2;
-}
-
-.selection {
-  grid-column: span 2;
+.num-input, .selection {
+  margin-right: 2rem;
 }
 
 #warning {
   color: red;
-  grid-column: 1 / 7;
 }
