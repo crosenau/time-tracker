@@ -1,10 +1,15 @@
 'use strict';
 
+const ObjectID = require('mongodb').ObjectID
 const getDb = require('../db').getDb;
 
 const collection = 'time-users';
 
 async function find(query) {
+  if (Object.keys(query).includes('_id') && ObjectID.isValid(query._id)) {
+    query._id = ObjectID(query._id);
+  }
+
   const db = getDb();
 
   try {
