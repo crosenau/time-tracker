@@ -9,6 +9,31 @@ import TimerSettings from './TimerSettings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './TimerUI.css'
 
+
+function leadingZero(num) {
+  if (String(num).length < 2) {
+    return '0' + String(num);
+  }
+
+  return String(num);
+}
+
+function getTotalTime(sessions) {
+  if (sessions.length === 0) {
+    return '00:00:00';
+  }
+
+  const totalSeconds = (sessions
+    .reduce((acc, cur) => ({sessionLength: acc.sessionLength + cur.sessionLength})))
+    .sessionLength;
+
+  const hours = Math.floor(totalSeconds / 60 / 60);
+  const minutes = Math.floor(totalSeconds / 60) % 60;
+  const seconds = totalSeconds % 60;
+  
+  return `${leadingZero(hours)}:${leadingZero(minutes)}:${leadingZero(seconds)}`;
+}
+
 const TimerUI = props => {
   const playButton = 
     <button
@@ -56,8 +81,8 @@ const TimerUI = props => {
         </div>
       </div>
       <div id='footer'>
-          <span>Goal: {props.timer.completedSessions}/{props.timer.goal}</span>
-          <span>hh:mm:ss</span>
+          <span>Goal: {props.timer.completedSessions.length}/{props.timer.goal}</span>
+          <span>{getTotalTime(props.timer.completedSessions)}</span>
         </div>
     </div>
   );
