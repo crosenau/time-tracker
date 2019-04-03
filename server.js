@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const users = require('./routes/api/users');
+const sessions = require('./routes/api/sessions');
 const initDb = require('./db').initDb;
 const keys = require('./config/keys');
 
@@ -21,6 +22,7 @@ initDb()
     require('./config/passport')(passport);
 
     app.use('/api/users', users);
+    app.use('/api/sessions', sessions);
 
     const port = keys.port || 5000;
 
