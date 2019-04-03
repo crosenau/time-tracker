@@ -1,11 +1,15 @@
+import axios from 'axios';
+
 import {
   START_TIMER,
   UPDATE_TIME_REMAINING,
   NEXT_TIMER,
   STOP_TIMER,
-  ADD_COMPLETED_SESSION,
-  UPDATE_SETTINGS,
   RESET_CURRENT_TIMER,
+  ADD_COMPLETED_SESSION,
+  CLEAR_COMPLETED_SESSIONS,
+  SAVE_COMPLETED_SESSIONS,
+  UPDATE_SETTINGS,
   TOGGLE_SETTINGS_DISPLAY
 } from './types';
 
@@ -44,6 +48,30 @@ export function addCompletedSession(session) {
     type: ADD_COMPLETED_SESSION,
     payload: session
   };
+}
+
+export function clearCompletedSessions() {
+  return {
+    type: CLEAR_COMPLETED_SESSIONS
+  };
+}
+
+export function saveCompletedSessions(sessions) {
+  return function(dispatch) {
+    // set saving session state?
+
+    axios
+      .post('/api/sessions/save', sessions)
+      .then(res => {
+        dispatch({
+          type: SAVE_COMPLETED_SESSIONS,
+          //payload: stuff
+        });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
 }
 
 export function updateSettings(settings) {
