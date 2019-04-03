@@ -3,9 +3,11 @@ import {
   UPDATE_TIME_REMAINING,
   NEXT_TIMER,
   STOP_TIMER,
-  ADD_COMPLETED_SESSION,
-  UPDATE_SETTINGS,
   RESET_CURRENT_TIMER,
+  ADD_COMPLETED_SESSION,
+  CLEAR_COMPLETED_SESSIONS,
+  SAVE_COMPLETED_SESSIONS,
+  UPDATE_SETTINGS,
   TOGGLE_SETTINGS_DISPLAY,
 } from '../actions/types';
 
@@ -103,13 +105,24 @@ export default function(state = initialState, action) {
       let updatedSessions = [...state.completedSessions];
       
       updatedSessions.push(action.payload);
-      console.log('state: ', state.completedSessions);
-      console.log('new copy: ', updatedSessions);
 
       return {
         ...state,
         completedSessions: updatedSessions
       };
+    }
+    case CLEAR_COMPLETED_SESSIONS: {
+      return {
+        ...state,
+        completedSessions: []
+      };
+    }
+    case SAVE_COMPLETED_SESSIONS: {
+
+
+
+
+
     }
     case UPDATE_SETTINGS: {
       return {
