@@ -8,6 +8,8 @@ import {
   nextTimer,
   resetCurrentTimer,
   addCompletedSession,
+  clearCompletedSessions,
+  saveCompletedSessions,
   updateSettings,
   toggleSettingsDisplay
 } from '../../actions/timerActions';
@@ -68,14 +70,29 @@ class Timer extends Component {
           sessionLength,
           completionDate: new Date(),
           userId: this.props.auth.user._id,
-          logged: false
+          saved: false
         };
 
         this.props.addCompletedSession(session)
       }
 
       // save any unsaved completed sessions to db
-      //this.props.logCompletedSessions();
+      const unsavedSessions = [];
+      
+      for (let session of this.props.timer.completedSessions) {
+        if (!session.saved) {
+          const { task, sessionLength, completionDate, userId } = session;
+          
+          unsavedSessions.push({
+            task,
+            sessionLength,
+            completionDate,
+            userId
+          });
+        }
+      };
+
+      this.props.saveCompletedSessions(unsavedSessions);
 
       this.props.nextTimer();
       this.props.startTimer();
@@ -122,6 +139,8 @@ export default connect(
     nextTimer,
     resetCurrentTimer,
     addCompletedSession,
+    clearCompletedSessions,
+    saveCompletedSessions,
     updateSettings,
     toggleSettingsDisplay
   }
