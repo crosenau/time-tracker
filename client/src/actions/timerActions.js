@@ -63,9 +63,14 @@ export function saveCompletedSessions(sessions) {
     axios
       .post('/api/sessions/save', sessions)
       .then(res => {
+        const savedSessions = res.data.map(session => ({
+          ...session,
+          completionDate: new Date(session.completionDate),
+          saved: true
+        }));
         dispatch({
           type: SAVE_COMPLETED_SESSIONS,
-          //payload: stuff
+          payload: savedSessions
         });
       })
       .catch(err => {
