@@ -5,12 +5,15 @@ const getDb = require('../db').getDb;
 const collection = 'sessions';
 
 async function save(docs) {
-  console.log('docs: ', docs);
-
   const db = getDb();
 
-  const result = await db.collection(collection).insertMany(docs);
-  console.log('result: ', result);
+  try {
+    const result = await db.collection(collection).insertMany(docs);
+
+    return result.ops;
+  } catch(err) {
+    throw(err);
+  }
 }
 
 module.exports = {
