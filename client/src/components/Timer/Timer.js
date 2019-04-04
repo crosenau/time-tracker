@@ -31,6 +31,24 @@ class Timer extends Component {
       this.props.stopTimer();
       clearInterval(this.intervalId);
     }
+
+    // save any unsaved completed sessions to db
+    const timer = this.props.timer;
+
+    if (prevProps.timer.completedSessions !== timer.completedSessions) {
+      const unsavedSessions = timer.completedSessions
+        .filter(session => !session.saved)
+        .map(session => ({
+            task: session.task,
+            sessionLength: session.sessionLength,
+            completionDate: session.completionDate
+        }));
+      
+      if (unsavedSessions.length > 0) {
+        console.log('unsavedSessions found');
+        this.props.saveCompletedSessions(unsavedSessions);
+      };
+    }
   }
 
   componentWillUnmount() {
@@ -40,23 +58,23 @@ class Timer extends Component {
   }
 
   tick() {
-    if (!this.props.timer.active) {
+    const timer = this.props.timer;
+
+    if (!timer.active) {
       return;
     }
 
-    if (this.props.timer.timeRemaining <= 0) {
+    if (timer.timeRemaining <= 0) {
       this.props.stopTimer();
       this.playAlarm();
-
-      const { currentTimer, task, sessionLength, completedSessions } = this.props.timer;
 
       // if new day, reset completedSessions
       const today = new Date().getDay();
       
       let lastRecord;
 
-      if (completedSessions.length > 0) {
-        lastRecord = completedSessions[completedSessions.length-1].completionDate.getDay();
+      if (timer.completedSessions.length > 0) {
+        lastRecord = timer.completedSessions[timer.completedSessions.length-1].completionDate.getDay();
       }
 
       if (lastRecord && lastRecord !== today) {
@@ -64,35 +82,16 @@ class Timer extends Component {
       }
 
       // cache completed session
-      if (currentTimer === 'session') {
+      if (timer.currentTimer === 'session') {
         const session = {
-          task,
-          sessionLength,
+          task: timer.task,
+          sessionLength: timer.sessionLength,
           completionDate: new Date(),
-          userId: this.props.auth.user._id,
           saved: false
         };
 
         this.props.addCompletedSession(session)
       }
-
-      // save any unsaved completed sessions to db
-      const unsavedSessions = [];
-      
-      for (let session of this.props.timer.completedSessions) {
-        if (!session.saved) {
-          const { task, sessionLength, completionDate, userId } = session;
-          
-          unsavedSessions.push({
-            task,
-            sessionLength,
-            completionDate,
-            userId
-          });
-        }
-      };
-
-      this.props.saveCompletedSessions(unsavedSessions);
 
       this.props.nextTimer();
       this.props.startTimer();
