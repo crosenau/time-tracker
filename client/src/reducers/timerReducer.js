@@ -62,7 +62,10 @@ export default function(state = initialState, action) {
       let { completedSessions, timeRemaining, currentTimer, setLength, shortBreakLength, longBreakLength, sessionLength } = state;
 
       if (currentTimer === session) {
-        if (completedSessions.length % setLength === 0) {
+        if (
+            completedSessions.length % setLength === 0
+            && completedSessions.length !== 0
+        ) {
           timeRemaining = longBreakLength;
           currentTimer = longBreak;
         } else {
@@ -118,11 +121,19 @@ export default function(state = initialState, action) {
       };
     }
     case SAVE_COMPLETED_SESSIONS: {
+      const updatedSessions = [...action.payload];
+      const savedDates = updatedSessions.map(session => Number(session.completionDate));
 
+      for (let session of state.completedSessions) {
+        if (!savedDates.includes(Number(session.completionDate))) {
+          updatedSessions.push(session);
+        }
+      }
 
-
-
-
+      return {
+        ...state,
+        completedSessions: updatedSessions
+      };
     }
     case UPDATE_SETTINGS: {
       return {
