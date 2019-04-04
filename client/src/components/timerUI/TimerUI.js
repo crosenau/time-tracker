@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { startTimer, stopTimer, resetCurrentTimer, toggleSettingsDisplay } from '../../actions/timerActions';
+import {
+  startTimer,
+  stopTimer,
+  nextTimer,
+  resetCurrentTimer,
+  toggleSettingsDisplay
+} from '../../actions/timerActions';
 
 import ProgressRing from './ProgressRing';
 import TimerSettings from './TimerSettings';
@@ -66,15 +72,17 @@ const TimerUI = props => {
             onClick={() => {
               props.stopTimer();
               props.resetCurrentTimer()
-            }
-          }
+            }}
           >
             <FontAwesomeIcon icon='undo-alt' />
           </button>
           {props.timer.active ? pauseButton : playButton}
           <button
             className='icon-btn'
-            onClick={props.skip}
+            onClick={() => {
+              props.stopTimer();
+              props.nextTimer();
+            }}
           >
             <FontAwesomeIcon icon='forward' />
           </button>
@@ -103,5 +111,6 @@ export default connect(
   { startTimer,
     stopTimer,
     resetCurrentTimer,
+    nextTimer,
     toggleSettingsDisplay }
 )(TimerUI);
