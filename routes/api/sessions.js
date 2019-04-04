@@ -5,19 +5,22 @@ const passport = require('passport');
 
 const session = require('../../models/session');
 
-router.post('/save', passport.authenticate('jwt', {session: false }), async (req, res) => {
-  console.log(req.body);
+router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  req.body.map(doc => {
+    doc.userId = req.user._id
+  });
 
   try {
     const saveResult = await session.save(req.body);
 
-    console.log('saveResult: ', saveResult);
-    
-    if (result.ops.length === 0) {
-      throw Error('Could not save session');
-    }
+    // Remove userId from docs before sending response
+    const savedSessions = saveResult.map(doc => ({
+      task: doc.task,
+      sessionLength: doc.sessionLength,
+      completionDate: doc.completionDate
+    }));
 
-    return '?';
+    return res.json(savedSessions);
   } catch(err) {
     console.log(err);
   }
