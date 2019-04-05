@@ -27,11 +27,10 @@ async function save(user) {
   try {
     const result = await db.collection(collection).insertOne(user);
 
-    if (result.ops.length === 0) {
-      throw Error('Error registering new user');
-    }
-
-    return 'success';
+    return result.ops.map(user => ({
+      name: user.name,
+      email: user.email
+    }));
   } catch(err) {
     throw err;
   }
