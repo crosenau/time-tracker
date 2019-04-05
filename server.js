@@ -14,6 +14,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+let server;
+
 initDb()
   .then(db => {
     console.log('Successfully connected to database');
@@ -26,6 +28,16 @@ initDb()
 
     const port = keys.port || 5000;
 
-    app.listen(port, () => console.log(`Server listening on port ${port}`));
+    server = app.listen(port, () => {
+      console.log(`Server listening on port ${port}`);
+      app.emit('appStarted');
+    });
   })
   .catch(err => console.log(err));
+
+app.on('closeApp', () => {
+  console.log('closing app');
+  server.close();
+});
+
+module.exports = app;
