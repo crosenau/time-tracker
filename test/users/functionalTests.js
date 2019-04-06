@@ -17,7 +17,6 @@ describe('API ROUTING FOR /api/users', function () {
         resolve();
       });
     });
-    console.log('finished');
   });
 
   describe('/api/users/register', function () {
@@ -31,19 +30,17 @@ describe('API ROUTING FOR /api/users', function () {
             password: 'testPassword',
             password2: 'testPassword'
           });
-
+        
         expect(response.status).to.equal(200);
         expect(response.text).to.be.a('string');
 
         const data = JSON.parse(response.text);
 
-        expect(data).to.be.an('array');
-        expect(data).to.be.lengthOf(1);
-        expect(data[0]).to.be.an('object');
-        expect(data[0]).to.have.a.property('name');
-        expect(data[0].name).to.equal('Test User');
-        expect(data[0]).to.have.a.property('email');
-        expect(data[0].email).to.equal('test@test.com');
+        expect(data).to.be.an('object');
+        expect(data).to.have.a.property('name');
+        expect(data.name).to.equal('Test User');
+        expect(data).to.have.a.property('email');
+        expect(data.email).to.equal('test@test.com');
       });
     });
 
