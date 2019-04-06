@@ -7,7 +7,7 @@ const keys = require('../../config/keys');
 
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
-const user = require('../../models/user');
+const User = require('../../models/User');
 
 router.post('/register', async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
   if (!isValid) return res.status(400).json(errors);
 
   try {
-    const foundUser = await user.find({ email: req.body.email });
+    const foundUser = await User.findOne({ email: req.body.email });
 
     if (foundUser) {
       return res.status(400).json({ email: 'Email already exists' });
@@ -31,15 +31,20 @@ router.post('/register', async (req, res) => {
       });
     });
 
-    const newUser = {
+    const newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword
-    };
+    });
 
-    const saveResult = await user.save(newUser);
+    const saveResult = await newUser.save();
 
-    res.json(saveResult);
+    console.log('saveResult: ', saveResult);
+
+    res.json({
+      name: saveResult.name,
+      email: saveResult.email
+    });
 
   } catch(err) {
     console.log(err);
@@ -52,10 +57,8 @@ router.post('/login', async (req, res) => {
   if (!isValid) return res.status(400).json(errors);
 
   try {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    const foundUser = await user.find({ email });
+    const { email, password } = req.body;
+    const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
       return res.status(404).json({ email: 'Email not found' });
