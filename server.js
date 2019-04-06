@@ -3,10 +3,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const mongoose = require('mongoose');
 
 const users = require('./routes/api/users');
 const sessions = require('./routes/api/sessions');
-const initDb = require('./db').initDb;
 const keys = require('./config/keys');
 
 const app = express();
@@ -16,10 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 let server;
 
-initDb()
-  .then(db => {
+mongoose.connect(keys.connectionString, { useNewUrlParser: true })
+  .then(() => {
     console.log('Successfully connected to database');
-    
     app.use(passport.initialize());
     require('./config/passport')(passport);
 
@@ -32,12 +31,14 @@ initDb()
       console.log(`Server listening on port ${port}`);
       app.emit('appStarted');
     });
-  })
+
+    app.on('closeApp', () => {
+      console.log('closing app');
+      server.close();
+    });
+      })
   .catch(err => console.log(err));
 
-app.on('closeApp', () => {
-  console.log('closing app');
-  server.close();
-});
+
 
 module.exports = app;
