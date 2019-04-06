@@ -3,7 +3,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-const session = require('../../models/session');
+const Session = require('../../models/Session');
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
   req.body.map(doc => {
@@ -11,7 +11,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
   });
 
   try {
-    const saveResult = await session.save(req.body);
+    const saveResult = await Session.create(req.body);
 
     // Remove userId from docs before sending response
     const savedSessions = saveResult.map(doc => ({
