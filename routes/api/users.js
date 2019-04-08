@@ -39,8 +39,6 @@ router.post('/register', async (req, res) => {
 
     const saveResult = await newUser.save();
 
-    console.log('saveResult: ', saveResult);
-
     res.json({
       name: saveResult.name,
       email: saveResult.email
