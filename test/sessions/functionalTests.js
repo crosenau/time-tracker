@@ -5,7 +5,6 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 
 const server = require('../../server');
-const users = require('../../routes/api/users');
 
 chai.use(chaiHttp);
 
@@ -200,5 +199,9 @@ describe('API ROUTING FOR /api/sessions', function() {
         expect(data.message).to.equal('sessions validation failed: completionDate: Cast to Date failed for value "wrong" at path "completionDate"');
       });
     });
+  });
+
+  describe('/api/sessions/load', function() {
+
   });
 });
