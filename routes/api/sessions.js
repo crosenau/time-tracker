@@ -22,7 +22,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
 
     return res.json(savedSessions);
   } catch(err) {
-    console.log(err);
+    res.status(400).json({ message: err.message });
   }
 });
 
