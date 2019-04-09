@@ -10,15 +10,6 @@ const users = require('../../routes/api/users');
 chai.use(chaiHttp);
 
 describe('API ROUTING FOR /api/users', function () {
-
-  before('Waiting for express app to start', async function () {
-    await new Promise((resolve, reject) => {
-      server.on('appStarted', () => {
-        resolve();
-      });
-    });
-  });
-
   describe('/api/users/register', function () {
     context('with all valid inputs', function () {
       it('should return JSON string containing name and email', async function () {
@@ -418,10 +409,4 @@ describe('API ROUTING FOR /api/users', function () {
       });
     });
   });
-
-  /*
-  after('closing express app', function() {
-    server.emit('closeApp');
-  });
-  */
 });
