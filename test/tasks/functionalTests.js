@@ -8,7 +8,7 @@ const server = require('../../server');
 
 chai.use(chaiHttp);
 
-describe('API ROUTING FOR /api/sessions', function() {
+describe('API ROUTING FOR /api/tasks', function() {
   let token;
 
   before('login with previous test user to get token', async function() {
@@ -31,24 +31,24 @@ describe('API ROUTING FOR /api/sessions', function() {
       token = data.token;
   });
 
-  describe('/api/sessions/save', function() {
-    context('POST with array of correctly formatted sessions', function() {
+  describe('/api/tasks/save', function() {
+    context('POST with array of correctly formatted tasks', function() {
       const sendData = [
         {
-          task: 'test1',
-          sessionLength: 1500,
-          completionDate: new Date()
+          taskName: 'test1',
+          taskLength: 1500,
+          completedAt: new Date()
         },
         {
-          task: 'test2',
-          sessionLength: 2000,
-          completionDate: new Date()
+          taskName: 'test2',
+          taskLength: 2000,
+          completedAt: new Date()
         }
       ];
 
-      it('should return an array of the saved sessions', async function() {
+      it('should return an array of the saved tasks', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send(sendData);
 
@@ -59,21 +59,21 @@ describe('API ROUTING FOR /api/sessions', function() {
         expect(data).to.be.an('array');
         expect(data).to.have.lengthOf(2);
 
-        data.forEach(session => {
-          expect(session).to.be.an('object');
-          expect(session).to.have.property('task');
-          expect(session.task).to.be.a('string');
+        data.forEach(task => {
+          expect(task).to.be.an('object');
+          expect(task).to.have.property('taskName');
+          expect(task.taskName).to.be.a('string');
 
-          const sent = sendData.filter(obj => obj.task === session.task)[0];
+          const sent = sendData.filter(obj => obj.taskName === task.taskName)[0];
 
-          expect(session.task).to.equal(sent.task);
-          expect(session).to.have.property('sessionLength');
-          expect(session.sessionLength).to.equal(sent.sessionLength);
-          expect(session).to.have.property('completionDate');
+          expect(task.task).to.equal(sent.task);
+          expect(task).to.have.property('taskLength');
+          expect(task.taskLength).to.equal(sent.taskLength);
+          expect(task).to.have.property('completedAt');
 
-          const returnedDate = new Date(session.completionDate);
+          const returnedDate = new Date(task.completedAt);
 
-          expect(returnedDate.getTime()).to.equal(sent.completionDate.getTime());
+          expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
         });
 
       });
@@ -82,11 +82,11 @@ describe('API ROUTING FOR /api/sessions', function() {
     context('POST without JSON web token', function() {
       it('should return error 401 Unauthorized', async function() {
         const response = await chai.request(server) 
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .send([{
-            task: 'test',
-            sessionLength: 600,
-            completionDate: new Date()
+            taskName: 'test',
+            taskLength: 600,
+            completedAt: new Date()
           }]);
         
         expect(response.status).to.equal(401);
@@ -97,12 +97,12 @@ describe('API ROUTING FOR /api/sessions', function() {
     context('POST with missing task', function() {
       it('should return a missing task error', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send([{
-            task: '',
-            sessionLength: 600,
-            completionDate: new Date()
+            taskName: '',
+            taskLength: 600,
+            completedAt: new Date()
           }]);
 
         expect(response.status).to.equal(400);
@@ -111,18 +111,18 @@ describe('API ROUTING FOR /api/sessions', function() {
 
         expect(data).to.be.an('object');
         expect(data).to.have.property('message');
-        expect(data.message).to.equal('sessions validation failed: task: Path `task` is required.');
+        expect(data.message).to.equal('tasks validation failed: taskName: Path `taskName` is required.');
       });
     });
 
-    context('POST with missing sessionLength', function() {
-      it('should return a missing sessionLength error', async function() {
+    context('POST with missing taskLength', function() {
+      it('should return a missing taskLength error', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send([{
-            task: 'test',
-            completionDate: new Date()
+            taskName: 'test',
+            completedAt: new Date()
           }]);
 
         expect(response.status).to.equal(400);
@@ -131,18 +131,18 @@ describe('API ROUTING FOR /api/sessions', function() {
 
         expect(data).to.be.an('object');
         expect(data).to.have.property('message');
-        expect(data.message).to.equal('sessions validation failed: sessionLength: Path `sessionLength` is required.');
+        expect(data.message).to.equal('tasks validation failed: taskLength: Path `taskLength` is required.');
       });
     });
 
-    context('POST with missing completionDate', function() {
-      it('should return a missing completionDate error', async function() {
+    context('POST with missing completedAt', function() {
+      it('should return a missing completedAt error', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send([{
-            task: 'test',
-            sessionLength: 600
+            taskName: 'test',
+            taskLength: 600
           }]);
 
         expect(response.status).to.equal(400);
@@ -151,22 +151,22 @@ describe('API ROUTING FOR /api/sessions', function() {
 
         expect(data).to.be.an('object');
         expect(data).to.have.property('message');
-        expect(data.message).to.equal('sessions validation failed: completionDate: Path `completionDate` is required.');
+        expect(data.message).to.equal('tasks validation failed: completedAt: Path `completedAt` is required.');
       });
     });
     
 
 
 
-    context('POST with sessionLength that is below 1', function() {
-      it('should return an error indicating sessionLength is below 1', async function() {
+    context('POST with taskLength that is below 1', function() {
+      it('should return an error indicating taskLength is below 1', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send([{
-            task: 'test',
-            sessionLength: 0.5,
-            completionDate: new Date()
+            taskName: 'test',
+            taskLength: 0.5,
+            completedAt: new Date()
           }]);
 
         expect(response.status).to.equal(400);
@@ -175,19 +175,19 @@ describe('API ROUTING FOR /api/sessions', function() {
 
         expect(data).to.be.an('object');
         expect(data).to.have.property('message');
-        expect(data.message).to.equal('sessions validation failed: sessionLength: sessionLength must be at least 1');
+        expect(data.message).to.equal('tasks validation failed: taskLength: taskLength must be at least 1');
       });
     });
 
-    context('POST with completionDate that is not a date object or properly formatted date string', function() {
+    context('POST with completedAt that is not a date object or properly formatted date string', function() {
       it('should return an error indicating an invalid date', async function() {
         const response = await chai.request(server)
-          .post('/api/sessions/save')
+          .post('/api/tasks/save')
           .set('Authorization', token)
           .send([{
-            task: 'test',
-            sessionLength: 600,
-            completionDate: 'wrong'
+            taskName: 'test',
+            taskLength: 600,
+            completedAt: 'wrong'
           }]);
 
         expect(response.status).to.equal(400);
@@ -196,12 +196,12 @@ describe('API ROUTING FOR /api/sessions', function() {
 
         expect(data).to.be.an('object');
         expect(data).to.have.property('message');
-        expect(data.message).to.equal('sessions validation failed: completionDate: Cast to Date failed for value "wrong" at path "completionDate"');
+        expect(data.message).to.equal('tasks validation failed: completedAt: Cast to Date failed for value "wrong" at path "completedAt"');
       });
     });
   });
 
-  describe('/api/sessions/load', function() {
+  describe('/api/tasks/load', function() {
 
   });
 });

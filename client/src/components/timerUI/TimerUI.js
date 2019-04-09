@@ -24,14 +24,14 @@ function leadingZero(num) {
   return String(num);
 }
 
-function getTotalTime(sessions) {
-  if (sessions.length === 0) {
+function getTotalTime(tasks) {
+  if (tasks.length === 0) {
     return '00:00:00';
   }
 
-  const totalSeconds = (sessions
-    .reduce((acc, cur) => ({sessionLength: acc.sessionLength + cur.sessionLength})))
-    .sessionLength;
+  const totalSeconds = (tasks
+    .reduce((acc, cur) => ({taskLength: acc.taskLength + cur.taskLength})))
+    .taskLength;
 
   const hours = Math.floor(totalSeconds / 60 / 60);
   const minutes = Math.floor(totalSeconds / 60) % 60;
@@ -64,7 +64,7 @@ const TimerUI = props => {
       </button>
       <div id='timer'>
         <ProgressRing />
-        <div id='task-label'>{props.timer.currentTimer === 'session' ? props.timer.task : props.timer.currentTimer}
+        <div id='task-label'>{props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
         </div>
         <div id='controls'>
           <button
@@ -89,8 +89,8 @@ const TimerUI = props => {
         </div>
       </div>
       <div id='footer'>
-          <span>Goal: {props.timer.completedSessions.length}/{props.timer.goal}</span>
-          <span>{getTotalTime(props.timer.completedSessions)}</span>
+          <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
+          <span>{getTotalTime(props.timer.completedTasks)}</span>
         </div>
     </div>
   );

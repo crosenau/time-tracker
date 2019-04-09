@@ -11,22 +11,22 @@ import {
   TOGGLE_SETTINGS_DISPLAY,
 } from '../actions/types';
 
-const session = 'session';
+const task = 'task';
 const shortBreak = 'Break';
 const longBreak = 'Long Break';
 
 const initialState = {
-  task: 'Work',
+  taskName: 'Work',
   shortBreakLength: 1,
   longBreakLength: 2,
-  sessionLength: 3,
+  taskLength: 3,
   setLength: 4,
   goal: 12,
   alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3',
   tickSound: null, // url
-  completedSessions: [],
+  completedTasks: [],
   displaySettings: false,
-  currentTimer: session,
+  currentTimer: task,
   active: false,
   timeRemaining: 3,
   startTime: null,
@@ -59,12 +59,12 @@ export default function(state = initialState, action) {
       };
     }
     case NEXT_TIMER: {
-      let { completedSessions, timeRemaining, currentTimer, setLength, shortBreakLength, longBreakLength, sessionLength } = state;
+      let { completedTasks, timeRemaining, currentTimer, setLength, shortBreakLength, longBreakLength, taskLength } = state;
 
-      if (currentTimer === session) {
+      if (currentTimer === task) {
         if (
-            completedSessions.length % setLength === 0
-            && completedSessions.length !== 0
+            completedTasks.length % setLength === 0
+            && completedTasks.length !== 0
         ) {
           timeRemaining = longBreakLength;
           currentTimer = longBreak;
@@ -73,8 +73,8 @@ export default function(state = initialState, action) {
           currentTimer = shortBreak;
         }
       } else {
-        timeRemaining = sessionLength;
-        currentTimer = session;
+        timeRemaining = taskLength;
+        currentTimer = task;
       }
 
       return {
@@ -84,11 +84,11 @@ export default function(state = initialState, action) {
       };
     }
     case RESET_CURRENT_TIMER: {
-      let { timeRemaining, currentTimer, sessionLength, shortBreakLength, longBreakLength } = state;
+      let { timeRemaining, currentTimer, taskLength, shortBreakLength, longBreakLength } = state;
 
       switch (currentTimer) {
-        case session:
-          timeRemaining = sessionLength;
+        case task:
+          timeRemaining = taskLength;
           break;
         case shortBreak:
           timeRemaining = shortBreakLength;
@@ -105,34 +105,34 @@ export default function(state = initialState, action) {
       };
     }
     case ADD_COMPLETED_SESSION: {
-      let updatedSessions = [...state.completedSessions];
+      let updatedTasks = [...state.completedTasks];
       
-      updatedSessions.push(action.payload);
+      updatedTasks.push(action.payload);
 
       return {
         ...state,
-        completedSessions: updatedSessions
+        completedTasks: updatedTasks
       };
     }
     case CLEAR_COMPLETED_SESSIONS: {
       return {
         ...state,
-        completedSessions: []
+        completedTasks: []
       };
     }
     case SAVE_COMPLETED_SESSIONS: {
-      const updatedSessions = [...action.payload];
-      const savedDates = updatedSessions.map(session => Number(session.completionDate));
+      const updatedTasks = [...action.payload];
+      const savedDates = updatedTasks.map(task => Number(task.completedAt));
 
-      for (let session of state.completedSessions) {
-        if (!savedDates.includes(Number(session.completionDate))) {
-          updatedSessions.push(session);
+      for (let task of state.completedTasks) {
+        if (!savedDates.includes(Number(task.completedAt))) {
+          updatedTasks.push(task);
         }
       }
 
       return {
         ...state,
-        completedSessions: updatedSessions
+        completedTasks: updatedTasks
       };
     }
     case UPDATE_SETTINGS: {

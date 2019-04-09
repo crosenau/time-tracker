@@ -3,7 +3,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-const Session = require('../../models/Session');
+const Task = require('../../models/Task');
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
   req.body.map(doc => {
@@ -11,17 +11,18 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
   });
 
   try {
-    const saveResult = await Session.create(req.body);
+    const saveResult = await Task.create(req.body);
 
     // Remove userId from docs before sending response
-    const savedSessions = saveResult.map(doc => ({
-      task: doc.task,
-      sessionLength: doc.sessionLength,
-      completionDate: doc.completionDate
+    const savedTasks = saveResult.map(doc => ({
+      taskName: doc.taskName,
+      taskLength: doc.taskLength,
+      completedAt: doc.completedAt
     }));
 
-    return res.json(savedSessions);
+    return res.json(savedTasks);
   } catch(err) {
+    console.log(err);
     res.status(400).json({ message: err.message });
   }
 });

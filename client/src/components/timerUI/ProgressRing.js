@@ -10,7 +10,7 @@ function leadingZero(num) {
   return String(num);
 }
 
-const session = 'session';
+const task = 'task';
 const shortBreak = 'Break';
 const longBreak = 'Long Break';
 
@@ -33,8 +33,8 @@ class ProgressRing extends Component {
 
   percentRemaining() {
     switch (this.props.timer.currentTimer) {
-     case session:
-       return (this.props.timer.timeRemaining / this.props.timer.sessionLength) * 100;
+     case task:
+       return (this.props.timer.timeRemaining / this.props.timer.taskLength) * 100;
      case shortBreak:
        return (this.props.timer.timeRemaining / this.props.timer.shortBreakLength) * 100;
      case longBreak:

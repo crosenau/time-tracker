@@ -6,7 +6,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 
 const users = require('./routes/api/users');
-const sessions = require('./routes/api/sessions');
+const tasks = require('./routes/api/tasks');
 const keys = require('./config/keys');
 
 const app = express();
@@ -23,7 +23,7 @@ mongoose.connect(keys.connectionString, { useNewUrlParser: true })
     require('./config/passport')(passport);
 
     app.use('/api/users', users);
-    app.use('/api/sessions', sessions);
+    app.use('/api/tasks', tasks);
 
     const port = keys.port || 5000;
 

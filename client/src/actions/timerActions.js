@@ -43,34 +43,34 @@ export function resetCurrentTimer() {
   };
 }
 
-export function addCompletedSession(session) {
+export function addCompletedTask(task) {
   return {
     type: ADD_COMPLETED_SESSION,
-    payload: session
+    payload: task
   };
 }
 
-export function clearCompletedSessions() {
+export function clearCompletedTasks() {
   return {
     type: CLEAR_COMPLETED_SESSIONS
   };
 }
 
-export function saveCompletedSessions(sessions) {
+export function saveCompletedTasks(tasks) {
   return function(dispatch) {
-    // set saving session state?
+    // set saving task state?
 
     axios
-      .post('/api/sessions/save', sessions)
+      .post('/api/tasks/save', tasks)
       .then(res => {
-        const savedSessions = res.data.map(session => ({
-          ...session,
-          completionDate: new Date(session.completionDate),
+        const savedTasks = res.data.map(task => ({
+          ...task,
+          completedAt: new Date(task.completedAt),
           saved: true
         }));
         dispatch({
           type: SAVE_COMPLETED_SESSIONS,
-          payload: savedSessions
+          payload: savedTasks
         });
       })
       .catch(err => {

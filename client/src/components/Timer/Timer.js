@@ -7,9 +7,9 @@ import {
   updateTimeRemaining,
   nextTimer,
   resetCurrentTimer,
-  addCompletedSession,
-  clearCompletedSessions,
-  saveCompletedSessions,
+  addCompletedTask,
+  clearCompletedTasks,
+  saveCompletedTasks,
   updateSettings,
   toggleSettingsDisplay
 } from '../../actions/timerActions';
@@ -32,21 +32,21 @@ class Timer extends Component {
       clearInterval(this.intervalId);
     }
 
-    // save any unsaved completed sessions to db
+    // save any unsaved completed tasks to db
     const timer = this.props.timer;
 
-    if (prevProps.timer.completedSessions !== timer.completedSessions) {
-      const unsavedSessions = timer.completedSessions
-        .filter(session => !session.saved)
-        .map(session => ({
-            task: session.task,
-            sessionLength: session.sessionLength,
-            completionDate: session.completionDate
+    if (prevProps.timer.completedTasks !== timer.completedTasks) {
+      const unsavedTasks = timer.completedTasks
+        .filter(task => !task.saved)
+        .map(task => ({
+            taskName: task.taskName,
+            taskLength: task.taskLength,
+            completedAt: task.completedAt
         }));
       
-      if (unsavedSessions.length > 0) {
-        console.log('unsavedSessions found');
-        this.props.saveCompletedSessions(unsavedSessions);
+      if (unsavedTasks.length > 0) {
+        console.log('unsavedTasks found');
+        this.props.saveCompletedTasks(unsavedTasks);
       };
     }
   }
@@ -68,29 +68,29 @@ class Timer extends Component {
       this.props.stopTimer();
       this.playAlarm();
 
-      // if new day, reset completedSessions
+      // if new day, reset completedTasks
       const today = new Date().getDay();
       
       let lastRecord;
 
-      if (timer.completedSessions.length > 0) {
-        lastRecord = timer.completedSessions[timer.completedSessions.length-1].completionDate.getDay();
+      if (timer.completedTasks.length > 0) {
+        lastRecord = timer.completedTasks[timer.completedTasks.length-1].completedAt.getDay();
       }
 
       if (lastRecord && lastRecord !== today) {
-        this.props.clearCompletedSessions();
+        this.props.clearCompletedTasks();
       }
 
-      // cache completed session
-      if (timer.currentTimer === 'session') {
-        const session = {
-          task: timer.task,
-          sessionLength: timer.sessionLength,
-          completionDate: new Date(),
+      // cache completed task
+      if (timer.currentTimer === 'task') {
+        const task = {
+          taskName: timer.taskName,
+          taskLength: timer.taskLength,
+          completedAt: new Date(),
           saved: false
         };
 
-        this.props.addCompletedSession(session)
+        this.props.addCompletedTask(task)
       }
 
       this.props.nextTimer();
@@ -137,9 +137,9 @@ export default connect(
     updateTimeRemaining,
     nextTimer,
     resetCurrentTimer,
-    addCompletedSession,
-    clearCompletedSessions,
-    saveCompletedSessions,
+    addCompletedTask,
+    clearCompletedTasks,
+    saveCompletedTasks,
     updateSettings,
     toggleSettingsDisplay
   }

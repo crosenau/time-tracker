@@ -29,8 +29,8 @@ class TimerSettings extends Component {
     super(props);
 
     this.state = {
-      task: this.props.timer.task,
-      sessionLength: String(this.props.timer.sessionLength / 60),
+      taskName: this.props.timer.taskName,
+      taskLength: String(this.props.timer.taskLength / 60),
       shortBreakLength: String(this.props.timer.shortBreakLength / 60),
       longBreakLength: String(this.props.timer.longBreakLength / 60),
       setLength: this.props.timer.setLength,
@@ -60,8 +60,8 @@ class TimerSettings extends Component {
 
   save() {
     let settings = {
-      task: this.state.task,
-      sessionLength: Number(this.state.sessionLength) * 60,
+      taskName: this.state.taskName,
+      taskLength: Number(this.state.taskLength) * 60,
       shortBreakLength: Number(this.state.shortBreakLength) * 60,
       longBreakLength: Number(this.state.longBreakLength) * 60,
       setLength: Number(this.state.setLength),
@@ -83,8 +83,8 @@ class TimerSettings extends Component {
 
   resetFields() {
     this.setState({
-      task: this.props.timer.task,
-      sessionLength: String(this.props.timer.sessionLength / 60),
+      taskName: this.props.timer.taskName,
+      taskLength: String(this.props.timer.taskLength / 60),
       shortBreakLength: String(this.props.timer.shortBreakLength / 60),
       longBreakLength: String(this.props.timer.longBreakLength / 60),
       setLength: this.props.timer.setLength,
@@ -113,9 +113,9 @@ class TimerSettings extends Component {
           <div className='section'>
             <h3>Task</h3>
             <input
-              id='task'
+              id='taskName'
               type='text'
-              value={this.state.task}
+              value={this.state.taskName}
               onChange={this.handleChange}
             />
           </div>
@@ -123,13 +123,13 @@ class TimerSettings extends Component {
           <div className='section'>
             <h3>Timer Length <span>(in minutes)</span></h3>
             <div className='num-input'>
-              <h4>Session</h4>
+              <h4>Task</h4>
               <input 
-                id='sessionLength' 
+                id='taskLength' 
                 type='number' 
                 min='1' 
                 max='60' 
-                value={this.state.sessionLength}
+                value={this.state.taskLength}
                 onChange={this.handleChange}
               />
             </div>
@@ -157,9 +157,9 @@ class TimerSettings extends Component {
           </div>
           
           <div className='section'>
-            <h3>Sessions</h3>
+            <h3>Tasks</h3>
             <div className='num-input'>
-              <h4>Sessions per Long Break</h4>
+              <h4>Tasks per Long Break</h4>
               <input
                 id='setLength'
                 type='number'

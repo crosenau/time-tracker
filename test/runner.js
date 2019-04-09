@@ -9,7 +9,7 @@ const mocha = new Mocha();
 
 const dirs = [
   path.join(__dirname, 'users'), 
-  path.join(__dirname, 'sessions')
+  path.join(__dirname, 'tasks')
 ];
 
 server.on('appStarted', () => {
