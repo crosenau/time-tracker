@@ -10,6 +10,7 @@ const SessionSchema = new Schema({
   },
   sessionLength: {
     type: Number,
+    min: [1, 'sessionLength must be at least 1'],
     required: true
   },
   completionDate: {
