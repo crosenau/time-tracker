@@ -23,13 +23,16 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
     return res.json(savedTasks);
   } catch(err) {
     // console.log(err);
-    const response = err.message ? { meesage: err.message } : { message: err }
+    const response = err.message ? { message: err.message } : { message: err }
+    console.log(response);
     res.status(400).json(response);
   }
 });
 
 router.get('/load', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  
+  const { errors, isValid } = validateTaskInput(req.query);
+
+  if (!isValid) return res.status(400).json(errors);
 });
 
 module.exports = router;
