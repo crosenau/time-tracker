@@ -10,6 +10,12 @@ const User = require('../../models/User');
 chai.use(chaiHttp);
 
 describe('API ROUTING FOR /api/users/register', function () {
+  after('delete created user', async function() {
+    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
+
+    expect(testUser.name).to.equal('Test User');
+  });
+  
   context('with all valid inputs', function () {
     it('should return JSON string containing name and email', async function () {
       const response = await chai.request(server)
@@ -281,11 +287,5 @@ describe('API ROUTING FOR /api/users/register', function () {
       expect(data).to.have.a.property('password2');
       expect(data.password2).to.equal('Confirm Password is required');
     });
-  });
-
-  after('delete created user', async function() {
-    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
-
-    expect(testUser.name).to.equal('Test User');
   });
 });

@@ -6,22 +6,19 @@ const chaiHttp = require('chai-http');
 
 const server = require('../../server');
 const User = require('../../models/User');
+const utility = require('../utility');
 
 chai.use(chaiHttp);
 
 describe('API ROUTING FOR /api/users/login', function () {
   before('create test user', async function() {
-    const response = await chai.request(server)
-      .post('/api/users/register')
-      .send({
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'testPassword',
-        password2: 'testPassword'
-      });
-    
-  expect(response.status).to.equal(200);
+    await utility.createTestUser();
+  });
 
+  after('delete created user', async function() {
+    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
+
+    expect(testUser.name).to.equal('Test User');
   });
 
   context('with valid email and password', function () {
@@ -145,11 +142,5 @@ describe('API ROUTING FOR /api/users/login', function () {
       expect(data).to.have.a.property('password');
       expect(data.password).to.equal('Password is incorrect');
     });
-  });
-
-  after('delete created user', async function() {
-    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
-
-    expect(testUser.name).to.equal('Test User');
   });
 });

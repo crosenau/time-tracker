@@ -7,41 +7,19 @@ const chaiHttp = require('chai-http');
 const server = require('../../server');
 const User = require('../../models/User');
 const Task = require('../../models/Task');
+const utility = require('../utility');
 
 chai.use(chaiHttp);
 
 describe('API ROUTING FOR /api/tasks/save', function () {
   let token;
 
-  before('Create new test user and login to get token', async function () {
-    const registerResponse = await chai.request(server)
-      .post('/api/users/register')
-      .send({
-        name: 'Test User',
-        email: 'test@test.com',
-        password: 'testPassword',
-        password2: 'testPassword'
-      });
+  before('Create new test user', async function () {
+    await utility.createTestUser();
+  });
 
-    expect(registerResponse.status).to.equal(200);
-
-    const loginResponse = await chai.request(server)
-      .post('/api/users/login')
-      .send({
-        email: 'test@test.com',
-        password: 'testPassword'
-      });
-
-    const data = JSON.parse(loginResponse.text);
-
-    expect(data).to.be.an('object');
-    expect(data).to.have.a.property('success');
-    expect(data.success).to.be.true;
-    expect(data).to.have.a.property('token');
-    expect(data.token).to.be.a('string');
-    expect(data.token).to.match(/^Bearer/);
-
-    token = data.token;
+  before('Simulate login to get JSON web token', async function() {
+    token = await utility.getJWT();
   });
 
   after('delete created user', async function() {
@@ -94,7 +72,7 @@ describe('API ROUTING FOR /api/tasks/save', function () {
 
         const sent = sendData.filter(obj => obj.taskName === task.taskName)[0];
 
-        expect(task.task).to.equal(sent.task);
+        expect(task.taskName).to.equal(sent.taskName);
         expect(task).to.have.property('taskLength');
         expect(task.taskLength).to.equal(sent.taskLength);
         expect(task).to.have.property('completedAt');
