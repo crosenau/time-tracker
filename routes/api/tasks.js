@@ -22,9 +22,14 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
 
     return res.json(savedTasks);
   } catch(err) {
-    console.log(err);
-    res.status(400).json({ message: err.message });
+    // console.log(err);
+    const response = err.message ? { meesage: err.message } : { message: err }
+    res.status(400).json(response);
   }
+});
+
+router.get('/load', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  
 });
 
 module.exports = router;
