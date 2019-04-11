@@ -16,6 +16,10 @@ const TaskSchema = new Schema({
   completedAt: {
     type: Date,
     required: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true
   }
 });
 
