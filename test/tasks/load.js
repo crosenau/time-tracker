@@ -5,7 +5,6 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 
 const server = require('../../server');
-const User = require('../../models/User');
 const Task = require('../../models/Task');
 const utility = require('../utility');
 
@@ -76,7 +75,7 @@ describe('API ROUTING FOR /api/tasks/load', function () {
     });
   });
 
-  after('delete created user', async function() {
+  after('delete created user and tasks', async function() {
     const testTasks = await Task.deleteMany({ taskLength: 500 });
 
     expect(testTasks).to.be.an('object');
@@ -104,6 +103,8 @@ describe('API ROUTING FOR /api/tasks/load', function () {
 
       data.forEach(task => {
         expect(task).to.be.an('object');
+        expect(task).to.not.have.property('_id');
+        expect(task).to.not.have.property('userId');
         expect(task).to.have.property('taskName');
         expect(task.taskName).to.be.a('string');
   
@@ -140,6 +141,8 @@ describe('API ROUTING FOR /api/tasks/load', function () {
 
       data.forEach(task => {
         expect(task).to.be.an('object');
+        expect(task).to.not.have.property('_id');
+        expect(task).to.not.have.property('userId');
         expect(task).to.have.property('taskName');
         expect(task.taskName).to.be.a('string');
   
@@ -177,6 +180,8 @@ describe('API ROUTING FOR /api/tasks/load', function () {
 
       data.forEach(task => {
         expect(task).to.be.an('object');
+        expect(task).to.not.have.property('_id');
+        expect(task).to.not.have.property('userId');
         expect(task).to.have.property('taskName');
         expect(task.taskName).to.be.a('string');
   
@@ -214,6 +219,8 @@ describe('API ROUTING FOR /api/tasks/load', function () {
 
       data.forEach(task => {
         expect(task).to.be.an('object');
+        expect(task).to.not.have.property('_id');
+        expect(task).to.not.have.property('userId');
         expect(task).to.have.property('taskName');
         expect(task.taskName).to.be.a('string');
 
