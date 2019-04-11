@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 const passport = require('passport');
+const isEmpty = require('is-empty');
 
 const Task = require('../../models/Task');
 
@@ -24,15 +25,33 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
   } catch(err) {
     // console.log(err);
     const response = err.message ? { message: err.message } : { message: err }
-    console.log(response);
+    // console.log(response);
     res.status(400).json(response);
   }
 });
 
 router.get('/load', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const { errors, isValid } = validateTaskInput(req.query);
+  let { start, end } = req.query;
 
-  if (!isValid) return res.status(400).json(errors);
+  start = !isEmpty(start) ? new Date(start) : new Date(0);
+  end = !isEmpty(end) ? new Date(end) : new Date();
+
+  try {
+    const tasks = await Task.find({
+      userId: req.user._id,
+      completedAt: {
+        $gte: start,
+        $lte: end
+      }
+    });
+
+    return res.json(tasks);
+  } catch(err) {
+    // console.log(err);
+    const response = err.message ? { message: err.message } : { message: err }
+    console.log(response);
+    res.status(400).json(response);
+  }
 });
 
 module.exports = router;
