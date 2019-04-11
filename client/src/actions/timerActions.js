@@ -10,7 +10,7 @@ import {
   CLEAR_COMPLETED_SESSIONS,
   SAVE_COMPLETED_SESSIONS,
   UPDATE_SETTINGS,
-  TOGGLE_SETTINGS_DISPLAY
+  TOGGLE_TIMER_SETTINGS
 } from './types';
 
 export function startTimer() {
@@ -86,8 +86,8 @@ export function updateSettings(settings) {
   };
 }
 
-export function toggleSettingsDisplay() {
+export function toggleTimerSettings() {
   return {
-    type: TOGGLE_SETTINGS_DISPLAY
+    type: TOGGLE_TIMER_SETTINGS
   };
 }

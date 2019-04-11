@@ -8,7 +8,7 @@ import {
   CLEAR_COMPLETED_SESSIONS,
   SAVE_COMPLETED_SESSIONS,
   UPDATE_SETTINGS,
-  TOGGLE_SETTINGS_DISPLAY,
+  TOGGLE_TIMER_SETTINGS,
 } from '../actions/types';
 
 const task = 'task';
@@ -141,7 +141,7 @@ export default function(state = initialState, action) {
         ...action.payload
       };
     }
-    case TOGGLE_SETTINGS_DISPLAY: {
+    case TOGGLE_TIMER_SETTINGS: {
       return {
         ...state,
         displaySettings: !state.displaySettings

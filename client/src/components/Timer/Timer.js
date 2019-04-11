@@ -11,7 +11,7 @@ import {
   clearCompletedTasks,
   saveCompletedTasks,
   updateSettings,
-  toggleSettingsDisplay
+  toggleTimerSettings
 } from '../../actions/timerActions';
 
 class Timer extends Component {
@@ -141,6 +141,6 @@ export default connect(
     clearCompletedTasks,
     saveCompletedTasks,
     updateSettings,
-    toggleSettingsDisplay
+    toggleTimerSettings
   }
 )(Timer);

@@ -8,7 +8,7 @@ import {
   nextTimer,
   resetCurrentTimer,
   updateSettings,
-  toggleSettingsDisplay
+  toggleTimerSettings
 } from '../../actions/timerActions';
 
 import './TimerSettings.css';
@@ -72,13 +72,13 @@ class TimerSettings extends Component {
 
     this.props.stopTimer();
     this.props.updateSettings(settings);
-    this.props.toggleSettingsDisplay();
+    this.props.toggleTimerSettings();
     this.props.resetCurrentTimer();
   }
 
   cancel() {
     this.resetFields();
-    this.props.toggleSettingsDisplay();
+    this.props.toggleTimerSettings();
   }
 
   resetFields() {
@@ -228,6 +228,6 @@ export default connect(
     nextTimer,
     resetCurrentTimer,
     updateSettings,
-    toggleSettingsDisplay
+    toggleTimerSettings
   }
 )(TimerSettings);

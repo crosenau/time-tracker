@@ -6,7 +6,7 @@ import {
   stopTimer,
   nextTimer,
   resetCurrentTimer,
-  toggleSettingsDisplay
+  toggleTimerSettings
 } from '../../actions/timerActions';
 
 import ProgressRing from './ProgressRing';
@@ -57,9 +57,9 @@ const TimerUI = props => {
     </button>;
 
   return (
-    <div id='container'>
+    <div id='timer-ui'>
       {props.timer.displaySettings ? <TimerSettings /> : null}
-      <button className='icon-btn' id='settings-btn' onClick={props.toggleSettingsDisplay}>
+      <button className='icon-btn' id='settings-btn' onClick={props.toggleTimerSettings}>
         <FontAwesomeIcon icon='ellipsis-v' />
       </button>
       <div id='timer'>
@@ -112,5 +112,5 @@ export default connect(
     stopTimer,
     resetCurrentTimer,
     nextTimer,
-    toggleSettingsDisplay }
+    toggleTimerSettings }
 )(TimerUI);
