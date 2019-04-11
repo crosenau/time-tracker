@@ -86,23 +86,13 @@ describe('API ROUTING FOR /api/tasks/load', function () {
 
     expect(testUser.name).to.equal('Test User');
   });
-
-  /* date range: {
-    from: { year, month, day },
-    to: { year, month, day }
-  }
-
-  ?start=01-01-2012&end=01-31-2012
-  ?start=YYYYMMDD
-    ?start=20180101&end=20180201
-  */
  
   context('GET with no date range', function () {
     it('should return an array of all of the users\' tasks', async function () {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
-        .send({
+        .query({
           start: '',
           end: ''
         });
@@ -138,9 +128,9 @@ describe('API ROUTING FOR /api/tasks/load', function () {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
-        .send({
-          start: '20190101',
-          end: '20190201'
+        .query({
+          start: new Date(2019, 0, 1),
+          end: new Date(2019, 1, 1)
         });
 
       expect(response.status).to.equal(200);
@@ -165,27 +155,27 @@ describe('API ROUTING FOR /api/tasks/load', function () {
         const returnedDate = new Date(task.completedAt);
   
         expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
-        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-1].getTime());
+        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-1].completedAt.getTime());
       });
     });
   });
 
-  context('GET with only "start=20190201"', function() {
+  context('GET with only start="2019-02-01T08:00:00.000Z"', function() {
     it('should return only the tasks on or after that date', async function() {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
-        .send({
-          start: '20190201',
+        .query({
+          start: new Date(2019, 1, 1),
           end: ''
         });
 
-      expect(request.status).to.equal(200);
+      expect(response.status).to.equal(200);
       
       const data = JSON.parse(response.text);
 
       expect(data).to.be.an('array');
-      expect(data).to.be.lengthOf(3);
+      expect(data).to.be.lengthOf(1);
 
       data.forEach(task => {
         expect(task).to.be.an('object');
@@ -202,22 +192,22 @@ describe('API ROUTING FOR /api/tasks/load', function () {
         const returnedDate = new Date(task.completedAt);
   
         expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
-        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-1].getTime());
+        expect(returnedDate.getTime()).to.be.greaterThan(testTasks[testTasks.length-2].completedAt.getTime());
       });
     });
   });
 
-  context('GET with only "end=20190101"', function() {
+  context('GET with only end="2019-02-01T08:00:00.000Z"', function() {
     it('should return only the tasks on or before that date', async function() {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
-        .send({
+        .query({
           start: '',
-          end: '20190101'
+          end: new Date(2019, 0, 1)
         });
 
-      expect(request.status).to.equal(200);
+      expect(response.status).to.equal(200);
       
       const data = JSON.parse(response.text);
 
@@ -239,48 +229,42 @@ describe('API ROUTING FOR /api/tasks/load', function () {
         const returnedDate = new Date(task.completedAt);
 
         expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
-        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-2].getTime());
+        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-2].completedAt.getTime());
       });
     });
   });
 
-  context('GET with start date later than the to date', function() {
-    it('should return an invalid date range error', async function() {
-      const response = await chai.request(server)
-        .get('/api/tasks/load')
-        .set('Authorization', token)
-        .send({
-          start: '20190201',
-          end: '20190101'
-        });
-
-      expect(request.status).to.equal(400);
-
-      const data = JSON.parse(response.text);
-
-      expect(data).to.be.an('object');
-      expect(data).to.have.property('message');
-      expect(data.message).to.equal('Invalid date range. Start date must be before end date');
-    });
-  });
-
-  context('GET with string that doens\'t follow "YYYYMMDD" format', function() {
+  context('GET with string that doesn\'t follow ISO 8601 format', function() {
     it('should return an invalid date error', async function() {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
-        .send({
+        .query({
           start: '201921',
           end: '20190101'
         });
 
-      expect(request.status).to.equal(400);
+      expect(response.status).to.equal(400);
 
       const data = JSON.parse(response.text);
 
       expect(data).to.be.an('object');
       expect(data).to.have.property('message');
-      expect(data.message).to.equal('Invalid date format. Start and end dates must be in format "YYYYMMDD"');
+      expect(data.message).to.equal('Cast to date failed for value "Invalid Date" at path "completedAt" for model "tasks"');
+    });
+  });
+
+  context('missing JSON Web Token', function() {
+    it('should return error 401 Unauthorized', async function () {
+      const response = await chai.request(server)
+        .get('/api/tasks/load')
+        .query({
+          start: '',
+          end: ''
+        });
+
+        expect(response.status).to.equal(401);
+        expect(response.text).to.equal('Unauthorized');
     });
   });
 });
