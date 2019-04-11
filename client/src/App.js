@@ -14,6 +14,7 @@ import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import Stats from './components/stats/Stats';
 import TimerUI from './components/timerUI/TimerUI';
 
 import './App.css';
@@ -53,6 +54,7 @@ class App extends Component {
               <Route exact path={['/', '/login', '/register']} component={Landing} />
               <Route exact path={['/', '/login']} component={Login} />
               <Route exact path='/register' component={Register} />
+              <PrivateRoute path='/stats' component={Stats} />
               <PrivateRoute path='/timer' component={TimerUI} />
             </div>
           </div>
