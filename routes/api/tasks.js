@@ -15,10 +15,10 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
     const saveResult = await Task.create(req.body);
 
     // Remove userId from docs before sending response
-    const savedTasks = saveResult.map(doc => ({
-      taskName: doc.taskName,
-      taskLength: doc.taskLength,
-      completedAt: doc.completedAt
+    const savedTasks = saveResult.map(task => ({
+      taskName: task.taskName,
+      taskLength: task.taskLength,
+      completedAt: task.completedAt
     }));
 
     return res.json(savedTasks);
@@ -43,7 +43,14 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
       }
     });
 
-    return res.json(tasks);
+    // Remove userId from docs before sending response
+    const formattedTasks = tasks.map(task => ({
+      taskName: task.taskName,
+      taskLength: task.taskLength,
+      completedAt: task.completedAt
+    }));
+
+    return res.json(formattedTasks);
   } catch(err) {
     const response = err.message ? { message: err.message } : { message: err }
     res.status(400).json(response);
