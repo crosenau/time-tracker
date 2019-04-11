@@ -28,9 +28,7 @@ describe('API ROUTING FOR /api/tasks/save', function () {
     expect(testTasks).to.be.an('object');
     expect(testTasks.deletedCount).to.equal(3);
 
-    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
-
-    expect(testUser.name).to.equal('Test User');
+    await utility.deleteTestUser();
   });
 
   context('POST with array of correctly formatted tasks', function () {

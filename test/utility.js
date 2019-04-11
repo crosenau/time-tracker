@@ -5,6 +5,7 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 
 const server = require('../server');
+const User = require('../models/User');
 
 chai.use(chaiHttp);
 
@@ -41,7 +42,14 @@ async function getJWT() {
   return data.token;
 }
 
+async function deleteTestUser() {
+  const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
+  
+  expect(testUser.name).to.equal('Test User');
+}
+
 module.exports = {
   createTestUser,
-  getJWT
+  getJWT,
+  deleteTestUser
 };

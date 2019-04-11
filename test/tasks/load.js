@@ -82,9 +82,7 @@ describe('API ROUTING FOR /api/tasks/load', function () {
     expect(testTasks).to.be.an('object');
     expect(testTasks.deletedCount).to.equal(4);
 
-    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
-
-    expect(testUser.name).to.equal('Test User');
+    await utility.deleteTestUser();
   });
  
   context('GET with no date range', function () {

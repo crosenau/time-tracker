@@ -5,17 +5,16 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 
 const server = require('../../server');
-const User = require('../../models/User');
+const utility = require('../utility');
+
 
 chai.use(chaiHttp);
 
 describe('API ROUTING FOR /api/users/register', function () {
   after('delete created user', async function() {
-    const testUser = await User.findOneAndDelete({ email: 'test@test.com' });
-
-    expect(testUser.name).to.equal('Test User');
+    await utility.deleteTestUser();
   });
-  
+
   context('with all valid inputs', function () {
     it('should return JSON string containing name and email', async function () {
       const response = await chai.request(server)
