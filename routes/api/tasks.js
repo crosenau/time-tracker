@@ -8,7 +8,7 @@ const Task = require('../../models/Task');
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
   req.body.map(doc => {
-    doc.userId = req.user._id
+    doc.userId = req.user[0]._id
   });
 
   try {
@@ -23,9 +23,7 @@ router.post('/save', passport.authenticate('jwt', { session: false }), async (re
 
     return res.json(savedTasks);
   } catch(err) {
-    // console.log(err);
     const response = err.message ? { message: err.message } : { message: err }
-    // console.log(response);
     res.status(400).json(response);
   }
 });
@@ -38,7 +36,7 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
 
   try {
     const tasks = await Task.find({
-      userId: req.user._id,
+      userId: req.user[0]._id,
       completedAt: {
         $gte: start,
         $lte: end
@@ -47,9 +45,7 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
 
     return res.json(tasks);
   } catch(err) {
-    // console.log(err);
     const response = err.message ? { message: err.message } : { message: err }
-    console.log(response);
     res.status(400).json(response);
   }
 });
