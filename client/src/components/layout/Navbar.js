@@ -29,11 +29,11 @@ class Navbar extends Component {
       navOpts = (
         <nav>
           <NavLink 
-            to='/stats'
+            to='/chart'
             className='nav-btn'
             activeClassName='nav-btn-selected' 
           >
-            Stats
+            Chart
           </NavLink>
           <NavLink 
             to='/timer'
