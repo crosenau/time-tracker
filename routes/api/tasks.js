@@ -35,13 +35,15 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
   end = !isEmpty(end) ? new Date(end) : new Date();
 
   try {
-    const tasks = await Task.find({
-      userId: req.user[0]._id,
-      completedAt: {
-        $gte: start,
-        $lte: end
-      }
-    });
+    const tasks = await Task
+      .find({
+        userId: req.user[0]._id,
+        completedAt: {
+          $gte: start,
+          $lte: end
+        }
+      })
+      .sort({ completedAt: 'asc' });
 
     // Remove userId from docs before sending response
     const formattedTasks = tasks.map(task => ({
