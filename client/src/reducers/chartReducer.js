@@ -33,9 +33,12 @@ export default function(state = initialState, action) {
     }
 
     case UPDATE_CHART_SETTINGS: {
+      const { startDate, endDate, filter } = action.payload;
       return {
         ...state,
-        filters: action.payload
+        startDate,
+        endDate,
+        filter
       };
     }
 
