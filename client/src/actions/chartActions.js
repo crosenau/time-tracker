@@ -6,12 +6,12 @@ import {
   TOGGLE_CHART_SETTINGS
 } from './types';
 
-export function getTasks() {
+export function getTasks(data) {
   return function(dispatch) {
     // Set loading state
 
     axios
-      .post('/api/tasks/load')
+      .get('/api/tasks/load', data)
       .then(res => {
         const tasks = res.data.map(task => ({
           ...task,
@@ -29,14 +29,14 @@ export function getTasks() {
   }
 }
 
-export function updatechartSettings(settings) {
+export function updateChartSettings(settings) {
   return {
     type: UPDATE_CHART_SETTINGS,
     payload: settings
   };
 } 
 
-export function togglechartSettings() {
+export function toggleChartSettings() {
   return {
     type: TOGGLE_CHART_SETTINGS
   };
