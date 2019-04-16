@@ -1,4 +1,4 @@
-#chart {
+#container {
   width: 90%;
   margin: 3rem;
   padding: 2rem;
@@ -9,11 +9,16 @@
   flex-direction: column;
 }
 
-#container h2 {
-  align-self: start;
+#header {
+  display: flex;
+  justify-content: space-between;
 }
 
-#settings-btn {
+#header h2 {
+  margin-bottom: 0rem;
+}
+
+#settingsButton {
   font-size: 1.5rem;
   width: 1.5rem;
   align-self: end;

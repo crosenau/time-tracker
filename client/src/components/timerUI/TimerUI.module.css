@@ -1,4 +1,4 @@
-#timer-ui {
+#container {
   width: 50%;
   margin: 3rem;
   padding: 2rem;
@@ -9,10 +9,14 @@
   flex-direction: column;
 }
 
-#settings-btn {
+#header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#settingsButton {
   font-size: 1.5rem;
   width: 1.5rem;
-  align-self: end;
 }
 
 #timer {
@@ -26,7 +30,7 @@
   align-items: center;
 }
 
-#task-label {
+#taskLabel {
   margin: 1rem;
   font-size: 3rem;
 }
@@ -47,7 +51,7 @@
   border-radius: 50%;
 }
 
-#play-pause-btn {
+#playPauseButton {
   font-size: 4rem;
 }
 

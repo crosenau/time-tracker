@@ -13,7 +13,7 @@ import ProgressRing from './ProgressRing';
 import TimerSettings from '../settings/TimerSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './TimerUI.css'
+import styles from './TimerUI.module.css'
 
 
 function leadingZero(num) {
@@ -57,16 +57,23 @@ const TimerUI = props => {
     </button>;
 
   return (
-    <div id='timer-ui'>
+    <div id={styles.container}>
       {props.timer.displaySettings ? <TimerSettings /> : null}
-      <button className='icon-btn' id='settings-btn' onClick={props.toggleTimerSettings}>
-        <FontAwesomeIcon icon='ellipsis-v' />
-      </button>
-      <div id='timer'>
+      <div id={styles.header}>
+        <button 
+          className='icon-btn' 
+          id={styles.settingsButton} 
+          onClick={props.toggleTimerSettings}
+        >
+          <FontAwesomeIcon icon='ellipsis-v' />
+        </button>
+      </div>
+      <div id={styles.timer}>
         <ProgressRing />
-        <div id='task-label'>{props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
+        <div id={styles.taskLabel}>
+          {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
         </div>
-        <div id='controls'>
+        <div id={styles.controls}>
           <button
             className='icon-btn'
             onClick={() => {
@@ -88,7 +95,7 @@ const TimerUI = props => {
           </button>
         </div>
       </div>
-      <div id='footer'>
+      <div id={styles.footer}>
           <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
           <span>{getTotalTime(props.timer.completedTasks)}</span>
         </div>

@@ -11,7 +11,7 @@ import {
 import ChartSettings from '../settings/ChartSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Chart.css';
+import styles from './Chart.module.css';
 
 class Chart extends Component {
   componentDidMount() {
@@ -25,11 +25,11 @@ class Chart extends Component {
 
   render() {
     return (
-      <div id='chart'>
+      <div id={styles.container}>
         {this.props.chart.displaySettings ? <ChartSettings /> : null}
-        <div id='header'>
+        <div id={styles.header}>
           <h2>Progresss</h2>
-          <button className='icon-btn' id='settings-btn' onClick={this.props.toggleChartSettings}>
+          <button className='icon-btn' id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
         </div>

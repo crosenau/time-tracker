@@ -8,7 +8,7 @@ import {
 
 import DatePicker from 'react-datepicker';
 
-import './settings.css';
+import style from './settings.module.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -89,9 +89,10 @@ class ChartSettings extends Component {
     console.log('uniqueTasks: ', uniqueTasks);
 
     return (
-      <div id='overlay'>
-        <div id='settings'>
-          <div id='header'>
+      <div id={style.overlay}>
+        <div id={style.settings}>
+          <div id={style.header}>
+          <h2>Settings</h2>
             <button
               className='icon-btn'
               onClick={this.cancel}
@@ -100,9 +101,9 @@ class ChartSettings extends Component {
             </button>
           </div>
 
-          <div className='section'>
+          <div className={style.section}>
             <h3>Date Range</h3>
-            <div className='input-container'>
+            <div className={style.inputContainer}>
               <label htmlFor='startDate'>From</label>
               <DatePicker
                 id='startDate'
@@ -112,7 +113,7 @@ class ChartSettings extends Component {
                 }}
               />
             </div>
-            <div className='input-container'>
+            <div className={style.inputContainer}>
               <label htmlFor='endDate'>To</label>
               <DatePicker
                 id='endDate'
@@ -125,30 +126,32 @@ class ChartSettings extends Component {
           </div>
           
           <div id='section'>
-              <h3>Filter</h3>
-              {uniqueTasks.map((task, i) => {
-                console.log(task, i);
-                return (
-                  <div className='checkbox-container' key={`checkbox-container-${i}`}>
-                    <input
-                      type='checkbox'
-                      id={task}
-                      key={`checkbox-${i}`}
-                      onChange={this.handleCheck}
-                      checked={!this.state.filter.includes(task)}
-                    />
-                    <label 
-                      htmlFor={task}
-                      key={`label-${i}`}
-                    >
-                      {task}
-                    </label>
-                  </div>
-                );
-              })}
+            <h3>Filter</h3>
+            <div className={style.checkboxes}>
+            {uniqueTasks.map((task, i) => {
+              console.log(task, i);
+              return (
+                <div className='checkboxContainer' key={`checkboxContainer-${i}`}>
+                  <input
+                    type='checkbox'
+                    id={task}
+                    key={`checkbox-${i}`}
+                    onChange={this.handleCheck}
+                    checked={!this.state.filter.includes(task)}
+                  />
+                  <label 
+                    htmlFor={task}
+                    key={`label-${i}`}
+                  >
+                    {task}
+                  </label>
+                </div>
+              );
+            })}
+            </div>
           </div>
 
-          <div className='section'>
+          <div className={style.section}>
             <button onClick={this.save}>Save</button>
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>
