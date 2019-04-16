@@ -8,7 +8,7 @@ import {
 
 import DatePicker from 'react-datepicker';
 
-import './ChartSettings.css';
+import './settings.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -29,7 +29,7 @@ class ChartSettings extends Component {
     this.handleCheck = this.handleCheck.bind(this);
     this.save = this.save.bind(this);
     this.cancel = this.cancel.bind(this);
-    this.revertSettings = this.revertSettings.bind(this);
+    this.resetFields = this.resetFields.bind(this);
   }
 
   handleDateChange(date, id) {
@@ -64,11 +64,11 @@ class ChartSettings extends Component {
   }
 
   cancel() {
-    this.revertSettings();
+    this.resetFields();
     this.props.toggleChartSettings();
   }
 
-  revertSettings() {
+  resetFields() {
     const chart = this.props.chart;
 
     this.setState({
@@ -96,28 +96,32 @@ class ChartSettings extends Component {
               className='icon-btn'
               onClick={this.cancel}
             >
-              <FontAwesomeIcon icon={['far', 'times-circle']} />
+              <FontAwesomeIcon icon={'times'} />
             </button>
           </div>
 
           <div className='section'>
             <h3>Date Range</h3>
-            <h2>From</h2>
-            <DatePicker
-              id='startDate'
-              selected={this.state.startDate}
-              onChange={date => {
-                this.handleDateChange(date, 'startDate');
-              }}
-            />
-            <h2>To</h2>
-            <DatePicker
-              id='endDate'
-              selected={this.state.startDate}
-              onChange={date => {
-                this.handleDateChange(date, 'endDate');
-              }}
-            />
+            <div className='input-container'>
+              <label htmlFor='startDate'>From</label>
+              <DatePicker
+                id='startDate'
+                selected={this.state.startDate}
+                onChange={date => {
+                  this.handleDateChange(date, 'startDate');
+                }}
+              />
+            </div>
+            <div className='input-container'>
+              <label htmlFor='endDate'>To</label>
+              <DatePicker
+                id='endDate'
+                selected={this.state.startDate}
+                onChange={date => {
+                  this.handleDateChange(date, 'endDate');
+                }}
+              />
+            </div>
           </div>
           
           <div id='section'>
@@ -125,7 +129,7 @@ class ChartSettings extends Component {
               {uniqueTasks.map((task, i) => {
                 console.log(task, i);
                 return (
-                  <div id='checkbox-container' key={`checkbox-container-${i}`}>
+                  <div className='checkbox-container' key={`checkbox-container-${i}`}>
                     <input
                       type='checkbox'
                       id={task}
@@ -145,9 +149,9 @@ class ChartSettings extends Component {
           </div>
 
           <div className='section'>
-              <button onClick={this.save}>Save</button>
-              <button onClick={this.cancel}>Cancel</button>
-              <button>Defaults</button>
+            <button onClick={this.save}>Save</button>
+            <button onClick={this.cancel}>Cancel</button>
+            <button>Defaults</button>
           </div>
 
         </div>

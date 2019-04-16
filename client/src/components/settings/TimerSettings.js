@@ -11,7 +11,7 @@ import {
   toggleTimerSettings
 } from '../../actions/timerActions';
 
-import './TimerSettings.css';
+import './settings.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const alarmSounds = [
@@ -106,24 +106,34 @@ class TimerSettings extends Component {
               className='icon-btn'
               onClick={this.cancel}
             >
-              <FontAwesomeIcon icon={['far', 'times-circle']} />
+              <FontAwesomeIcon icon={'times'} />
             </button>
           </div>
 
           <div className='section'>
-            <h3>Task</h3>
-            <input
-              id='taskName'
-              type='text'
-              value={this.state.taskName}
-              onChange={this.handleChange}
-            />
+            <div className='input-container'>
+              <label
+                htmlFor='taskName'
+              >
+                Task
+              </label>
+              <input
+                id='taskName'
+                type='text'
+                value={this.state.taskName}
+                onChange={this.handleChange}
+              />
+            </div>
           </div>
 
           <div className='section'>
             <h3>Timer Length <span>(in minutes)</span></h3>
-            <div className='num-input'>
-              <h4>Task</h4>
+            <div className='input-container'>
+              <label
+                htmlFor='taskLength'
+              >
+                Task
+              </label>
               <input 
                 id='taskLength' 
                 type='number' 
@@ -133,8 +143,12 @@ class TimerSettings extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className='num-input'>
-              <h4>Short Break</h4>
+            <div className='input-container'>
+              <label
+                htmlFor='shortBreakLength'
+              >
+                Short Break
+              </label>
               <input
               id='shortBreakLength'
               type='number'
@@ -143,8 +157,12 @@ class TimerSettings extends Component {
               onChange={this.handleChange}
             />
             </div>
-            <div className='num-input'>
-              <h4>Long Break</h4>
+            <div className='input-container'>
+              <label
+                htmlFor='longBreakLength'
+              >
+                Long Break
+              </label>
               <input
                 id='longBreakLength'
                 type='number'
@@ -158,8 +176,12 @@ class TimerSettings extends Component {
           
           <div className='section'>
             <h3>Tasks</h3>
-            <div className='num-input'>
-              <h4>Tasks per Long Break</h4>
+            <div className='input-container'>
+              <label
+                htmlFor='setLength'
+              >
+                Tasks per Long Break
+              </label>
               <input
                 id='setLength'
                 type='number'
@@ -168,8 +190,12 @@ class TimerSettings extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className='num-input'>
-              <h4>Daily Goal</h4>
+            <div className='input-container'>
+              <label
+                htmlFor='goal'
+              >
+                Daily Goal
+              </label>
               <input
                 id='goal'
                 type='number'
@@ -182,15 +208,28 @@ class TimerSettings extends Component {
           
           <div className='section'>
             <h3>Sounds</h3>
-            <div className='selection'>
-              <h4>Alarm</h4>
-              <select onChange={this.handleSelect}>
+            <div className='input-container'>
+              <label
+                htmlFor='alarm'
+              >
+                Alarm
+              </label>
+              <select
+                id='alarm'
+                onChange={this.handleSelect}
+              >
                 {alarmSounds.map((sound, i) => <option key={i} id={sound.name} value={sound.url}>{sound.name}</option>)}
               </select>
             </div>
-            <div className='selection'>
-              <h4>Tick</h4>
-              <select>
+            <div className='input-container'>
+              <label
+                htmlFor='tick'
+              >
+                Tick
+              </label>
+              <select
+                id='tick'
+              >
                 <option value='whiteNoise'>White Noise</option>
                 <option value='clock'>Clock</option>
                 <option value='rain'>Rain</option>
