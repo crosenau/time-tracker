@@ -8,7 +8,7 @@ import {
   toggleChartSettings
 } from '../../actions/chartActions';
 
-import ChartSettings from './ChartSettings';
+import ChartSettings from '../settings/ChartSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Chart.css';

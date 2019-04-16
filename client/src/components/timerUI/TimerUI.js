@@ -10,7 +10,7 @@ import {
 } from '../../actions/timerActions';
 
 import ProgressRing from './ProgressRing';
-import TimerSettings from './TimerSettings';
+import TimerSettings from '../settings/TimerSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './TimerUI.css'
