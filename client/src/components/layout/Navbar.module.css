@@ -14,7 +14,6 @@
 }
 
 #clock {
-  width: 60%;
   margin-top: 0.5rem;
   display: flex;
   justify-content: left;
@@ -23,10 +22,10 @@
 nav {
   flex-grow: 1;
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
 }
 
-.nav-btn {
+.navButton {
   color: white;
   background: inherit;
   border: inherit;
@@ -36,9 +35,11 @@ nav {
   cursor: pointer;
   padding-left: 2rem;
   padding-right: 2rem;
+  display: flex;
+  flex-wrap: none;
 }
 
-.nav-btn-selected {
+.navButtonSelected {
   color: black;
   background: #00ccffff;
 }

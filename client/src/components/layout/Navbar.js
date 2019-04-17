@@ -6,7 +6,7 @@ import { logoutUser } from '../../actions/authActions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './Navbar.css';
+import style from './Navbar.module.css';
 
 
 class Navbar extends Component {
@@ -30,20 +30,20 @@ class Navbar extends Component {
         <nav>
           <NavLink 
             to='/chart'
-            className='nav-btn'
-            activeClassName='nav-btn-selected' 
+            className={style.navButton}
+            activeClassName={style.navButtonSelected} 
           >
             Chart
           </NavLink>
           <NavLink 
             to='/timer'
-            className='nav-btn'
-            activeClassName='nav-btn-selected' 
+            className={style.navButton}
+            activeClassName={style.navButtonSelected} 
           >
             Timer
           </NavLink>
           <button
-            className='nav-btn'
+            className={style.navButton}
             onClick={this.handleClick}
           >
             Log out
@@ -55,15 +55,15 @@ class Navbar extends Component {
         <nav>
           <NavLink
             to='/login'
-            className='nav-btn'
-            activeClassName='nav-btn-selected'
+            className={style.navButton}
+            activeClassName={style.navButtonSelected}
             >
               Log in
           </NavLink>
           <NavLink 
             to='/register'
-            className='nav-btn'
-            activeClassName='nav-btn-selected'
+            className={style.navButton}
+            activeClassName={style.navButtonSelected}
           >
             Register
           </NavLink>  
@@ -72,8 +72,8 @@ class Navbar extends Component {
     }
 
     return (
-      <div id='navbar'>
-        <div id='clock'>
+      <div id={style.navbar}>
+        <div id={style.clock}>
           <FontAwesomeIcon icon='clock' />
         </div>
         {navOpts}
