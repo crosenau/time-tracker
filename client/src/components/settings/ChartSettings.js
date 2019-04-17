@@ -117,7 +117,7 @@ class ChartSettings extends Component {
               <label htmlFor='endDate'>To</label>
               <DatePicker
                 id='endDate'
-                selected={this.state.startDate}
+                selected={this.state.endDate}
                 onChange={date => {
                   this.handleDateChange(date, 'endDate');
                 }}
