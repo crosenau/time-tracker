@@ -1,3 +1,7 @@
+h2 {
+  margin-top: 0rem;
+}
+
 #overlay {
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 999;
@@ -45,19 +49,21 @@
 }
 
 .inputContainer {
+  width: 10rem;
   margin-right: 2rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
 }
 
+.inputContainer input {
+  width: 100%;
+}
+
 .checkboxes {
   margin-bottom: 2rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-}
-
-.checkboxContainer {
 }
 
 #warning {
