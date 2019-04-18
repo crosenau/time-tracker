@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 import {
-  LOAD_TASKS,
+  TASKS_LOADING,
+  UPDATE_TASKS,
   UPDATE_CHART_SETTINGS,
   TOGGLE_CHART_SETTINGS
 } from './types';
@@ -11,7 +12,12 @@ export function getTasks(data) {
     // Set loading state
 
     axios
-      .get('/api/tasks/load', data)
+      .get('/api/tasks/load', {
+        params: {
+          start: data.startDate,
+          end: data.endDate
+        } 
+      })
       .then(res => {
         const tasks = res.data.map(task => ({
           ...task,
@@ -19,7 +25,7 @@ export function getTasks(data) {
         }))
 
         dispatch({
-          type: LOAD_TASKS,
+          type: UPDATE_TASKS,
           payload: tasks
         });
       })
