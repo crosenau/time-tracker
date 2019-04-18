@@ -10,6 +10,7 @@
 }
 
 #header {
+  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
 }
@@ -24,7 +25,22 @@
   align-self: end;
 }
 
+#tooltip {
+  background-color: grey;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
 #svgContainer {
   width: 100%;
   height: 100%;
+  align-self: center;
+}
+
+#dateRange {
+  display: flex;
+  justify-content: space-between;
 }
