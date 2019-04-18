@@ -1,5 +1,5 @@
 import {
-  LOAD_TASKS,
+  UPDATE_TASKS,
   UPDATE_CHART_SETTINGS,
   TOGGLE_CHART_SETTINGS
 } from "../actions/types";
@@ -20,12 +20,12 @@ const initialState = {
   filter: [],
   startDate: lastWeek,
   endDate: now,
-  displaySettings: false
+  displaySettings: false,
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case LOAD_TASKS: {
+    case UPDATE_TASKS: {
       return {
         ...state,
         tasks: action.payload
