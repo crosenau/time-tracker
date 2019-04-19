@@ -14,6 +14,8 @@ import ChartSettings from '../settings/ChartSettings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Chart.module.css';
 
+
+
 class Chart extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +50,7 @@ class Chart extends Component {
     }
 
     if (!this.props.chart.displaySettings) {
-      //this.createChart();
+      this.createChart();
     }
   }
 
@@ -58,54 +60,65 @@ class Chart extends Component {
     const height = Number(getComputedStyle(node).height.replace('px', ''));
     const padding = 4;
 
-    // consolidate tasks into individual days with total times for each task performed that day
-    const dataset = this.props.chart.tasks
-      .filter(task => task.taskName !== this.props.chart.filter)
-      .map(task => {
-        const msInDay = 1000 * 60 * 60 * 24;
-
-        return {
-          taskName: task.taskName,
-          date: task.completedAt.getTime() / msInDay,
-        };
-      })
-
-    /*
-    dataset = 
-      [
-        {
-          date,
-          TaskName: totalTime
-          TaskName2: totalTime
-          ...
-        }
-      ]
-     */
+    const filteredTasks = this.props.chart.tasks
+      .filter(task => task.taskName !== this.props.chart.filter);
 
     const uniqueTasks = Array.from(
       new Set(
-        dataset
+        filteredTasks
           .map(task => task.taskName)
       )
     );
 
-    const colorScale = d3.scaleLinear()
-      .domain([0, (uniqueTasks.length - 1) / 2, uniqueTasks.length - 1])
-      .range(['#422c42', '#456accfe', '#25dbccff']);
-
-    const xScale = d3.scaleLinear()
-      .domain([
-        d3.min(dataset, d => d.completedAt.getTime()),
-        d3.max(dataset, d => d.completedAt.getTime())
-      ])
-      .range([padding, width - padding]);
+    // consolidate tasks into individual days with total times for each task performed that day
+    const dataset = [];
     
+    let day = { date: new Date(this.props.chart.startDate.toDateString()) };
+    uniqueTasks.forEach(name => day[name] = 0);
+
+    filteredTasks.forEach((task, i) => {
+      while (day.date.toDateString() !== task.completedAt.toDateString()) {
+        const nextDay = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + 1);
+
+        dataset.push(day);
+        day = { date: nextDay };
+        uniqueTasks.forEach(name => day[name] = 0);
+      }
+
+      day[task.taskName] += task.taskLength;
+
+      if (i === filteredTasks.length -1) {
+        dataset.push(day);
+      }
+    });
+
+    console.log(dataset);
+
+    const stack = d3.stack()
+      .keys(uniqueTasks)
+      .order(d3.stackOrderNone);
+
+    const series = stack(dataset);
+
+    console.log(series);
+
+    const xScale = d3.scaleBand()
+      .domain(dataset.map(d => d.date))
+      .range([padding, width - padding])
+      .padding(0.1);
+
     const yScale = d3.scaleLinear()
-      .domain([0, d3.max(dataset, d => d.taskLength)])
+      .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
       .range([height - padding, padding]);
 
-    // Delete any existing svgs
+    const colorScale = d3.scaleLinear()
+      .domain([0, (uniqueTasks.length - 1) / 2, uniqueTasks.length - 1])
+      .range(['#422c42', '#456acc', '#25dbcc'])
+      .interpolate(d3.interpolateHcl)
+
+    // Delete any existing svgs or divs
     d3.select(node).selectAll('svg').remove();
+    d3.select(node).selectAll('div').remove();
 
     const tooltip = d3.select(node)
       .append('div')
@@ -120,29 +133,30 @@ class Chart extends Component {
     //bars
     const barWidth = width / dataset.length - 2;
 
-    chart.selectAll('rect')
-      .data(dataset)
+    const groups = chart.selectAll('g')
+      .data(series)
+      .enter()
+      .append('g')
+        .attr('fill', d => colorScale(uniqueTasks.indexOf(d.key)))
+        .attr('id', 'test')
+      
+    const rects = groups.selectAll('rect')
+      .data(d => d)
       .enter()
       .append('rect')
-      .attr('class', 'bar')
-      .attr('dataTaskName', d => d.taskName)
-      .attr('dataTaskLength', d => d.taskLength)
-      .attr('dataCompletedAt', d => d.completedAt)
-      .attr('x', (d, i) => xScale(d.completedAt.getTime()))
-      .attr('y', d => yScale(d.taskLength))
-      .attr('width', barWidth)
-      .attr('height', d => height - yScale(d.taskLength))
-      .attr('fill', d => colorScale(uniqueTasks.indexOf(d.taskName)))
-      /*
-      .on('mousemove', d => {
-        const x = `${d3.event.clientX + 16}px`;
-        const y = `${d3.event.clientY + 8}px`;
-        const data = [
-          d.completedAt.toDateString(),
-          d.completedTasks
-        ];
-      })
-      */
+        .attr('class', 'bar')
+        .attr('x', (d, i) => xScale(d.data.date))
+        .attr('y', d => yScale(d[1]))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => yScale(d[0]) - yScale(d[1]))
+        .on('mousemove', d => {
+          const x = `${d3.event.clientX + 16}px`;
+          const y = `${d3.event.clientY + 8}px`;
+          const data = [
+            d.data.date.toDateString(),
+            d.data.key
+          ];
+        })
   }
 
   render() {
@@ -150,7 +164,7 @@ class Chart extends Component {
       <div id={styles.container}>
         {this.props.chart.displaySettings ? <ChartSettings /> : null}
         <div id={styles.header}>
-          <h2>Progresss</h2>
+          <h2>Progress</h2>
           <button className='icon-btn' id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
