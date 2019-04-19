@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   updateChartSettings,
-  toggleChartSettings
+  toggleChartSettings,
 } from '../../actions/chartActions';
 
 import DatePicker from 'react-datepicker';
@@ -86,8 +86,6 @@ class ChartSettings extends Component {
       )
     );
 
-    console.log('uniqueTasks: ', uniqueTasks);
-
     return (
       <div id={style.overlay}>
         <div id={style.settings}>
@@ -129,7 +127,6 @@ class ChartSettings extends Component {
             <h3>Filter</h3>
             <div className={style.checkboxes}>
             {uniqueTasks.map((task, i) => {
-              console.log(task, i);
               return (
                 <div className='checkboxContainer' key={`checkboxContainer-${i}`}>
                   <input
@@ -175,6 +172,6 @@ export default connect(
   mapStateToProps,
   {
     updateChartSettings,
-    toggleChartSettings
+    toggleChartSettings,
   }
 )(ChartSettings);
