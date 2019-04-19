@@ -1,7 +1,10 @@
 'use strict';
 
-const length = 100;
-const log = [];
+const length = 1000;
+const startDate = new Date(2018, 0, 1);
+const endDate = new Date(2018, 11, 31);
+
+const tasks = [];
 
 function randomSelect(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -11,10 +14,9 @@ function randomTaskLength() {
   return Math.ceil((Math.random()* 60 * 60) / 60) * 60;
 }
 
-function randomDateBetween(startDate, endDate) {
-  const min = startDate.getTime();
-  const max = endDate.getTime();
-  const diff = endDate - startDate;
+function randomDateBetween(start, end) {
+  const min = start.getTime();
+  const diff = end - start;
 
   const rndValue = Math.floor(Math.random() * diff);
 
@@ -24,13 +26,13 @@ function randomDateBetween(startDate, endDate) {
 for (let x = 0; x < length; x++) {
   const taskName = randomSelect(['Work', 'Studying', 'Reading', 'Gaming']);
   const taskLength = randomTaskLength();
-  const completedAt = randomDateBetween(new Date(2019, 0, 1), new Date());
+  const completedAt = randomDateBetween(startDate, endDate);
 
-  log.push({
+  tasks.push({
     taskName,
     taskLength,
     completedAt
   });
 }
 
-console.log(JSON.stringify(log));
+console.log(JSON.stringify(tasks));
