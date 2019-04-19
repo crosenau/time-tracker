@@ -10,6 +10,9 @@ import {
 export function getTasks(data) {
   return function(dispatch) {
     // Set loading state
+    dispatch({
+      type: TASKS_LOADING
+    });
 
     axios
       .get('/api/tasks/load', {

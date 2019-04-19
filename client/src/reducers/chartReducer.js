@@ -1,4 +1,5 @@
 import {
+  TASKS_LOADING,
   UPDATE_TASKS,
   UPDATE_CHART_SETTINGS,
   TOGGLE_CHART_SETTINGS
@@ -21,17 +22,24 @@ const initialState = {
   startDate: lastWeek,
   endDate: now,
   displaySettings: false,
+  loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case TASKS_LOADING: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
     case UPDATE_TASKS: {
       return {
         ...state,
-        tasks: action.payload
+        tasks: action.payload,
+        loading: false
       };
     }
-
     case UPDATE_CHART_SETTINGS: {
       const { startDate, endDate, filter } = action.payload;
       return {

@@ -49,7 +49,10 @@ class Chart extends Component {
       });
     }
 
-    if (!this.props.chart.displaySettings) {
+    if (
+      !chart.displaySettings 
+      && (prevChart.loading && !chart.loading)
+    ) {
       this.createChart();
     }
   }
