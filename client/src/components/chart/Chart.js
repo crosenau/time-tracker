@@ -49,22 +49,22 @@ class Chart extends Component {
       });
     }
 
-    if (
-      !chart.displaySettings 
-      && (prevChart.loading && !chart.loading)
-    ) {
-      this.createChart();
+    if (!chart.displaySettings) {
+      if (prevChart.loading && !chart.loading) {
+        this.createChart();
+      } else if (
+        !prevChart.loading 
+        && !chart.loading 
+        && prevChart.filter.join(' ') !== chart.filter.join(' ')
+      ) {
+        this.createChart();
+      }
     }
   }
 
   createChart() {
-    const node = this.node.current;
-    const width = Number(getComputedStyle(node).width.replace('px', ''));
-    const height = Number(getComputedStyle(node).height.replace('px', ''));
-    const padding = 4;
-
     const filteredTasks = this.props.chart.tasks
-      .filter(task => task.taskName !== this.props.chart.filter);
+      .filter(task => !this.props.chart.filter.includes(task.taskName));
 
     const uniqueTasks = Array.from(
       new Set(
@@ -85,7 +85,10 @@ class Chart extends Component {
 
         dataset.push(day);
         day = { date: nextDay };
-        uniqueTasks.forEach(name => day[name] = 0);
+
+        for (let name of uniqueTasks) {
+          day[name] = 0;
+        }
       }
 
       day[task.taskName] += task.taskLength;
@@ -95,15 +98,16 @@ class Chart extends Component {
       }
     });
 
-    console.log(dataset);
-
     const stack = d3.stack()
       .keys(uniqueTasks)
       .order(d3.stackOrderNone);
 
     const series = stack(dataset);
 
-    console.log(series);
+    const node = this.node.current;
+    const width = Number(getComputedStyle(node).width.replace('px', ''));
+    const height = Number(getComputedStyle(node).height.replace('px', ''));
+    const padding = 4;
 
     const xScale = d3.scaleBand()
       .domain(dataset.map(d => d.date))
@@ -125,41 +129,86 @@ class Chart extends Component {
 
     const tooltip = d3.select(node)
       .append('div')
-      .attr('id', 'tooltip');
+      .attr('id', 'tooltip')
+      .style('background-color', '#BBB')
+      .style('opacity', 0)
+      .style('position', 'fixed')
+      .style('top', 0)
+      .style('left', 0)
+      .style('pointer-events', 'none');
 
     const chart = d3.select(node)
       .append('svg')
-      .attr('id', 'chartSvg')
+      .attr('id', 'svg')
       .attr('width', width - padding)
       .attr('height', height - padding);
     
-    //bars
-    const barWidth = width / dataset.length - 2;
-
     const groups = chart.selectAll('g')
       .data(series)
       .enter()
       .append('g')
         .attr('fill', d => colorScale(uniqueTasks.indexOf(d.key)))
-        .attr('id', 'test')
-      
-    const rects = groups.selectAll('rect')
-      .data(d => d)
-      .enter()
-      .append('rect')
-        .attr('class', 'bar')
-        .attr('x', (d, i) => xScale(d.data.date))
-        .attr('y', d => yScale(d[1]))
-        .attr('width', xScale.bandwidth())
-        .attr('height', d => yScale(d[0]) - yScale(d[1]))
+        .attr('id', d => d.key)
         .on('mousemove', d => {
           const x = `${d3.event.clientX + 16}px`;
           const y = `${d3.event.clientY + 8}px`;
+
+          const data = [d.key];
+
+          tooltip
+            .style('left', x)
+            .style('top', y)
+            .style('opacity', 0.8)
+            .selectAll('div')
+            .data(data)
+            .enter()
+            .append('div')
+              .attr('id', 'taskName')
+              .text(d => d);
+        })
+        .on('mouseout', d => {
+          d3.select('#tooltip')
+            .style('opacity', 0)
+            .selectAll('div').remove();
+        });
+
+
+    console.log(series);
+    
+    groups.selectAll('rect')
+      .data(d => d)
+      .enter()
+      .append('rect')
+        .attr('id', d => `Date${d.data.date.getTime()}start${d[0]}end${d[0]}`)
+        .attr('class', 'bar')
+        .attr('x', d => xScale(d.data.date))
+        .attr('y', d => yScale(d[1]))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => yScale(d[0]) - yScale(d[1]))
+        /*
+        .on('mousemove', (d) => {
+          const totalSecs = d[1] - d[0];
+          const hours = Math.floor(totalSecs / 60 / 60);
+          const minutes = Math.floor(totalSecs / 60) % 60;
+
           const data = [
             d.data.date.toDateString(),
-            d.data.key
+            `${hours}h ${minutes}min`,
           ];
+
+          d3.select('#tooltip')
+            .selectAll('div')
+            .data(data)
+            .enter()
+            .append('div')
+              .text(d => d)
         })
+        .on('mouseout', d => {
+          d3.select('#tooltip')
+            .style('opacity', 0)
+            .selectAll('div').remove();
+        })
+        */
   }
 
   render() {
@@ -173,7 +222,7 @@ class Chart extends Component {
           </button>
         </div>
 
-        <div id={styles.svgContainer} ref={this.node} />
+        <div id={styles.d3Container} ref={this.node} />
         <div id={styles.dateRange}>
           <span>{this.props.chart.startDate.toDateString()}</span>
           <span>{this.props.chart.endDate.toDateString()}</span>
