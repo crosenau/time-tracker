@@ -6,10 +6,10 @@ import {
 } from "../actions/types";
 
 const now = new Date();
-const lastWeek = new Date(
+const lastMonth = new Date(
   now.getFullYear(), 
   now.getMonth(), 
-  now.getDate() - 7, 
+  now.getDate() -30, 
   now.getHours(), 
   now.getMinutes(), 
   now.getSeconds(), 
@@ -19,7 +19,7 @@ const lastWeek = new Date(
 const initialState = {
   tasks: [],
   filter: [],
-  startDate: lastWeek,
+  startDate: lastMonth,
   endDate: now,
   displaySettings: false,
   loading: false
