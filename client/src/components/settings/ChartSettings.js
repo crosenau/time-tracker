@@ -79,7 +79,7 @@ class ChartSettings extends Component {
   }
 
   render() {
-    const uniqueTasks = Array.from(
+    const taskLabels = Array.from(
       new Set(
         this.state.tasks
           .map(task => task.taskName)
@@ -109,6 +109,7 @@ class ChartSettings extends Component {
                 onChange={date => {
                   this.handleDateChange(date, 'startDate');
                 }}
+                required
               />
             </div>
             <div className={style.inputContainer}>
@@ -119,6 +120,7 @@ class ChartSettings extends Component {
                 onChange={date => {
                   this.handleDateChange(date, 'endDate');
                 }}
+                required
               />
             </div>
           </div>
@@ -126,7 +128,7 @@ class ChartSettings extends Component {
           <div id='section'>
             <h3>Filter</h3>
             <div className={style.checkboxes}>
-            {uniqueTasks.map((task, i) => {
+            {taskLabels.map((task, i) => {
               return (
                 <div className='checkboxContainer' key={`checkboxContainer-${i}`}>
                   <input
@@ -149,7 +151,10 @@ class ChartSettings extends Component {
           </div>
 
           <div className={style.section}>
-            <button onClick={this.save}>Save</button>
+            {this.state.startDate && this.state.endDate > this.state.startDate ?
+              <button onClick={this.save}>Save</button> :
+              <button onClick={this.save} disabled>Save</button>
+            }
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>
           </div>
