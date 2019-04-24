@@ -20,17 +20,22 @@ class Chart extends Component {
   constructor(props) {
     super(props);
 
+    // element ref for D3
     this.node = React.createRef();
-    this.createChart = this.createChart.bind(this);
   }
 
   componentDidMount() {
-    const { startDate, endDate } = this.props.chart;
+    const { startDate, endDate, tasks } = this.props.chart;
 
-    this.props.getTasks({
-      startDate,
-      endDate
-    });
+    if (tasks.length === 0) {
+      this.props.getTasks({
+        startDate,
+        endDate
+      });
+    }
+    else {
+      this.createChart();
+    }
   }
   
   componentDidUpdate(prevProps) {
@@ -66,18 +71,18 @@ class Chart extends Component {
     const filteredTasks = this.props.chart.tasks
       .filter(task => !this.props.chart.filter.includes(task.taskName));
 
-    const uniqueTasks = Array.from(
+    const taskLabels = Array.from(
       new Set(
         filteredTasks
           .map(task => task.taskName)
       )
     );
 
-    // consolidate tasks into individual days with total times for each task performed that day
+    // consolidate task objects into individual day objects with total times for each task performed that day
     const dataset = [];
     
     let day = { date: new Date(this.props.chart.startDate.toDateString()) };
-    uniqueTasks.forEach(name => day[name] = 0);
+    taskLabels.forEach(label => day[label] = 0);
 
     filteredTasks.forEach((task, i) => {
       while (day.date.toDateString() !== task.completedAt.toDateString()) {
@@ -86,8 +91,8 @@ class Chart extends Component {
         dataset.push(day);
         day = { date: nextDay };
 
-        for (let name of uniqueTasks) {
-          day[name] = 0;
+        for (let label of taskLabels) {
+          day[label] = 0;
         }
       }
 
@@ -98,20 +103,31 @@ class Chart extends Component {
       }
     });
 
+    // Create data series for stacked bars
     const stack = d3.stack()
-      .keys(uniqueTasks)
+      .keys(taskLabels)
       .order(d3.stackOrderNone);
 
     const series = stack(dataset);
 
-    console.log(dataset);
-    console.log(series);
-
+    // Set svg dimensions and margins
     const node = this.node.current;
     const width = Number(getComputedStyle(node).width.replace('px', '')) - 4;
     const height = Number(getComputedStyle(node).height.replace('px', '')) - 4;
-    const margin = { top: height * 0.1, right: width * 0.25, bottom: height * 0.1, left: 0 };
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
+    const maxLabelLength = Math.max(...taskLabels
+      .map(label => label.length)
+    );
+
+    const margin = {
+      top: rem,
+      right: rem * (0.5 * maxLabelLength + 6),
+      bottom: 2 * rem,
+      left: 2 * rem
+    };
+
+    // Create scales
     const xScale = d3.scaleBand()
       .domain(dataset.map(d => d.date))
       .range([margin.left, width - margin.right])
@@ -122,8 +138,8 @@ class Chart extends Component {
       .range([height - margin.bottom, margin.top]);
 
     const colorScale = d3.scaleLinear()
-      .domain([0, (uniqueTasks.length - 1) / 2, uniqueTasks.length - 1])
-      .range(['#422c42', '#456acc', '#25dbcc'])
+      .domain([0, taskLabels.length - 1])
+      .range(['#48f', '#fb4'])
       .interpolate(d3.interpolateHcl)
 
     // Delete any existing svgs or divs
@@ -133,7 +149,9 @@ class Chart extends Component {
     const tooltip = d3.select(node)
       .append('div')
       .attr('id', 'tooltip')
-      .style('background-color', '#BBB')
+      .style('color', 'white')
+      .style('background-color', 'black')
+      .style('box-shadow', '2px 2px 4px #223')
       .style('opacity', 0)
       .style('padding', '1rem')
       .style('position', 'fixed')
@@ -143,17 +161,18 @@ class Chart extends Component {
       .style('display', 'flex')
       .style('flex-direction', 'column');
 
+    // Create svg and append barchart elements
     const chart = d3.select(node)
       .append('svg')
       .attr('id', 'svg')
       .attr('width', width)
       .attr('height', height);
-    
-    const groups = chart.selectAll('g')
+
+    const barGroups = chart.selectAll('g')
       .data(series)
       .enter()
       .append('g')
-        .attr('fill', d => colorScale(uniqueTasks.indexOf(d.key)))
+        .attr('fill', d => colorScale(taskLabels.indexOf(d.key)))
         .attr('id', d => d.key)
         .on('mousemove', d => {
           const x = `${d3.event.clientX + 16}px`;
@@ -162,13 +181,14 @@ class Chart extends Component {
           tooltip
             .style('left', x)
             .style('top', y)
-            .style('opacity', 0.8)
+            .style('opacity', 1)
             .selectAll('div #taskName')
             .data([d.key])
             .enter()
             .append('div')
               .attr('id', 'taskName')
               .style('order', -1)
+              .style('font-weight', 'bold')
               .text(d => d);
         })
         .on('mouseout', d => {
@@ -177,7 +197,7 @@ class Chart extends Component {
             .selectAll('div').remove();
         });
     
-    groups.selectAll('rect')
+    barGroups.selectAll('rect')
       .data(d => d)
       .enter()
       .append('rect')
@@ -193,8 +213,8 @@ class Chart extends Component {
           const minutes = Math.floor(totalSecs / 60) % 60;
 
           const data = [
-            d.data.date.toDateString(),
             `${hours}h ${minutes}min`,
+            d.data.date.toDateString()
           ];
 
           d3.select('#tooltip')
@@ -206,22 +226,34 @@ class Chart extends Component {
               .text(d => d)
         })
       
-    // Date range
+    // Render Date range
     chart.append('text')
       .attr('x', margin.left)
-      .attr('y', height + 20 - margin.bottom)
+      .attr('y', height - margin.bottom + rem)
       .text(dataset[0].date.toDateString())
 
     chart.append('text')
       .attr('x', width - margin.right)
-      .attr('y', height + 20 - margin.bottom)
+      .attr('y', height - margin.bottom + rem)
       .attr('text-anchor', 'end')
       .text(dataset[dataset.length-1].date.toDateString())
 
-    // Legend
+    // Create Y-axis
+    const yAxis = d3.axisLeft(yScale)
+      .ticks(d3.max(series, d => d3.max(d, d => d[1])) / 60 / 60)
+      .tickFormat(val => `${Math.floor(val / 60 / 60)}h`)
+      .tickSize(0);
+      
+    chart.append('g')
+      .attr('id', 'y-axis')
+      .attr('transform', `translate(${margin.left}, 0)`)
+      .attr('stroke-width', '0.5px')
+      .call(yAxis);
+
+    // Create Legend
     const taskTotals = {};
 
-    uniqueTasks.forEach(task => taskTotals[task] = 0);
+    taskLabels.forEach(task => taskTotals[task] = 0);
 
     dataset.forEach(day => {
       Object.entries(day).forEach(entry => {
@@ -231,10 +263,8 @@ class Chart extends Component {
       });
     });
 
-    console.log(taskTotals);
-
     const legendGroups = chart.selectAll('g.legend')
-      .data(Object.entries(taskTotals))
+      .data(Object.entries(taskTotals).reverse())
       .enter()
       .append('g')
         .attr('class', 'legend')
@@ -242,18 +272,25 @@ class Chart extends Component {
           const x = `${d3.event.clientX + 16}px`;
           const y = `${d3.event.clientY + 8}px`;
 
+          const label = d[0];
+          const secs = d[1]
+          const avgSecs = d[1] / dataset.length;
+
           const info = [
-            d[0]
+            label,
+            `Daily avg: ${Math.floor(avgSecs / 60 / 60)}h ${Math.floor(secs / 60) % 60}min`,
+            `Total: ${Math.floor(secs / 60 / 60)}h ${Math.floor(secs / 60) % 60}min`,
           ];
 
           tooltip
             .style('left', x)
             .style('top', y)
-            .style('opacity', 0.8)
+            .style('opacity', 1)
             .selectAll('div')
             .data(info)
             .enter()
             .append('div')
+              .style('font-weight', (d, i) => i === 0 ? 'bold' : 'normal')
               .text(d => d);
         })
         .on('mouseout', d => {
@@ -262,24 +299,17 @@ class Chart extends Component {
             .selectAll('div').remove();
         });
 
-    
-    d3.selectAll('.legend')
-      .append('rect')
-        .attr('x', width - margin.right)
-        .attr('y', (d, i) => i * (margin.top * 0.5))
-        .attr('width', 24)
-        .attr('height', 24)
-        .attr('fill', d => colorScale(uniqueTasks.indexOf(d[0])));
+    legendGroups.append('rect')
+      .attr('x', 2 * rem + width - margin.right)
+      .attr('y', (d, i) => margin.top + i * (2.25 * rem))
+      .attr('width', 2 * rem)
+      .attr('height', 2 * rem)
+      .attr('fill', d => colorScale(taskLabels.indexOf(d[0])));
 
-    d3.selectAll('.legend')
-      .append('text')
-      .attr('x', width - margin.right + 28)
-      .attr('y', (d, i) => i * (margin.top * 0.5) + 20)
+    legendGroups.append('text')
+      .attr('x', 4.5 * rem + width - margin.right)
+      .attr('y', (d, i) => margin.top +  i * 2.25 * rem + (1.5 * rem))
       .text(d => d[0]);
-
-    
-    
-    console.log(legendGroups);
   }
 
   render() {
@@ -287,7 +317,7 @@ class Chart extends Component {
       <div id={styles.container}>
         {this.props.chart.displaySettings ? <ChartSettings /> : null}
         <div id={styles.header}>
-          <h2>Progress</h2>
+          <h2>Stats</h2>
           <button className='icon-btn' id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
