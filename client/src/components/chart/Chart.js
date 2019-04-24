@@ -227,6 +227,14 @@ class Chart extends Component {
         })
       
     // Render Date range
+    chart.append('line')
+      .attr('x1', margin.left)
+      .attr('y1', height - margin.bottom)
+      .attr('x2', width - margin.right)
+      .attr('y2', height - margin.bottom)
+      .attr('stroke', 'black')
+      .attr('stroke-width', '0.5px');
+
     chart.append('text')
       .attr('x', margin.left)
       .attr('y', height - margin.bottom + rem)
@@ -322,8 +330,11 @@ class Chart extends Component {
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
         </div>
-
-        <div id={styles.d3Container} ref={this.node} />
+        {
+          this.props.chart.loading ? 
+            <div id={styles.loading}>Loading...</div> :
+            <div id={styles.d3Container} ref={this.node} />
+        }
       </div>
     );
   }
