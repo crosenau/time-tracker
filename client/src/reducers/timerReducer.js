@@ -4,9 +4,9 @@ import {
   NEXT_TIMER,
   STOP_TIMER,
   RESET_CURRENT_TIMER,
-  ADD_COMPLETED_SESSION,
-  CLEAR_COMPLETED_SESSIONS,
-  SAVE_COMPLETED_SESSIONS,
+  ADD_COMPLETED_TASK,
+  CLEAR_COMPLETED_TASKS,
+  UPDATE_COMPLETED_TASKS,
   UPDATE_SETTINGS,
   TOGGLE_TIMER_SETTINGS,
 } from '../actions/types';
@@ -17,9 +17,9 @@ const longBreak = 'Long Break';
 
 const initialState = {
   taskName: 'Work',
-  shortBreakLength: 1,
-  longBreakLength: 2,
-  taskLength: 3,
+  shortBreakLength: 5 * 60,
+  longBreakLength: 15 * 60,
+  taskLength: 25 * 60,
   setLength: 4,
   goal: 12,
   alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3',
@@ -28,7 +28,7 @@ const initialState = {
   displaySettings: false,
   currentTimer: task,
   active: false,
-  timeRemaining: 3,
+  timeRemaining: 25 * 60,
   startTime: null,
   timeRemainingAtStart: null,
 };
@@ -104,7 +104,7 @@ export default function(state = initialState, action) {
         timeRemainingAtStart: timeRemaining
       };
     }
-    case ADD_COMPLETED_SESSION: {
+    case ADD_COMPLETED_TASK: {
       let updatedTasks = [...state.completedTasks];
       
       updatedTasks.push(action.payload);
@@ -114,13 +114,13 @@ export default function(state = initialState, action) {
         completedTasks: updatedTasks
       };
     }
-    case CLEAR_COMPLETED_SESSIONS: {
+    case CLEAR_COMPLETED_TASKS: {
       return {
         ...state,
         completedTasks: []
       };
     }
-    case SAVE_COMPLETED_SESSIONS: {
+    case UPDATE_COMPLETED_TASKS: {
       const updatedTasks = [...action.payload];
       const savedDates = updatedTasks.map(task => Number(task.completedAt));
 

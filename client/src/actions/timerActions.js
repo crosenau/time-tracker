@@ -6,9 +6,9 @@ import {
   NEXT_TIMER,
   STOP_TIMER,
   RESET_CURRENT_TIMER,
-  ADD_COMPLETED_SESSION,
-  CLEAR_COMPLETED_SESSIONS,
-  SAVE_COMPLETED_SESSIONS,
+  ADD_COMPLETED_TASK,
+  CLEAR_COMPLETED_TASKS,
+  UPDATE_COMPLETED_TASKS,
   UPDATE_SETTINGS,
   TOGGLE_TIMER_SETTINGS
 } from './types';
@@ -45,14 +45,14 @@ export function resetCurrentTimer() {
 
 export function addCompletedTask(task) {
   return {
-    type: ADD_COMPLETED_SESSION,
+    type: ADD_COMPLETED_TASK,
     payload: task
   };
 }
 
 export function clearCompletedTasks() {
   return {
-    type: CLEAR_COMPLETED_SESSIONS
+    type: CLEAR_COMPLETED_TASKS
   };
 }
 
@@ -69,7 +69,7 @@ export function saveCompletedTasks(tasks) {
           saved: true
         }));
         dispatch({
-          type: SAVE_COMPLETED_SESSIONS,
+          type: UPDATE_COMPLETED_TASKS,
           payload: savedTasks
         });
       })
