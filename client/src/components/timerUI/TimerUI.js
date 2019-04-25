@@ -15,18 +15,9 @@ import TimerSettings from '../settings/TimerSettings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './TimerUI.module.css'
 
-
-function leadingZero(num) {
-  if (String(num).length < 2) {
-    return '0' + String(num);
-  }
-
-  return String(num);
-}
-
 function getTotalTime(tasks) {
   if (tasks.length === 0) {
-    return '00:00:00';
+    return '0 hours 0 minutes';
   }
 
   const totalSeconds = (tasks
@@ -35,9 +26,8 @@ function getTotalTime(tasks) {
 
   const hours = Math.floor(totalSeconds / 60 / 60);
   const minutes = Math.floor(totalSeconds / 60) % 60;
-  const seconds = totalSeconds % 60;
   
-  return `${leadingZero(hours)}:${leadingZero(minutes)}:${leadingZero(seconds)}`;
+  return `${hours} hours ${minutes} minutes`;
 }
 
 const TimerUI = props => {
@@ -69,7 +59,7 @@ const TimerUI = props => {
         </button>
       </div>
       <div id={styles.timer}>
-        <ProgressRing />
+        <ProgressRing id={styles.progressRing} />
         <div id={styles.taskLabel}>
           {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
         </div>
@@ -104,12 +94,10 @@ const TimerUI = props => {
 }
 
 TimerUI.propTypes = {
-  auth: PropTypes.object.isRequired,
   timer: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
   timer: state.timer
 });
 
