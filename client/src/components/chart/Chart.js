@@ -232,7 +232,6 @@ class Chart extends Component {
       .attr('y1', height - margin.bottom)
       .attr('x2', width - margin.right)
       .attr('y2', height - margin.bottom)
-      .attr('stroke', 'black')
       .attr('stroke-width', '0.5px');
 
     chart.append('text')

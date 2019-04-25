@@ -1,10 +1,9 @@
 #container {
+  background-color: #3a3a3a;
+  color: white;
   width: 50%;
   margin: 3rem;
   padding: 2rem;
-  background-color: #ebebebff;
-  box-shadow: 2px 2px 4px #223;
-  border-radius: 1rem;
   display: flex;
   flex-direction: column;
 }
@@ -42,12 +41,13 @@
 }
 
 #controls button {
+  color: white;
   font-size: 2rem;
   margin-left: 1rem;
   margin-right: 1rem;
   width: 5rem;
   height: 5rem;
-  border: black solid 4px;
+  border: white solid 2px;
   border-radius: 50%;
 }
 
