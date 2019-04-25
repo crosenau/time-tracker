@@ -1,0 +1,23 @@
+#container {
+  border-width: 1px;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  font-size: 5rem;
+  fill: white;
+  user-select: none;
+}
+
+#backgroundCircle {
+  stroke: #555;
+  stroke-width: 8px;
+  fill: transparent;
+}
+
+#progressRing {
+  stroke: #ffffff;
+  stroke-width: 16;
+  fill: transparent;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import styles from './ProgressRing.module.css';
+
 function leadingZero(num) {
   if (String(num).length < 2) {
     return '0' + String(num);
@@ -18,17 +20,64 @@ class ProgressRing extends Component {
   constructor() {
     super();
 
-    this.smallest = Math.min(window.innerWidth, window.innerHeight)
-    this.diameter = Math.floor(this.smallest / 3);
-    this.stroke = 8;
-    this.radius = this.diameter / 2 - this.stroke;
-    this.center = this.diameter / 2;
+    this.state = {};
+
+    this.node = React.createRef();
+  }
+
+  componentDidMount() {
+    const node = this.node.current;
+
+    this.svgDiameter = Number(getComputedStyle(node).width.replace('px', ''));
+    this.diameter = this.svgDiameter * 0.90;
+    this.radius = this.diameter / 2;
+    this.center = this.svgDiameter / 2;
     this.circumference = 2 * Math.PI * this.radius;
-    this.ringStyle = {
-      strokeDasharray: `${this.circumference} ${this.circumference}`,
-      transform: 'rotate(-90deg)',
-      transformOrigin: '50% 50%'
-    };
+
+    // Force component to re-render once computed dimensions are computed
+    this.setState(this.state); 
+  }
+
+  renderProgressRing() {
+    if (!this.diameter) {
+      return null;
+    }
+
+    const minutes = Math.floor(this.props.timer.timeRemaining / 60);
+    const seconds = this.props.timer.timeRemaining % 60;
+    const timeLeft = `${leadingZero(minutes)}:${leadingZero(seconds)}`;
+
+    const offset = this.circumference - this.circumference * this.percentRemaining() / 100;
+
+    return (
+      <svg
+        width={this.svgDiameter}
+        height={this.svgDiameter}
+      >
+        <circle
+          id={styles.backgroundCircle}
+          r={this.radius}
+          cx={this.center}
+          cy={this.center}
+        />
+        <circle
+          id={styles.progressRing}
+          r={this.radius}
+          cx={this.center}
+          cy={this.center}
+          strokeDasharray={`${this.circumference} ${this.circumference}`}
+          strokeDashoffset={-offset}
+        />
+        <text
+          x={this.center}
+          y={this.center * 1.2}
+          textAnchor='middle'
+        >
+          {timeLeft}
+        </text>
+      </svg>
+    );
+
   }
 
   percentRemaining() {
@@ -43,59 +92,13 @@ class ProgressRing extends Component {
   }
 
   render() {
-    const minutesLeft = Math.floor(this.props.timer.timeRemaining / 60);
-    const secondsLeft = this.props.timer.timeRemaining % 60;
-    const timeLeft = `${leadingZero(minutesLeft)}:${leadingZero(secondsLeft)}`;
-
-    const ring = document.querySelector('#progress-ring-circle');
-    
-    if (ring) {
-      const offset = this.circumference - this.circumference * this.percentRemaining() / 100; 
-      ring.style.strokeDashoffset = -offset;
-    }
-
     return (
-      <div id='progress-ring'>
-      <svg
-        width={this.diameter}
-        height={this.diameter}
-        style={{ fontSize: `${this.diameter / 5}px` }}
-      >
-        <circle
-          id='background-circle'
-          stroke='#999'
-          strokeWidth={this.stroke}
-          fill='transparent'
-          r={this.radius}
-          cx={this.center}
-          cy={this.center}
-          style={this.ringStyle}
-        />
-        <circle
-          id='progress-ring-circle'
-          stroke='#4520d9ff'
-          strokeWidth={this.stroke * 2}
-          fill='transparent'
-          r={this.radius}
-          cx={this.center}
-          cy={this.center}
-          style={this.ringStyle}
-        />
-        <text
-          x={this.center}
-          y={this.center * 1.15}
-          textAnchor='middle'
-          fill='black'
-        >
-          {timeLeft}
-        </text>
-      </svg>
+      <div id={styles.container} ref={this.node}>
+        {this.renderProgressRing()}
       </div>
     );
   }
 };
-
-//export default ProgressRing;
 
 ProgressRing.propTypes = {
   timer: PropTypes.object.isRequired
@@ -107,5 +110,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { }
+  {}
 )(ProgressRing);
