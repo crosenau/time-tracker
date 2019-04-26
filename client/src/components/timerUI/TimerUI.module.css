@@ -6,6 +6,7 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 #header {
@@ -49,6 +50,9 @@
   height: 5rem;
   border: white solid 2px;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #playPauseButton {

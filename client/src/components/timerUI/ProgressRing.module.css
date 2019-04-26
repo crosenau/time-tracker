@@ -1,9 +1,8 @@
 #container {
-  border-width: 1px;
-  width: 50%;
+  width: 40%;
   display: flex;
   justify-content: center;
-  font-size: 5rem;
+  font-size: 4rem;
   fill: white;
   user-select: none;
 }
@@ -15,7 +14,7 @@
 }
 
 #progressRing {
-  stroke: #ffffff;
+  stroke: #FE719B;
   stroke-width: 16;
   fill: transparent;
   transform: rotate(-90deg);

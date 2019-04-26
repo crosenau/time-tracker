@@ -42,6 +42,6 @@
   align-self: center;
 }
 
-svg line {
-  stroke: white;
+.axis {
+  font-size: 0.7rem;
 }

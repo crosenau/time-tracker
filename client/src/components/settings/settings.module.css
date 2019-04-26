@@ -27,11 +27,6 @@ h2 {
   justify-content: center;
 }
 
-#settings input, select, button {
-  color: white;
-  background-color: #444
-}
-
 #header {
   font-size: 1.5rem;
   display: flex;
@@ -56,6 +51,26 @@ h2 {
   margin-top: 0rem;
 }
 
+.section input, select {
+  color: white;
+  background-color: #222;
+  border: none;
+}
+
+.section button {
+  color: white;
+  background-color: #111;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-right: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.section button:disabled {
+  color: grey;
+  cursor: default;
+}
+
 .inputContainer {
   width: 10rem;
   margin-right: 2rem;
@@ -65,6 +80,7 @@ h2 {
 }
 
 .inputContainer input {
+  border: none;
   width: 100%;
 }
 
