@@ -21,7 +21,9 @@ class Chart extends Component {
     super(props);
 
     // element ref for D3
-    this.node = React.createRef();
+    this.d3Container = React.createRef();
+
+    this.drawChart = this.drawChart.bind(this);
   }
 
   componentDidMount() {
@@ -32,10 +34,21 @@ class Chart extends Component {
         startDate,
         endDate
       });
+    } else {
+      this.drawChart();
     }
-    else {
-      this.createChart();
-    }
+
+    this.delay = 250;
+    this.timeout = false;
+
+    window.addEventListener('resize', this.handler = () => {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(this.drawChart, this.delay);
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handler);
   }
   
   componentDidUpdate(prevProps) {
@@ -56,18 +69,22 @@ class Chart extends Component {
 
     if (!chart.displaySettings) {
       if (prevChart.loading && !chart.loading) {
-        this.createChart();
+        this.drawChart();
       } else if (
         !prevChart.loading 
         && !chart.loading 
         && prevChart.filter.join(' ') !== chart.filter.join(' ')
       ) {
-        this.createChart();
+        this.drawChart();
       }
     }
   }
 
-  createChart() {
+  drawChart() {
+    if (this.props.chart.tasks.length === 0) {
+      return null;
+    }
+
     const filteredTasks = this.props.chart.tasks
       .filter(task => !this.props.chart.filter.includes(task.taskName));
 
@@ -111,17 +128,20 @@ class Chart extends Component {
     const series = stack(dataset);
 
     // Set svg dimensions and margins
-    const node = this.node.current;
-    const width = Number(getComputedStyle(node).width.replace('px', '')) - 4;
-    const height = Number(getComputedStyle(node).height.replace('px', '')) - 4;
+    const d3Container = this.d3Container.current;
+
+    const width = Number(getComputedStyle(d3Container).width.replace('px', '')) - 4;
+    const height = Number(getComputedStyle(d3Container).height.replace('px', '')) - 8;
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+    console.log(width, height);
 
     const maxLabelLength = Math.max(...taskLabels
       .map(label => label.length)
     );
 
     const margin = {
-      top: rem,
+      top: 0 * rem,
       right: rem * (0.5 * maxLabelLength + 6),
       bottom: 2 * rem,
       left: 2 * rem
@@ -139,14 +159,14 @@ class Chart extends Component {
 
     const colorScale = d3.scaleLinear()
       .domain([0, taskLabels.length - 1])
-      .range(['#48f', '#fb4'])
+      .range(['#48f', '#FE719B'])
       .interpolate(d3.interpolateHcl)
 
     // Delete any existing svgs or divs
-    d3.select(node).selectAll('svg').remove();
-    d3.select(node).selectAll('div').remove();
+    d3.select(d3Container).selectAll('svg').remove();
+    d3.select(d3Container).selectAll('div').remove();
 
-    const tooltip = d3.select(node)
+    const tooltip = d3.select(d3Container)
       .append('div')
       .attr('id', 'tooltip')
       .style('color', 'white')
@@ -162,7 +182,7 @@ class Chart extends Component {
       .style('flex-direction', 'column');
 
     // Create svg and append barchart elements
-    const chart = d3.select(node)
+    const chart = d3.select(d3Container)
       .append('svg')
       .attr('id', 'svg')
       .attr('width', width)
@@ -225,36 +245,26 @@ class Chart extends Component {
               .attr('class', 'data')
               .text(d => d)
         })
-      
-    // Render Date range
-    chart.append('line')
-      .attr('x1', margin.left)
-      .attr('y1', height - margin.bottom)
-      .attr('x2', width - margin.right)
-      .attr('y2', height - margin.bottom)
-      .attr('stroke-width', '0.5px');
 
-    chart.append('text')
-      .attr('x', margin.left)
-      .attr('y', height - margin.bottom + rem)
-      .text(dataset[0].date.toDateString())
+    const xAxis = d3.axisBottom(xScale)
+      .tickValues([dataset[0].date, dataset[dataset.length-1].date])
+      .tickFormat(d => d.toDateString())
+      .tickSize(0)
+      .tickPadding(rem);
 
-    chart.append('text')
-      .attr('x', width - margin.right)
-      .attr('y', height - margin.bottom + rem)
-      .attr('text-anchor', 'end')
-      .text(dataset[dataset.length-1].date.toDateString())
+    chart.append('g')
+      .attr('class', styles.axis)
+      .attr('transform', `translate(0, ${height - margin.bottom})`)
+      .call(xAxis);
 
-    // Create Y-axis
     const yAxis = d3.axisLeft(yScale)
       .ticks(d3.max(series, d => d3.max(d, d => d[1])) / 60 / 60)
       .tickFormat(val => `${Math.floor(val / 60 / 60)}h`)
-      .tickSize(0);
+      .tickSizeOuter(0);
       
     chart.append('g')
-      .attr('id', 'y-axis')
+      .attr('class', styles.axis)
       .attr('transform', `translate(${margin.left}, 0)`)
-      .attr('stroke-width', '0.5px')
       .call(yAxis);
 
     // Create Legend
@@ -307,15 +317,15 @@ class Chart extends Component {
         });
 
     legendGroups.append('rect')
-      .attr('x', 2 * rem + width - margin.right)
-      .attr('y', (d, i) => margin.top + i * (2.25 * rem))
-      .attr('width', 2 * rem)
-      .attr('height', 2 * rem)
+      .attr('x', 3 * rem + width - margin.right)
+      .attr('y', (d, i) => margin.top + i * (2 * rem))
+      .attr('width', 1.5 * rem)
+      .attr('height', 1.5 * rem)
       .attr('fill', d => colorScale(taskLabels.indexOf(d[0])));
 
     legendGroups.append('text')
-      .attr('x', 4.5 * rem + width - margin.right)
-      .attr('y', (d, i) => margin.top +  i * 2.25 * rem + (1.5 * rem))
+      .attr('x', 5.5 * rem + width - margin.right)
+      .attr('y', (d, i) => margin.top +  i * 2 * rem + (1.2 * rem))
       .text(d => d[0]);
   }
 
@@ -332,7 +342,7 @@ class Chart extends Component {
         {
           this.props.chart.loading ? 
             <div id={styles.loading}>Loading...</div> :
-            <div id={styles.d3Container} ref={this.node} />
+            <div id={styles.d3Container} ref={this.d3Container} />
         }
       </div>
     );
