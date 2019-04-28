@@ -22,13 +22,14 @@ class ProgressRing extends Component {
 
     this.state = {};
 
-    this.node = React.createRef();
+    this.svgContainer = React.createRef();
   }
 
   componentDidMount() {
-    const node = this.node.current;
+    const svgContainer = this.svgContainer.current;
 
-    this.svgDiameter = Number(getComputedStyle(node).width.replace('px', ''));
+    //this.svgDiameter = Number(getComputedStyle(svgContainer).width.replace('px', ''));
+    this.svgDiameter = 300;
     this.diameter = this.svgDiameter * 0.90;
     this.radius = this.diameter / 2;
     this.center = this.svgDiameter / 2;
@@ -51,8 +52,9 @@ class ProgressRing extends Component {
 
     return (
       <svg
-        width={this.svgDiameter}
-        height={this.svgDiameter}
+        width='100%'
+        height='100%'
+        viewBox={`0 0 ${this.svgDiameter} ${this.svgDiameter}`}
       >
         <circle
           id={styles.backgroundCircle}
@@ -93,7 +95,7 @@ class ProgressRing extends Component {
 
   render() {
     return (
-      <div id={styles.container} ref={this.node}>
+      <div id={styles.container} ref={this.svgContainer}>
         {this.renderProgressRing()}
       </div>
     );

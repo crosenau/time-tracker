@@ -1,7 +1,5 @@
 #container {
-  width: 40%;
-  display: flex;
-  justify-content: center;
+  width: 50%;
   font-size: 4rem;
   fill: white;
   user-select: none;
@@ -19,4 +17,10 @@
   fill: transparent;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
+}
+
+@media (max-width: 400px) {
+  #container {
+    width: 70%;
+  }
 }
