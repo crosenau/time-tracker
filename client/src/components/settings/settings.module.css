@@ -57,7 +57,7 @@ h2 {
   border: none;
 }
 
-.section button {
+.section > button {
   color: white;
   background-color: #111;
   padding: 0.5rem 1rem 0.5rem 1rem;
@@ -66,7 +66,7 @@ h2 {
   cursor: pointer;
 }
 
-.section button:disabled {
+.section > button:disabled {
   color: grey;
   cursor: default;
 }
