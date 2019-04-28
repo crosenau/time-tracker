@@ -14,13 +14,10 @@ import ChartSettings from '../settings/ChartSettings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Chart.module.css';
 
-
-
 class Chart extends Component {
   constructor(props) {
     super(props);
 
-    // element ref for D3
     this.d3Container = React.createRef();
 
     this.drawChart = this.drawChart.bind(this);
@@ -37,7 +34,7 @@ class Chart extends Component {
     } else {
       this.drawChart();
     }
-
+    
     this.delay = 250;
     this.timeout = false;
 
@@ -45,6 +42,7 @@ class Chart extends Component {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(this.drawChart, this.delay);
     });
+    
   }
 
   componentWillUnmount() {
@@ -130,11 +128,10 @@ class Chart extends Component {
     // Set svg dimensions and margins
     const d3Container = this.d3Container.current;
 
-    const width = Number(getComputedStyle(d3Container).width.replace('px', '')) - 4;
-    const height = Number(getComputedStyle(d3Container).height.replace('px', '')) - 8;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const width = Number(getComputedStyle(d3Container).width.replace('px', ''));
+    const height = Number(getComputedStyle(d3Container).height.replace('px', ''));
 
-    console.log(width, height);
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
     const maxLabelLength = Math.max(...taskLabels
       .map(label => label.length)
@@ -184,9 +181,9 @@ class Chart extends Component {
     // Create svg and append barchart elements
     const chart = d3.select(d3Container)
       .append('svg')
-      .attr('id', 'svg')
-      .attr('width', width)
-      .attr('height', height);
+        .attr('id', 'svg')
+        .attr('width', '100%')
+        .attr('height', '100%');
 
     const barGroups = chart.selectAll('g')
       .data(series)
