@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 
 import {
   GET_ERRORS,
+  CLEAR_ERRORS,
   SET_CURRENT_USER,
   USER_LOADING
 } from './types';
@@ -57,3 +58,9 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   dispatch(setCurrentUser({}));
 };
+
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
+}
