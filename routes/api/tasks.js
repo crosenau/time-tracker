@@ -7,14 +7,14 @@ const isEmpty = require('is-empty');
 const Task = require('../../models/Task');
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  req.body.map(doc => {
-    doc.userId = req.user[0]._id
-  });
-
   try {
+    req.body.map(task => {
+      task.userId = req.user[0]._id
+    });
+    
     const saveResult = await Task.create(req.body);
 
-    // Remove userId from docs before sending response
+    // Remove userId from tasks before sending response
     const savedTasks = saveResult.map(task => ({
       taskName: task.taskName,
       taskLength: task.taskLength,
@@ -45,7 +45,7 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
       })
       .sort({ completedAt: 'asc' });
 
-    // Remove userId from docs before sending response
+    // Remove userId from tasks before sending response
     const formattedTasks = tasks.map(task => ({
       taskName: task.taskName,
       taskLength: task.taskLength,
