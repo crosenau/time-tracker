@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import { loginUser, clearErrors } from '../../actions/authActions';
 
 import './form.css'
 
@@ -13,7 +13,6 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -22,20 +21,18 @@ class Login extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/chart');
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+  componentDidUpdate(prevProps) {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/chart');
     }
+  }
 
-    if (nextProps.errors) {
-      this.setState({
-        errors: nextProps.errors
-      });
-    }
+  componentWillUnmount() {
+    this.props.clearErrors();
   }
 
   handleChange(event) {
@@ -56,7 +53,7 @@ class Login extends Component {
   }
 
   render() {
-    const { errors } = this.state;
+    const { errors } = this.props;
     
     return (
       <div className='form-container'>
@@ -101,6 +98,7 @@ class Login extends Component {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -112,5 +110,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loginUser }
+  { loginUser, clearErrors }
 )(Login);

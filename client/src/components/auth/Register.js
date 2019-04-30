@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { registerUser } from '../../actions/authActions';
+import { registerUser, clearErrors } from '../../actions/authActions';
 
 import './form.css';
 
@@ -15,7 +15,6 @@ class Register extends Component {
       email: '',
       password: '',
       password2: '',
-      errors: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -24,16 +23,12 @@ class Register extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/chart');
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({
-        errors: nextProps.errors
-      });
-    }
+  componentWillUnmount() {
+    this.props.clearErrors();
   }
 
   handleChange(event) {
@@ -56,7 +51,7 @@ class Register extends Component {
   }
 
   render() {
-    const { errors } = this.state;
+    const { errors } = this.props;
 
     return (
       <div className='form-container'>
@@ -121,6 +116,7 @@ class Register extends Component {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -132,5 +128,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  { registerUser, clearErrors }
 )(withRouter(Register));
