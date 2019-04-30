@@ -118,6 +118,13 @@ class Chart extends Component {
       }
     });
 
+    while (day.date < this.props.chart.endDate) {
+      const nextDay = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + 1);
+
+      dataset.push(day);
+      day = { date: nextDay };
+    }
+
     // Create data series for stacked bars
     const stack = d3.stack()
       .keys(taskLabels)
@@ -243,16 +250,25 @@ class Chart extends Component {
               .text(d => d)
         })
 
-    const xAxis = d3.axisBottom(xScale)
-      .tickValues([dataset[0].date, dataset[dataset.length-1].date])
-      .tickFormat(d => d.toDateString())
-      .tickSize(0)
-      .tickPadding(rem);
-
-    chart.append('g')
+    const xAxisGroup = chart.append('g')
       .attr('class', styles.axis)
-      .attr('transform', `translate(0, ${height - margin.bottom})`)
-      .call(xAxis);
+
+    xAxisGroup.append('line')
+      .attr('x1', margin.left)
+      .attr('y1', height - margin.bottom)
+      .attr('x2', margin.right > 0 ? width - margin.right : width - margin.left)
+      .attr('y2', height - margin.bottom)
+
+    xAxisGroup.append('text')
+      .attr('x', margin.left)
+      .attr('y', height - margin.bottom + rem)
+      .text(dataset[0].date.toDateString())
+
+    xAxisGroup.append('text')
+      .attr('x', margin.right > 0 ? width - margin.right : width - margin.left)
+      .attr('y', height - margin.bottom + rem)
+      .attr('text-anchor', 'end')
+      .text(dataset[dataset.length-1].date.toDateString())
 
     const yAxis = d3.axisLeft(yScale)
       .ticks(d3.max(series, d => d3.max(d, d => d[1])) / 60 / 60)
