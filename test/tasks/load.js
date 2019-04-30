@@ -20,6 +20,11 @@ describe('API ROUTING FOR /api/tasks/load', function () {
       completedAt: new Date(2019, 0, 1)
     },
     {
+      taskName: 'test3',
+      taskLength: 500,
+      completedAt: new Date(2019, 1, 15)
+    },
+    {
       taskName: 'test1',
       taskLength: 500,
       completedAt: new Date(2019, 0, 1)
@@ -29,11 +34,6 @@ describe('API ROUTING FOR /api/tasks/load', function () {
       taskLength: 500,
       completedAt: new Date(2019, 0, 2)
     },
-    {
-      taskName: 'test3',
-      taskLength: 500,
-      completedAt: new Date(2019, 1, 15)
-    }
   ];
 
   before('Create new test user', async function () {
@@ -85,7 +85,7 @@ describe('API ROUTING FOR /api/tasks/load', function () {
   });
  
   context('GET with no date range', function () {
-    it('should return an array of all of the users\' tasks', async function () {
+    it('should return an array of all of the users\' tasks in ascending order', async function () {
       const response = await chai.request(server)
         .get('/api/tasks/load')
         .set('Authorization', token)
@@ -117,8 +117,13 @@ describe('API ROUTING FOR /api/tasks/load', function () {
   
         const returnedDate = new Date(task.completedAt);
   
-        expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());  
+        expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
       });
+
+      const dates = data.map(task => new Date(task.completedAt).getTime());
+      const sortedDates = dates.sort((a, b) => a - b);
+      
+      expect(dates.join()).to.equal(sortedDates.join());
     });
   });
 
@@ -156,7 +161,7 @@ describe('API ROUTING FOR /api/tasks/load', function () {
         const returnedDate = new Date(task.completedAt);
   
         expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
-        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-1].completedAt.getTime());
+        expect(returnedDate.getTime()).to.be.lessThan(testTasks[1].completedAt.getTime());
       });
     });
   });
@@ -234,7 +239,7 @@ describe('API ROUTING FOR /api/tasks/load', function () {
         const returnedDate = new Date(task.completedAt);
 
         expect(returnedDate.getTime()).to.equal(sent.completedAt.getTime());
-        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-2].completedAt.getTime());
+        expect(returnedDate.getTime()).to.be.lessThan(testTasks[testTasks.length-1].completedAt.getTime());
       });
     });
   });
