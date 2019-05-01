@@ -199,8 +199,8 @@ class Chart extends Component {
         .attr('fill', d => colorScale(taskLabels.indexOf(d.key)))
         .attr('id', d => d.key)
         .on('mousemove', d => {
-          const x = `${d3.event.clientX + 16}px`;
-          const y = `${d3.event.clientY + 8}px`;
+          const x = `${d3.event.clientX}px`;
+          const y = `${d3.event.clientY + 32}px`;
 
           tooltip
             .style('left', x)
@@ -299,8 +299,8 @@ class Chart extends Component {
       .append('g')
         .attr('class', 'legend')
         .on('mousemove', d => {
-          const x = `${d3.event.clientX + 16}px`;
-          const y = `${d3.event.clientY + 8}px`;
+          const x = `${d3.event.clientX}px`;
+          const y = `${d3.event.clientY + 32}px`;
 
           const label = d[0];
           const secs = d[1]
