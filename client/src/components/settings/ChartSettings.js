@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import {
   updateChartSettings,
   toggleChartSettings,
+  updateErrors
 } from '../../actions/chartActions';
 
 import DatePicker from 'react-datepicker';
+
+import validateChartSettings from '../../validation/chartSettings';
 
 import style from './settings.module.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,7 +25,8 @@ class ChartSettings extends Component {
       tasks: [...chart.tasks],
       filter: [...chart.filter],
       startDate: chart.startDate,
-      endDate: chart.endDate
+      endDate: chart.endDate,
+      isValid: true
     };
 
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -32,9 +36,21 @@ class ChartSettings extends Component {
     this.resetFields = this.resetFields.bind(this);
   }
 
+  componentWillUnmount() {
+    this.props.updateErrors({});
+  }
+
   handleDateChange(date, id) {
-    this.setState({
+    const { errors, isValid } = validateChartSettings({
+      ...this.state,
       [id]: date
+    });
+
+    this.props.updateErrors(errors);
+
+    this.setState({
+      [id]: date,
+      isValid
     });
   }
 
@@ -79,6 +95,8 @@ class ChartSettings extends Component {
   }
 
   render() {
+    const { errors } = this.props;
+    
     const taskLabels = Array.from(
       new Set(
         this.state.tasks
@@ -124,6 +142,7 @@ class ChartSettings extends Component {
               />
             </div>
           </div>
+          <span className='error'>{null || errors.dateRange}</span>
           
           <div id='section'>
             <h3>Filter</h3>
@@ -151,12 +170,11 @@ class ChartSettings extends Component {
           </div>
 
           <div className={style.section}>
-            {this.state.startDate && this.state.endDate > this.state.startDate ?
+            {this.state.isValid ?
               <button onClick={this.save}>Save</button> :
               <button onClick={this.save} disabled>Save</button>
             }
             <button onClick={this.cancel}>Cancel</button>
-            <button>Defaults</button>
           </div>
 
         </div>
@@ -166,11 +184,16 @@ class ChartSettings extends Component {
 }
 
 ChartSettings.propTypes = {
-  chart: PropTypes.object.isRequired
+  updateChartSettings: PropTypes.func.isRequired,
+  toggleChartSettings: PropTypes.func.isRequired,
+  updateErrors: PropTypes.func.isRequired,
+  chart: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  chart: state.chart
+  chart: state.chart,
+  errors: state.errors
 });
 
 export default connect(
@@ -178,5 +201,6 @@ export default connect(
   {
     updateChartSettings,
     toggleChartSettings,
+    updateErrors
   }
 )(ChartSettings);
