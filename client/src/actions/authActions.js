@@ -3,8 +3,7 @@ import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 
 import {
-  GET_ERRORS,
-  CLEAR_ERRORS,
+  UPDATE_ERRORS,
   SET_CURRENT_USER,
   USER_LOADING
 } from './types';
@@ -17,7 +16,7 @@ export const registerUser = (userData, history) => dispatch => {
       const errors = typeof err.response.data !== 'object' ? { http: err.response.data } : err.response.data;
 
       dispatch({
-        type: GET_ERRORS,
+        type: UPDATE_ERRORS,
         payload: errors
       })
     });
@@ -35,7 +34,7 @@ export const loginUser = userData => dispatch => {
       dispatch(setCurrentUser(decoded));
     })
     .catch(err => dispatch({
-      type: GET_ERRORS,
+      type: UPDATE_ERRORS,
       payload: err.response.data
     }));
 };
@@ -61,6 +60,7 @@ export const logoutUser = () => dispatch => {
 
 export const clearErrors = () => {
   return {
-    type: CLEAR_ERRORS
+    type: UPDATE_ERRORS,
+    payload: {}
   };
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {
+  UPDATE_ERRORS,
   TASKS_LOADING,
   UPDATE_TASKS,
   UPDATE_CHART_SETTINGS,
@@ -48,5 +49,12 @@ export function updateChartSettings(settings) {
 export function toggleChartSettings() {
   return {
     type: TOGGLE_CHART_SETTINGS
+  };
+}
+
+export function updateErrors(errors) {
+  return {
+    type: UPDATE_ERRORS,
+    payload: errors
   };
 }
