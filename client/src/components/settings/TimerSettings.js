@@ -11,18 +11,11 @@ import {
   toggleTimerSettings
 } from '../../actions/timerActions';
 
+import alarmSounds from './alarmSounds';
+import tickSounds from './tickSounds';
+
 import style from './settings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-const alarmSounds = [
-  {
-    name: 'Desk Bell',
-    url: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3'
-  },
-  { name: 'none',
-    url: ''
-  }
-];
 
 class TimerSettings extends Component {
   constructor(props) {
@@ -40,7 +33,6 @@ class TimerSettings extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
     this.resetFields = this.resetFields.bind(this);
     this.save = this.save.bind(this);
     this.cancel = this.cancel.bind(this);
@@ -50,12 +42,6 @@ class TimerSettings extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
-
-  handleSelect(event) {
-   this.setState({
-     alarmSound: event.target.value 
-   });
   }
 
   save() {
@@ -210,30 +196,46 @@ class TimerSettings extends Component {
             <h3>Sounds</h3>
             <div className={style.inputContainer}>
               <label
-                htmlFor='alarm'
+                htmlFor='alarmSound'
               >
                 Alarm
               </label>
               <select
-                id='alarm'
-                onChange={this.handleSelect}
+                id='alarmSound'
+                value={this.state.alarmSound}
+                onChange={this.handleChange}
               >
-                {alarmSounds.map((sound, i) => <option key={i} id={sound.name} value={sound.url}>{sound.name}</option>)}
+                {alarmSounds.map((sound, i) => 
+                  <option 
+                    key={i}
+                    id={sound.name}
+                    value={sound.url}
+                  >
+                    {sound.name}
+                  </option>)}
               </select>
             </div>
             <div className={style.inputContainer}>
               <label
-                htmlFor='tick'
+                htmlFor='tickSound'
               >
                 Tick
               </label>
               <select
-                id='tick'
+                id='tickSound'
+                value={this.state.tickSound}
+                onChange={this.handleChange}
               >
-                <option value='whiteNoise'>White Noise</option>
-                <option value='clock'>Clock</option>
-                <option value='rain'>Rain</option>
-                <option value='none'>None</option>
+                {tickSounds.map((sound, i) =>
+                    <option
+                      key={i}
+                      id={sound.name}
+                      value={sound.url}
+                    >
+                      {sound.name}
+                    </option>
+                )}
+              >
               </select>
             </div>
           </div>

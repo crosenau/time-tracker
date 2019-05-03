@@ -15,6 +15,13 @@ import {
 } from '../../actions/timerActions';
 
 class Timer extends Component {
+  constructor(props) {
+    super(props); 
+    
+    this.alarmAudio = React.createRef();
+    this.tickAudio = React.createRef();
+  }
+
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       console.log('setting interval');
@@ -45,7 +52,7 @@ class Timer extends Component {
         }));
       
       if (unsavedTasks.length > 0) {
-        console.log('unsavedTasks found');
+        console.log('unsavedTasks found. attempting to save');
         this.props.saveCompletedTasks(unsavedTasks);
       };
     }
@@ -66,7 +73,7 @@ class Timer extends Component {
 
     if (timer.timeRemaining <= 0) {
       this.props.stopTimer();
-      this.playAlarm();
+      this.playAudio(this.alarmAudio);
 
       // if new day, reset completedTasks
       const today = new Date().getDay();
@@ -98,23 +105,25 @@ class Timer extends Component {
       return;
     }
 
+    this.playAudio(this.tickAudio);
     this.props.updateTimeRemaining();
   }
 
-  playAlarm() {
-    const alarm = document.querySelector('#beep');
+  playAudio(audioElement) {
+    const audio = audioElement.current;
 
-    if (alarm) {
-      alarm.currentTime = 0;
-     alarm.play();
+    if (audio.currentSrc !== '' && audio.paused) {
+      audio.currentTime = 0;
+     audio.play();
     }
   }
 
   render() {
-    const alarm = this.props.timer.alarmSound ? <audio id='beep' src={this.props.timer.alarmSound} /> : null;
-
     return (
-        alarm
+      <div>
+        <audio ref={this.tickAudio} src={this.props.timer.tickSound} />
+        <audio ref={this.alarmAudio} src={this.props.timer.alarmSound} />
+      </div>
     );
   }
 }

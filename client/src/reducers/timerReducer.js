@@ -22,8 +22,8 @@ const initialState = {
   taskLength: 25 * 60,
   setLength: 4,
   goal: 12,
-  alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1542177884/Pomodoro%20Clock/78506__joedeshon__desk-bell-one-time-01.mp3',
-  tickSound: null, // url
+  alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1556684851/Pomodoro%20Clock/333629__jgreer__chime-sound_amp.mp3',
+  tickSound: '',
   completedTasks: [],
   displaySettings: false,
   currentTimer: task,
