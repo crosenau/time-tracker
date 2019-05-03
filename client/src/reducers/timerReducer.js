@@ -11,7 +11,7 @@ import {
   TOGGLE_TIMER_SETTINGS,
 } from '../actions/types';
 
-const task = 'task';
+const task = 'Task';
 const shortBreak = 'Break';
 const longBreak = 'Long Break';
 

@@ -89,7 +89,7 @@ class Timer extends Component {
       }
 
       // cache completed task
-      if (timer.currentTimer === 'task') {
+      if (timer.currentTimer === 'Task') {
         const task = {
           taskName: timer.taskName,
           taskLength: timer.taskLength,

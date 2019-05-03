@@ -56,10 +56,26 @@ class TimerSettings extends Component {
       tickSound: this.state.tickSound
     };
 
+    const { taskLength, shortBreakLength, longBreakLength, currentTimer } = this.props.timer;
+    let timerChanged = false; 
+
+    if (currentTimer === 'Task' && taskLength !== settings.taskLength) {
+      timerChanged = true;
+    } else if (currentTimer === 'Break' && shortBreakLength !== settings.shortBreakLength) {
+      timerChanged = true;
+    } else if (currentTimer === 'Long Break' && longBreakLength !== settings.longBreakLength) {
+      timerChanged = true;
+    }
+
     this.props.stopTimer();
     this.props.updateSettings(settings);
     this.props.toggleTimerSettings();
-    this.props.resetCurrentTimer();
+
+    if (timerChanged) {
+      this.props.resetCurrentTimer();
+    } else {
+      this.props.startTimer();
+    }
   }
 
   cancel() {
@@ -81,8 +97,6 @@ class TimerSettings extends Component {
   }
 
   render() {
-    const warning = <p id='warning'>Timer is currently running. Saving changes will stop the timer and update it's settings.</p>;
-
     return (
       <div id={style.overlay}>
         <div id={style.settings}>
@@ -241,10 +255,9 @@ class TimerSettings extends Component {
           </div>
           
           <div className={style.section}>
-            {this.props.timer.active ? warning : null}
-              <button onClick={this.save}>Save</button>
-              <button onClick={this.cancel}>Cancel</button>
-              <button>Defaults</button>
+            <button onClick={this.save}>Save</button>
+            <button onClick={this.cancel}>Cancel</button>
+            <button>Defaults</button>
           </div>
         </div>
       </div>
