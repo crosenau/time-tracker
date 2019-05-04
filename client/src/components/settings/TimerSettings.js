@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   startTimer,
   stopTimer,
-  updateTimeRemaining,
+  updatetimeLeft,
   nextTimer,
   resetCurrentTimer,
   updateSettings,
@@ -278,7 +278,7 @@ export default connect(
   { 
     startTimer,
     stopTimer,
-    updateTimeRemaining,
+    updatetimeLeft,
     nextTimer,
     resetCurrentTimer,
     updateSettings,

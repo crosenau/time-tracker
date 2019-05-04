@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   startTimer,
   stopTimer,
-  updateTimeRemaining,
+  updatetimeLeft,
   nextTimer,
   resetCurrentTimer,
   addCompletedTask,
@@ -71,7 +71,7 @@ class Timer extends Component {
       return;
     }
 
-    if (timer.timeRemaining <= 0) {
+    if (timer.timeLeft <= 0) {
       this.props.stopTimer();
       this.playAudio(this.alarmAudio);
 
@@ -106,7 +106,7 @@ class Timer extends Component {
     }
 
     this.playAudio(this.tickAudio);
-    this.props.updateTimeRemaining();
+    this.props.updatetimeLeft();
   }
 
   playAudio(audioElement) {
@@ -143,7 +143,7 @@ export default connect(
   { 
     startTimer,
     stopTimer,
-    updateTimeRemaining,
+    updatetimeLeft,
     nextTimer,
     resetCurrentTimer,
     addCompletedTask,

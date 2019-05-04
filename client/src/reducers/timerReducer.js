@@ -28,9 +28,9 @@ const initialState = {
   displaySettings: false,
   currentTimer: task,
   active: false,
-  timeRemaining: 25 * 60,
+  timeLeft: 25 * 60,
   startTime: null,
-  timeRemainingAtStart: null,
+  timeLeftAtStart: null,
 };
 
 export default function(state = initialState, action) {
@@ -40,7 +40,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         startTime: Date.now(),
-        timeRemainingAtStart: state.timeRemaining,
+        timeLeftAtStart: state.timeLeft,
         active: true
       };
     }
@@ -55,53 +55,53 @@ export default function(state = initialState, action) {
       
       return {
         ...state,
-        timeRemaining: state.timeRemainingAtStart - secondsElapsed
+        timeLeft: state.timeLeftAtStart - secondsElapsed
       };
     }
     case NEXT_TIMER: {
-      let { completedTasks, timeRemaining, currentTimer, setLength, shortBreakLength, longBreakLength, taskLength } = state;
+      let { completedTasks, timeLeft, currentTimer, setLength, shortBreakLength, longBreakLength, taskLength } = state;
 
       if (currentTimer === task) {
         if (
             completedTasks.length % setLength === 0
             && completedTasks.length !== 0
         ) {
-          timeRemaining = longBreakLength;
+          timeLeft = longBreakLength;
           currentTimer = longBreak;
         } else {
-          timeRemaining = shortBreakLength;
+          timeLeft = shortBreakLength;
           currentTimer = shortBreak;
         }
       } else {
-        timeRemaining = taskLength;
+        timeLeft = taskLength;
         currentTimer = task;
       }
 
       return {
         ...state,
-        timeRemaining,
+        timeLeft,
         currentTimer
       };
     }
     case RESET_CURRENT_TIMER: {
-      let { timeRemaining, currentTimer, taskLength, shortBreakLength, longBreakLength } = state;
+      let { timeLeft, currentTimer, taskLength, shortBreakLength, longBreakLength } = state;
 
       switch (currentTimer) {
         case task:
-          timeRemaining = taskLength;
+          timeLeft = taskLength;
           break;
         case shortBreak:
-          timeRemaining = shortBreakLength;
+          timeLeft = shortBreakLength;
           break;
         case longBreak:
-          timeRemaining = longBreakLength;
+          timeLeft = longBreakLength;
           break;
       }
 
       return {
         ...state,
-        timeRemaining,
-        timeRemainingAtStart: timeRemaining
+        timeLeft,
+        timeLeftAtStart: timeLeft
       };
     }
     case ADD_COMPLETED_TASK: {

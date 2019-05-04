@@ -25,7 +25,7 @@ export function stopTimer() {
   };
 }
 
-export function updateTimeRemaining() {
+export function updatetimeLeft() {
   return {
     type: UPDATE_TIME_REMAINING
   };
