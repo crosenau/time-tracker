@@ -59,9 +59,12 @@ const TimerUI = props => {
         </button>
       </div>
       <div id={styles.timer}>
-        <ProgressRing id={styles.progressRing} />
-        <div id={styles.taskLabel}>
-          {props.timer.currentTimer === 'Task' ? props.timer.taskName : props.timer.currentTimer}
+        <div id={styles.display}>
+          <ProgressRing id={styles.progressRing} />
+          <div id={styles.altTimeDisplay}>{props.timer.timeLeft}</div>
+          <div id={styles.taskLabel}>
+            {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
+          </div>
         </div>
         <div id={styles.controls}>
           <button
@@ -103,9 +106,11 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { startTimer,
+  {
+    startTimer,
     stopTimer,
     resetCurrentTimer,
     nextTimer,
-    toggleTimerSettings }
+    toggleTimerSettings
+  }
 )(TimerUI);

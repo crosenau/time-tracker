@@ -12,67 +12,47 @@ function leadingZero(num) {
   return String(num);
 }
 
-const task = 'task';
-const shortBreak = 'Break';
-const longBreak = 'Long Break';
-
 class ProgressRing extends Component {
   constructor() {
     super();
-
-    this.state = {};
-
-    this.svgContainer = React.createRef();
-  }
-
-  componentDidMount() {
-    const svgContainer = this.svgContainer.current;
-
-    //this.svgDiameter = Number(getComputedStyle(svgContainer).width.replace('px', ''));
-    this.svgDiameter = 300;
-    this.diameter = this.svgDiameter * 0.90;
-    this.radius = this.diameter / 2;
-    this.center = this.svgDiameter / 2;
-    this.circumference = 2 * Math.PI * this.radius;
-
-    // Force component to re-render once computed dimensions are computed
-    this.setState(this.state); 
   }
 
   renderProgressRing() {
-    if (!this.diameter) {
-      return null;
-    }
-
-    const minutes = Math.floor(this.props.timer.timeRemaining / 60);
-    const seconds = this.props.timer.timeRemaining % 60;
+    const minutes = Math.floor(this.props.timer.timeLeft / 60);
+    const seconds = this.props.timer.timeLeft % 60;
     const timeLeft = `${leadingZero(minutes)}:${leadingZero(seconds)}`;
 
     const offset = this.circumference - this.circumference * this.percentRemaining() / 100;
+
+    const svgDiameter = 400;
+    const diameter = svgDiameter * 0.90;
+    const radius = diameter / 2;
+    const center = svgDiameter / 2;
+    const circumference = 2 * Math.PI * radius;
 
     return (
       <svg
         width='100%'
         height='100%'
-        viewBox={`0 0 ${this.svgDiameter} ${this.svgDiameter}`}
+        viewBox={`0 0 ${svgDiameter} ${svgDiameter}`}
       >
         <circle
           id={styles.backgroundCircle}
-          r={this.radius}
-          cx={this.center}
-          cy={this.center}
+          r={radius}
+          cx={center}
+          cy={center}
         />
         <circle
           id={styles.progressRing}
-          r={this.radius}
-          cx={this.center}
-          cy={this.center}
-          strokeDasharray={`${this.circumference} ${this.circumference}`}
+          r={radius}
+          cx={center}
+          cy={center}
+          strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={-offset}
         />
         <text
-          x={this.center}
-          y={this.center * 1.2}
+          x={center}
+          y={center * 1.2}
           textAnchor='middle'
         >
           {timeLeft}
@@ -84,12 +64,12 @@ class ProgressRing extends Component {
 
   percentRemaining() {
     switch (this.props.timer.currentTimer) {
-     case task:
-       return (this.props.timer.timeRemaining / this.props.timer.taskLength) * 100;
-     case shortBreak:
-       return (this.props.timer.timeRemaining / this.props.timer.shortBreakLength) * 100;
-     case longBreak:
-       return (this.props.timer.timeRemaining / this.props.timer.longBreakLength) * 100;
+     case 'Task':
+       return (this.props.timer.timeLeft / this.props.timer.taskLength) * 100;
+     case 'Break':
+       return (this.props.timer.timeLeft / this.props.timer.shortBreakLength) * 100;
+     case 'Long Break':
+       return (this.props.timer.timeLeft / this.props.timer.longBreakLength) * 100;
     }
   }
 
