@@ -13,22 +13,19 @@ function leadingZero(num) {
 }
 
 class ProgressRing extends Component {
-  constructor() {
-    super();
-  }
-
   renderProgressRing() {
     const minutes = Math.floor(this.props.timer.timeLeft / 60);
     const seconds = this.props.timer.timeLeft % 60;
     const timeLeft = `${leadingZero(minutes)}:${leadingZero(seconds)}`;
-
-    const offset = this.circumference - this.circumference * this.percentRemaining() / 100;
 
     const svgDiameter = 400;
     const diameter = svgDiameter * 0.90;
     const radius = diameter / 2;
     const center = svgDiameter / 2;
     const circumference = 2 * Math.PI * radius;
+
+    const offset = circumference - circumference * this.percentRemaining() / 100;
+
 
     return (
       <svg
@@ -59,7 +56,6 @@ class ProgressRing extends Component {
         </text>
       </svg>
     );
-
   }
 
   percentRemaining() {
