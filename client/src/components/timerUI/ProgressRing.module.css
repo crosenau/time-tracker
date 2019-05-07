@@ -2,9 +2,8 @@
   font-size: 7rem;
   fill: white;
   user-select: none;
-  width: 50%;
-  flex-basis: 50%;
-  max-height: 80%;
+  width: calc(calc(30vw + 30vh) / 2);
+  height: calc(calc(30vw + 30vh) / 2);
 }
 
 #backgroundCircle {

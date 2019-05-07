@@ -56,13 +56,13 @@ const TimerUI = props => {
         </button>
       </div>
       <div id={styles.timer}>
-        <div id={styles.display}>
-          <ProgressRing id={styles.progressRing} />
-          <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
-          <div id={styles.taskLabel}>
-            {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
-          </div>
+
+        <ProgressRing id={styles.progressRing} />
+        <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
+        <div id={styles.taskLabel}>
+          {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
         </div>
+
         <div id={styles.controls}>
           <button
             className='icon-btn'
