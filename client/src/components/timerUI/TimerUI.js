@@ -12,23 +12,10 @@ import {
 import ProgressRing from './ProgressRing';
 import TimerSettings from '../settings/TimerSettings';
 
+import { digitalTime, hoursMinutes } from '../../utils/convertSeconds';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './TimerUI.module.css'
-
-function getTotalTime(tasks) {
-  if (tasks.length === 0) {
-    return '0 hours 0 minutes';
-  }
-
-  const totalSeconds = (tasks
-    .reduce((acc, cur) => ({taskLength: acc.taskLength + cur.taskLength})))
-    .taskLength;
-
-  const hours = Math.floor(totalSeconds / 60 / 60);
-  const minutes = Math.floor(totalSeconds / 60) % 60;
-  
-  return `${hours} hours ${minutes} minutes`;
-}
 
 const TimerUI = props => {
   const playButton = 
@@ -46,6 +33,16 @@ const TimerUI = props => {
       <FontAwesomeIcon icon='pause' />
     </button>;
 
+  let totalSeconds;
+
+  if (props.timer.completedTasks.length > 0) {
+    totalSeconds = (props.timer.completedTasks
+      .reduce((acc, cur) => ({ taskLength: acc.taskLength + cur.taskLength })))
+      .taskLength;
+  } else {
+    totalSeconds = 0;
+  }
+
   return (
     <div id={styles.container}>
       {props.timer.displaySettings ? <TimerSettings /> : null}
@@ -61,7 +58,7 @@ const TimerUI = props => {
       <div id={styles.timer}>
         <div id={styles.display}>
           <ProgressRing id={styles.progressRing} />
-          <div id={styles.altTimeDisplay}>{props.timer.timeLeft}</div>
+          <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
           <div id={styles.taskLabel}>
             {props.timer.currentTimer === 'task' ? props.timer.taskName : props.timer.currentTimer}
           </div>
@@ -90,7 +87,7 @@ const TimerUI = props => {
       </div>
       <div id={styles.footer}>
           <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-          <span>{getTotalTime(props.timer.completedTasks)}</span>
+          <span>{hoursMinutes(totalSeconds)}</span>
         </div>
     </div>
   );

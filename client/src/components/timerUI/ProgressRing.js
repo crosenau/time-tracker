@@ -2,22 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { digitalTime } from '../../utils/convertSeconds';
+
 import styles from './ProgressRing.module.css';
-
-function leadingZero(num) {
-  if (String(num).length < 2) {
-    return '0' + String(num);
-  }
-
-  return String(num);
-}
 
 class ProgressRing extends Component {
   renderProgressRing() {
-    const minutes = Math.floor(this.props.timer.timeLeft / 60);
-    const seconds = this.props.timer.timeLeft % 60;
-    const timeLeft = `${leadingZero(minutes)}:${leadingZero(seconds)}`;
-
     const svgDiameter = 400;
     const diameter = svgDiameter * 0.90;
     const radius = diameter / 2;
@@ -25,7 +15,6 @@ class ProgressRing extends Component {
     const circumference = 2 * Math.PI * radius;
 
     const offset = circumference - circumference * this.percentRemaining() / 100;
-
 
     return (
       <svg
@@ -52,7 +41,7 @@ class ProgressRing extends Component {
           y={center * 1.2}
           textAnchor='middle'
         >
-          {timeLeft}
+          {digitalTime(this.props.timer.timeLeft)}
         </text>
       </svg>
     );
