@@ -14,7 +14,7 @@ import {
 import alarmSounds from './alarmSounds';
 import tickSounds from './tickSounds';
 
-import style from './settings.module.css';
+import styles from './settings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class TimerSettings extends Component {
@@ -67,15 +67,13 @@ class TimerSettings extends Component {
       timerChanged = true;
     }
 
-    this.props.stopTimer();
-    this.props.updateSettings(settings);
-    this.props.toggleTimerSettings();
-
-    if (timerChanged) {
-      this.props.resetCurrentTimer();
-    } else {
-      this.props.startTimer();
+    if (timerChanged && this.props.timer.active) {
+      this.props.stopTimer();
     }
+
+    this.props.updateSettings(settings);
+    timerChanged && this.props.resetCurrentTimer();
+    this.props.toggleTimerSettings();
   }
 
   cancel() {
@@ -98,9 +96,9 @@ class TimerSettings extends Component {
 
   render() {
     return (
-      <div id={style.overlay}>
-        <div id={style.settings}>
-          <div id={style.header}>
+      <div id={styles.overlay}>
+        <div id={styles.settings}>
+          <div id={styles.header}>
             <h2>Settings</h2>
             <button
               className='icon-btn'
@@ -110,8 +108,8 @@ class TimerSettings extends Component {
             </button>
           </div>
 
-          <div className={style.section}>
-            <div className={style.inputContainer}>
+          <div className={styles.section}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='taskName'
               >
@@ -120,15 +118,17 @@ class TimerSettings extends Component {
               <input
                 id='taskName'
                 type='text'
+                maxLength='16'
                 value={this.state.taskName}
                 onChange={this.handleChange}
+                required
               />
             </div>
           </div>
 
-          <div className={style.section}>
+          <div className={styles.section}>
             <h3>Timer Length <span>(in minutes)</span></h3>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='taskLength'
               >
@@ -143,7 +143,7 @@ class TimerSettings extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='shortBreakLength'
               >
@@ -157,7 +157,7 @@ class TimerSettings extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='longBreakLength'
               >
@@ -174,13 +174,13 @@ class TimerSettings extends Component {
             </div>
           </div>
           
-          <div className={style.section}>
+          <div className={styles.section}>
             <h3>Tasks</h3>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='setLength'
               >
-                Tasks per Long Break
+                Set Length
               </label>
               <input
                 id='setLength'
@@ -190,7 +190,7 @@ class TimerSettings extends Component {
                 onChange={this.handleChange}
               />
             </div>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='goal'
               >
@@ -206,9 +206,9 @@ class TimerSettings extends Component {
             </div>
           </div>
           
-          <div className={style.section}>
+          <div className={styles.section}>
             <h3>Sounds</h3>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='alarmSound'
               >
@@ -229,7 +229,7 @@ class TimerSettings extends Component {
                   </option>)}
               </select>
             </div>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label
                 htmlFor='tickSound'
               >
@@ -254,7 +254,7 @@ class TimerSettings extends Component {
             </div>
           </div>
           
-          <div className={style.section}>
+          <div className={styles.section}>
             <button onClick={this.save}>Save</button>
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>
