@@ -11,7 +11,7 @@ import store from './store';
 
 import Timer from './components/timer/Timer';
 import Navbar from './components/layout/Navbar';
-import Landing from './components/layout/Landing';
+import Landing from './components/auth/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Chart from './components/chart/Chart';
@@ -19,9 +19,29 @@ import TimerUI from './components/timerUI/TimerUI';
 
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock, faEllipsisV, faForward, faUndoAlt, faPlay, faPause, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faEllipsisV,
+  faForward,
+  faUndoAlt,
+  faPlay,
+  faPause,
+  faTimes,
+  faSignOutAlt
+} from '@fortawesome/free-solid-svg-icons';
+import { faClock, faChartBar } from '@fortawesome/free-regular-svg-icons';
 
-library.add(faClock, faEllipsisV, faForward, faUndoAlt, faPlay, faPause, faTimes);
+library.add(
+  faClock,
+  faEllipsisV,
+  faForward,
+  faUndoAlt,
+  faPlay,
+  faPause,
+  faTimes,
+  faClock,
+  faChartBar,
+  faSignOutAlt
+);
 
 if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;

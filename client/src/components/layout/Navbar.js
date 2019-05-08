@@ -6,7 +6,7 @@ import { logoutUser } from '../../actions/authActions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import style from './Navbar.module.css';
+import styles from './Navbar.module.css';
 
 
 class Navbar extends Component {
@@ -28,25 +28,33 @@ class Navbar extends Component {
     if (isAuthenticated) {
       navOpts = (
         <nav>
-          <NavLink 
-            to='/chart'
-            className={style.navButton}
-            activeClassName={style.navButtonSelected} 
-          >
-            Chart
-          </NavLink>
-          <NavLink 
-            to='/timer'
-            className={style.navButton}
-            activeClassName={style.navButtonSelected} 
-          >
-            Timer
-          </NavLink>
+          <div id={styles.sections}>
+            <NavLink 
+              to='/timer'
+              className={styles.navButton}
+              activeClassName={styles.navButtonSelected} 
+            >
+              <span>
+                <FontAwesomeIcon icon={['far', 'clock']} />
+              </span>
+            </NavLink>
+            <NavLink 
+              to='/chart'
+              className={styles.navButton}
+              activeClassName={styles.navButtonSelected} 
+            >
+              <span>
+                <FontAwesomeIcon icon={['far', 'chart-bar']} />
+              </span>
+            </NavLink>
+          </div>
           <button
-            className={style.navButton}
+            className={styles.navButton}
             onClick={this.handleClick}
           >
-            Log out
+            <span>
+              <FontAwesomeIcon icon='sign-out-alt' />
+            </span>
           </button>
         </nav>
         );
@@ -55,15 +63,15 @@ class Navbar extends Component {
         <nav>
           <NavLink
             to='/login'
-            className={style.navButton}
-            activeClassName={style.navButtonSelected}
+            className={styles.navButton}
+            activeClassName={styles.navButtonSelected}
             >
               Log in
           </NavLink>
           <NavLink 
             to='/register'
-            className={style.navButton}
-            activeClassName={style.navButtonSelected}
+            className={styles.navButton}
+            activeClassName={styles.navButtonSelected}
           >
             Register
           </NavLink>  
@@ -72,10 +80,7 @@ class Navbar extends Component {
     }
 
     return (
-      <div id={style.navbar}>
-        <div id={style.clock}>
-          <FontAwesomeIcon icon='clock' />
-        </div>
+      <div id={styles.navbar}>
         {navOpts}
       </div>
     );
