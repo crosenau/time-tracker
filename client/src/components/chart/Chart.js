@@ -7,7 +7,7 @@ import {
   toggleChartSettings
 } from '../../actions/chartActions';
 
-import BarChartWide from './barChartWide';
+import BarChart from './BarChart';
 import ChartSettings from '../settings/ChartSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,10 +52,10 @@ class Chart extends Component {
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
         </div>
-         {
+          {
             this.props.chart.loading ? 
               <div id={styles.loading}>Loading...</div> :
-              <BarChartWide />
+              <BarChart />
           }
       </div>
     );

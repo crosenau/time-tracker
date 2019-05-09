@@ -1,7 +1,7 @@
 #container {
   background-color: #3a3a3a;
   color: white;
-  width: 90%;
+  flex-basis: 100%;
   margin: 3rem;
   padding: 2rem;
   display: flex;
@@ -9,13 +9,13 @@
 }
 
 #header {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
 }
 
 #header h2 {
-  margin-bottom: 0rem;
+  margin: 0rem;
 }
 
 #settingsButton {
@@ -32,4 +32,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 500px), (max-height: 500px) {
+  #container {
+    margin: 0rem;
+    padding: 1rem;
+  }
 }

@@ -1,0 +1,13 @@
+#d3Container {
+  overflow: hidden;
+  color: white;
+  fill: white;
+  width: 100%;
+  flex-basis: 100%;
+  align-self: center;
+}
+
+.axis {
+  stroke: white;
+  font-size: 0.7rem;
+}
