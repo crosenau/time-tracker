@@ -9,13 +9,13 @@ import { setCurrentUser, logoutUser } from './actions/authActions';
 import { Provider } from 'react-redux';
 import store from './store';
 
-import Timer from './components/timer/Timer';
-import Navbar from './components/layout/Navbar';
+import TimerLogic from './components/timerLogic/TimerLogic';
+import Navbar from './components/navbar/Navbar';
 import Landing from './components/auth/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Chart from './components/chart/Chart';
-import TimerUI from './components/timerUI/TimerUI';
+import Timer from './components/timer/Timer';
 
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -67,14 +67,14 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Timer />
+            <TimerLogic />
             <Route path='/' component={Navbar} />
             <div id='app-body'>
               <Route exact path={['/', '/login', '/register']} component={Landing} />
               <Route exact path={['/', '/login']} component={Login} />
               <Route exact path='/register' component={Register} />
               <PrivateRoute path='/chart' component={Chart} />
-              <PrivateRoute path='/timer' component={TimerUI} />
+              <PrivateRoute path='/timer' component={Timer} />
             </div>
           </div>
         </Router>

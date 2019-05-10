@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -15,7 +15,7 @@ import TimerSettings from '../settings/TimerSettings';
 import { digitalTime, hoursMinutes } from '../../utils/convertSeconds';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './TimerUI.module.css'
+import styles from './Timer.module.css'
 
 const TimerUI = props => {
   const playButton = 
