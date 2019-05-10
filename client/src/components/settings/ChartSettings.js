@@ -11,7 +11,7 @@ import DatePicker from 'react-datepicker';
 
 import validateChartSettings from '../../validation/chartSettings';
 
-import style from './settings.module.css';
+import styles from './settings.module.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -26,7 +26,7 @@ class ChartSettings extends Component {
       filter: [...chart.filter],
       startDate: chart.startDate,
       endDate: chart.endDate,
-      isValid: true
+      validInputs: true
     };
 
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -50,7 +50,7 @@ class ChartSettings extends Component {
 
     this.setState({
       [id]: date,
-      isValid
+      validInputs: isValid
     });
   }
 
@@ -105,21 +105,21 @@ class ChartSettings extends Component {
     );
 
     return (
-      <div id={style.overlay}>
-        <div id={style.settings}>
-          <div id={style.header}>
-          <h2>Settings</h2>
-            <button
-              className='icon-btn'
-              onClick={this.cancel}
-            >
-              <FontAwesomeIcon icon={'times'} />
-            </button>
+      <div id={styles.overlay}>
+        <div id={styles.settings}>
+          <div id={styles.header}>
+            <h2>Settings</h2>
+              <button
+                className='icon-btn'
+                onClick={this.cancel}
+              >
+                <FontAwesomeIcon icon={'times'} />
+              </button>
           </div>
 
-          <div className={style.section}>
+          <div className={styles.section}>
             <h3>Date Range</h3>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label htmlFor='startDate'>From</label>
               <DatePicker
                 id='startDate'
@@ -130,7 +130,7 @@ class ChartSettings extends Component {
                 required
               />
             </div>
-            <div className={style.inputContainer}>
+            <div className={styles.inputContainer}>
               <label htmlFor='endDate'>To</label>
               <DatePicker
                 id='endDate'
@@ -146,7 +146,7 @@ class ChartSettings extends Component {
           
           <div id='section'>
             <h3>Filter</h3>
-            <div className={style.checkboxes}>
+            <div className={styles.checkboxes}>
             {taskLabels.map((task, i) => {
               return (
                 <div className='checkboxContainer' key={`checkboxContainer-${i}`}>
@@ -169,10 +169,10 @@ class ChartSettings extends Component {
             </div>
           </div>
 
-          <div className={style.section}>
-            {this.state.isValid ?
+          <div className={styles.section}>
+            {this.state.validInputs ?
               <button onClick={this.save}>Save</button> :
-              <button onClick={this.save} disabled>Save</button>
+              <button disabled>Save</button>
             }
             <button onClick={this.cancel}>Cancel</button>
           </div>
