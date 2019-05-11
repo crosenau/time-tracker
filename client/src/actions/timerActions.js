@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import {
   START_TIMER,
-  UPDATE_TIME_REMAINING,
+  UPDATE_TIME_LEFT,
   NEXT_TIMER,
   STOP_TIMER,
   RESET_CURRENT_TIMER,
@@ -27,7 +27,7 @@ export function stopTimer() {
 
 export function updatetimeLeft() {
   return {
-    type: UPDATE_TIME_REMAINING
+    type: UPDATE_TIME_LEFT
   };
 }
 

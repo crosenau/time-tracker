@@ -1,6 +1,6 @@
 import {
   START_TIMER,
-  UPDATE_TIME_REMAINING,
+  UPDATE_TIME_LEFT,
   NEXT_TIMER,
   STOP_TIMER,
   RESET_CURRENT_TIMER,
@@ -50,7 +50,7 @@ export default function(state = initialState, action) {
         active: false
       };
     }
-    case UPDATE_TIME_REMAINING: {
+    case UPDATE_TIME_LEFT: {
       const secondsElapsed = Math.round((Date.now() - state.startTime) / 1000);
       
       return {
