@@ -70,7 +70,7 @@ class App extends Component {
             <TimerLogic />
             <Route path='/' component={Navbar} />
             <div id='app-body'>
-              <Route exact path={['/', '/login', '/register']} component={Landing} />
+              { /*<Route exact path={['/', '/login', '/register']} component={Landing} /> */}
               <Route exact path={['/', '/login']} component={Login} />
               <Route exact path='/register' component={Register} />
               <PrivateRoute path='/chart' component={Chart} />

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { loginUser, clearErrors } from '../../actions/authActions';
 
 import './form.css'
+import Landing from './Landing';
 
 class Login extends Component {
   constructor(props) {
@@ -56,40 +57,43 @@ class Login extends Component {
     const { errors } = this.props;
     
     return (
-      <div className='form-container'>
-        <div className='elements-container'>
-          <h2>Log in now</h2>
-          <form onSubmit={this.onSubmit}>
-            <div className='field-container'>
-              <label htmlFor='email'>Email Address</label>
-              <input
-                type='email'
-                id='email'
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-              <span className='error'>{errors.email}</span>
-            </div>
-            <div className='field-container'>
-              <label htmlFor='password'>Password</label>
-              <input
-                type='password'
-                id='password'
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-              <span className='error'>{errors.password}</span>
-            </div>
-            <button
-              className='submit-btn'
-              type='submit'
-            >
-              LOG IN
-            </button>
-          </form>
-          <p>
-            Don't have an account? <Link to='/register'>Register Here</Link>
-          </p>
+      <div className='container'>
+        <Landing />
+        <div className='form-container'>
+          <div className='elements-container'>
+            <h2>Log in now</h2>
+            <form onSubmit={this.onSubmit}>
+              <div className='field-container'>
+                <label htmlFor='email'>Email Address</label>
+                <input
+                  type='email'
+                  id='email'
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                />
+                <span className='error'>{errors.email}</span>
+              </div>
+              <div className='field-container'>
+                <label htmlFor='password'>Password</label>
+                <input
+                  type='password'
+                  id='password'
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                />
+                <span className='error'>{errors.password}</span>
+              </div>
+              <button
+                className='submit-btn'
+                type='submit'
+              >
+                LOG IN
+              </button>
+            </form>
+            <p>
+              Don't have an account? <Link to='/register'>Register Here</Link>
+            </p>
+          </div>
         </div>
       </div>
     );
