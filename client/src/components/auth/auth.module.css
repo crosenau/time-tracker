@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.formContainer {
+  background-color: #789DB2;
+  color: white;
+  font-size: 1rem;
+  flex-basis: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elementsContainer {
+  flex-basis: 100%;
+  margin: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.fieldContainer {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldContainer input {
+  padding: 0.25rem;
+  font-size: 1.3rem;
+}
+
+.formContainer h2 {
+  font-size: 3rem;
+}
+
+.submitBtn {
+  color: white;
+  background-color: #111;
+  font-size: 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-right: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 1rem;
+}
+
+a {
+  color: rgb(255, 162, 255);
+}
+
+.intro {
+  background-color: #3a3a3a;
+  padding: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.list {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item {
+  width: 50%;
+  display: flex;
+  justify-content: start;
+}
+
+.item span {
+  margin-right: 2rem;
+}
+
+#image {
+  width: 100%;
+  height: auto;
+  object-fit: scale-down;
+}

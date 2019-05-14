@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser, clearErrors } from '../../actions/authActions';
 
-import './form.css'
-import Landing from './Landing';
+import styles from './auth.module.css'
+import Intro from './Intro';
 
 class Login extends Component {
   constructor(props) {
@@ -57,13 +57,13 @@ class Login extends Component {
     const { errors } = this.props;
     
     return (
-      <div className='container'>
-        <Landing />
-        <div className='form-container'>
-          <div className='elements-container'>
+      <div className={styles.container}>
+        <Intro />
+        <div className={styles.formContainer}>
+          <div className={styles.elementsContainer}>
             <h2>Log in now</h2>
             <form onSubmit={this.onSubmit}>
-              <div className='field-container'>
+              <div className={styles.fieldContainer}>
                 <label htmlFor='email'>Email Address</label>
                 <input
                   type='email'
@@ -73,7 +73,7 @@ class Login extends Component {
                 />
                 <span className='error'>{errors.email}</span>
               </div>
-              <div className='field-container'>
+              <div className={styles.fieldContainer}>
                 <label htmlFor='password'>Password</label>
                 <input
                   type='password'
@@ -84,10 +84,10 @@ class Login extends Component {
                 <span className='error'>{errors.password}</span>
               </div>
               <button
-                className='submit-btn'
+                className={styles.submitBtn}
                 type='submit'
               >
-                LOG IN
+                Log in
               </button>
             </form>
             <p>

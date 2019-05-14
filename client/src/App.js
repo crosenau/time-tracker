@@ -11,7 +11,6 @@ import store from './store';
 
 import TimerLogic from './components/timerLogic/TimerLogic';
 import Navbar from './components/navbar/Navbar';
-import Landing from './components/auth/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Chart from './components/chart/Chart';
@@ -26,7 +25,11 @@ import {
   faPlay,
   faPause,
   faTimes,
-  faSignOutAlt
+  faSignOutAlt,
+  faBullseye,
+  faLayerGroup,
+  faClipboardList,
+  faChartLine
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faChartBar } from '@fortawesome/free-regular-svg-icons';
 
@@ -40,7 +43,11 @@ library.add(
   faTimes,
   faClock,
   faChartBar,
-  faSignOutAlt
+  faSignOutAlt,
+  faBullseye,
+  faLayerGroup,
+  faClipboardList,
+  faChartLine
 );
 
 if (localStorage.jwtToken) {

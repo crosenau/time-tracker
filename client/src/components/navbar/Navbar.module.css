@@ -19,8 +19,9 @@ nav {
   justify-content: space-between;
 }
 
-#sections {
+.section {
   display: flex;
+  flex-direction: row;
 }
 
 .navButton {

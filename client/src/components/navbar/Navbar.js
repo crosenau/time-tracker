@@ -28,7 +28,7 @@ class Navbar extends Component {
     if (isAuthenticated) {
       navOpts = (
         <nav>
-          <div id={styles.sections}>
+          <div className={styles.section}>
             <NavLink 
               to='/timer'
               className={styles.navButton}
@@ -48,33 +48,24 @@ class Navbar extends Component {
               </span>
             </NavLink>
           </div>
-          <button
-            className={styles.navButton}
-            onClick={this.handleClick}
-          >
-            <span>
-              <FontAwesomeIcon icon='sign-out-alt' />
-            </span>
-          </button>
+          <div className={styles.section}>
+            <button
+              className={styles.navButton}
+              onClick={this.handleClick}
+            >
+              <span>
+                <FontAwesomeIcon icon='sign-out-alt' />
+              </span>
+            </button>
+          </div>
         </nav>
         );
     } else {
       navOpts = (
         <nav>
-          <NavLink
-            to='/login'
-            className={styles.navButton}
-            activeClassName={styles.navButtonSelected}
-            >
-              Log in
-          </NavLink>
-          <NavLink 
-            to='/register'
-            className={styles.navButton}
-            activeClassName={styles.navButtonSelected}
-          >
-            Register
-          </NavLink>  
+          <div className={styles.section}>
+            Time Tracker
+          </div>
         </nav>
       );
     }
