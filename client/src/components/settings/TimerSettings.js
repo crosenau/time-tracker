@@ -292,9 +292,10 @@ class TimerSettings extends Component {
           </div>
           
           <div className={styles.section}>
-            {this.state.validInputs ?
-              <button onClick={this.save}>Save</button> :
-              <button disabled>Save</button>
+            {
+              this.state.isValid ?
+               <button onClick={this.save}>Save</button> :
+               <button disabled>Save</button>
             }            
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>

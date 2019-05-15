@@ -26,7 +26,7 @@ class ChartSettings extends Component {
       filter: [...chart.filter],
       startDate: chart.startDate,
       endDate: chart.endDate,
-      validInputs: true
+      isValid: true
     };
 
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -50,7 +50,7 @@ class ChartSettings extends Component {
 
     this.setState({
       [id]: date,
-      validInputs: isValid
+      isValid
     });
   }
 
@@ -187,9 +187,10 @@ class ChartSettings extends Component {
           </div>
 
           <div className={styles.section}>
-            {this.state.validInputs ?
-              <button onClick={this.save}>Save</button> :
-              <button disabled>Save</button>
+            {
+              this.state.isValid ?
+                <button onClick={this.save}>Save</button> :
+                <button disabled>Save</button>
             }
             <button onClick={this.cancel}>Cancel</button>
           </div>
