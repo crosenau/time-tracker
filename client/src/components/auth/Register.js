@@ -56,7 +56,7 @@ class Register extends Component {
 
     return (
       <div className={styles.container}>
-      <Intro />
+        <Intro />
         <div className={styles.formContainer}>
           <div className={styles.elementsContainer}>
             <h2>Registration</h2>
@@ -69,7 +69,7 @@ class Register extends Component {
                   value={this.state.name}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.name}</span>
+                <span className={styles.error}>{errors.name}</span>
               </div>
               <div className={styles.fieldContainer}>
                 <label htmlFor='email'>Email Address</label>
@@ -79,7 +79,7 @@ class Register extends Component {
                   value={this.state.email}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.email}</span>
+                <span className={styles.error}>{errors.email}</span>
               </div>
               <div className={styles.fieldContainer}>
                 <label htmlFor='password'>Password</label>
@@ -89,7 +89,7 @@ class Register extends Component {
                   value={this.state.password}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.password}</span>
+                <span className={styles.error}>{errors.password}</span>
               </div>
               <div className={styles.fieldContainer}>
                 <label htmlFor='password2'>Confirm Password</label>
@@ -99,7 +99,7 @@ class Register extends Component {
                   value={this.state.password2}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.password2}</span>
+                <span className={styles.error}>{errors.password2}</span>
               </div>
               <button
                 className={styles.submitBtn}

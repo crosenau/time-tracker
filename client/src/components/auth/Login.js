@@ -71,7 +71,7 @@ class Login extends Component {
                   value={this.state.email}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.email}</span>
+                <span className={styles.error}>{errors.email}</span>
               </div>
               <div className={styles.fieldContainer}>
                 <label htmlFor='password'>Password</label>
@@ -81,7 +81,7 @@ class Login extends Component {
                   value={this.state.password}
                   onChange={this.handleChange}
                 />
-                <span className='error'>{errors.password}</span>
+                <span className={styles.error}>{errors.password}</span>
               </div>
               <button
                 className={styles.submitBtn}
