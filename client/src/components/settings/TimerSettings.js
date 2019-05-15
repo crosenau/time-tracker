@@ -8,8 +8,11 @@ import {
   nextTimer,
   resetCurrentTimer,
   updateSettings,
-  toggleTimerSettings
+  toggleTimerSettings,
+  updateErrors
 } from '../../actions/timerActions';
+
+import isEmpty from 'is-empty';
 
 import alarmSounds from './alarmSounds';
 import tickSounds from './tickSounds';
@@ -21,15 +24,18 @@ class TimerSettings extends Component {
   constructor(props) {
     super(props);
 
+    const { timer } = this.props;
+
     this.state = {
-      taskName: this.props.timer.taskName,
-      taskLength: String(this.props.timer.taskLength / 60),
-      shortBreakLength: String(this.props.timer.shortBreakLength / 60),
-      longBreakLength: String(this.props.timer.longBreakLength / 60),
-      setLength: this.props.timer.setLength,
-      goal: this.props.timer.goal,
-      alarmSound: this.props.timer.alarmSound,
-      tickSound: this.props.timer.tickSound,
+      taskName: timer.taskName,
+      taskLength: String(timer.taskLength / 60),
+      shortBreakLength: String(timer.shortBreakLength / 60),
+      longBreakLength: String(timer.longBreakLength / 60),
+      setLength: timer.setLength,
+      goal: timer.goal,
+      alarmSound: timer.alarmSound,
+      tickSound: timer.tickSound,
+      isValid: true
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -38,10 +44,35 @@ class TimerSettings extends Component {
     this.cancel = this.cancel.bind(this);
   }
 
+  componentWillUnmount() {
+    this.props.updateErrors({});
+  }
+
   handleChange(event) {
-    this.setState({
+    const { errors, isValid } = this.validateInput({
+      ...this.state,
       [event.target.id]: event.target.value
     });
+
+    this.props.updateErrors(errors);
+
+    this.setState({
+      [event.target.id]: event.target.value,
+      isValid
+    });
+  }
+
+  validateInput(data) {
+    const errors = {};
+
+    if (isEmpty(data.taskName)) {
+      errors.taskName = 'Task name is required'
+    }
+
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    };
   }
 
   save() {
@@ -82,19 +113,24 @@ class TimerSettings extends Component {
   }
 
   resetFields() {
+    const { timer } = this.props;
+
     this.setState({
-      taskName: this.props.timer.taskName,
-      taskLength: String(this.props.timer.taskLength / 60),
-      shortBreakLength: String(this.props.timer.shortBreakLength / 60),
-      longBreakLength: String(this.props.timer.longBreakLength / 60),
-      setLength: this.props.timer.setLength,
-      goal: this.props.timer.goal,
-      alarmSound: this.props.timer.alarmSound,
-      tickSound: this.props.timer.tickSound
+      taskName: timer.taskName,
+      taskLength: String(timer.taskLength / 60),
+      shortBreakLength: String(timer.shortBreakLength / 60),
+      longBreakLength: String(timer.longBreakLength / 60),
+      setLength: timer.setLength,
+      goal: timer.goal,
+      alarmSound: timer.alarmSound,
+      tickSound: timer.tickSound,
+      isValid: true
     });
   }
 
   render() {
+    const { errors } = this.props;
+
     return (
       <div id={styles.overlay}>
         <div id={styles.settings}>
@@ -124,6 +160,7 @@ class TimerSettings extends Component {
                 required
               />
             </div>
+            <span className={styles.error}>{null || errors.taskName}</span>
           </div>
 
           <div className={styles.section}>
@@ -255,7 +292,10 @@ class TimerSettings extends Component {
           </div>
           
           <div className={styles.section}>
-            <button onClick={this.save}>Save</button>
+            {this.state.validInputs ?
+              <button onClick={this.save}>Save</button> :
+              <button disabled>Save</button>
+            }            
             <button onClick={this.cancel}>Cancel</button>
             <button>Defaults</button>
           </div>
@@ -266,11 +306,13 @@ class TimerSettings extends Component {
 };
 
 TimerSettings.propTypes = {
-  timer: PropTypes.object.isRequired
+  timer: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  timer: state.timer
+  timer: state.timer,
+  errors: state.errors
 });
 
 export default connect(
@@ -282,6 +324,7 @@ export default connect(
     nextTimer,
     resetCurrentTimer,
     updateSettings,
-    toggleTimerSettings
+    toggleTimerSettings,
+    updateErrors
   }
 )(TimerSettings);

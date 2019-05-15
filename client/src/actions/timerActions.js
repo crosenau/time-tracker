@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import {
+  UPDATE_ERRORS,
   START_TIMER,
   UPDATE_TIME_LEFT,
   NEXT_TIMER,
@@ -89,5 +90,12 @@ export function updateSettings(settings) {
 export function toggleTimerSettings() {
   return {
     type: TOGGLE_TIMER_SETTINGS
+  };
+}
+
+export function updateErrors(errors) {
+  return {
+    type: UPDATE_ERRORS,
+    payload: errors
   };
 }

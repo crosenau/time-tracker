@@ -87,6 +87,11 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
+.error {
+  color: red;
+  flex: 100%;
+}
+
 @media (max-width: 500px), (max-height: 500px) {
   #settings {
     flex-basis: 100%;
