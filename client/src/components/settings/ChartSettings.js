@@ -7,9 +7,9 @@ import {
   updateErrors
 } from '../../actions/chartActions';
 
-import DatePicker from 'react-datepicker';
+import isEmpty from 'is-empty';
 
-import validateChartSettings from '../../validation/chartSettings';
+import DatePicker from 'react-datepicker';
 
 import styles from './settings.module.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -41,7 +41,7 @@ class ChartSettings extends Component {
   }
 
   handleDateChange(date, id) {
-    const { errors, isValid } = validateChartSettings({
+    const { errors, isValid } = this.validateInput({
       ...this.state,
       [id]: date
     });
@@ -66,6 +66,23 @@ class ChartSettings extends Component {
     }
 
     this.setState({ filter });
+  }
+
+  validateInput(data) {
+    const errors = {};
+
+    if (!data.startDate) {
+      errors.dateRange = 'From date is required';
+    } else if (!data.endDate) {
+      errors.dateRange = 'To date is required';
+    } else if (data.startDate > data.endDate) {
+      errors.dateRange = 'From date must be eariler then To'
+    }
+  
+    return {
+      errors,
+      isValid: isEmpty(errors)
+    };
   }
 
   save() {
@@ -142,7 +159,7 @@ class ChartSettings extends Component {
               />
             </div>
           </div>
-          <span className='error'>{null || errors.dateRange}</span>
+          <span className={styles.error}>{null || errors.dateRange}</span>
           
           <div id='section'>
             <h3>Filter</h3>
