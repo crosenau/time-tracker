@@ -1,127 +1,158 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   startTimer,
   stopTimer,
+  updatetimeLeft,
   nextTimer,
   resetCurrentTimer,
-  toggleTimerSettings
+  addCompletedTask,
+  clearCompletedTasks,
+  saveCompletedTasks,
+  updateSettings,
+  toggleTimerSettings,
+  getTasks
 } from '../../actions/timerActions';
 
-import ProgressRing from './ProgressRing';
-import TimerSettings from '../settings/TimerSettings';
-
-import { digitalTime, hoursMinutes } from '../../utils/convertSeconds';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './Timer.module.css'
-
-const Timer = props => {
-  const playButton = 
-    <button
-      className='icon-btn'
-      onClick={props.startTimer}
-    >
-      <FontAwesomeIcon icon='play' />
-    </button>;
-  const pauseButton =
-    <button
-      className='icon-btn'
-      onClick={props.stopTimer}
-    >
-      <FontAwesomeIcon icon='pause' />
-    </button>;
-
-  const footerContent = props.timer.loading ?
-    <span>Loading...</span> :
-    <div id={styles.footer}>
-      <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-      <span>{hoursMinutes(totalSeconds)}</span>
-    </div>;
-
-
-  let totalSeconds;
-
-  if (props.timer.completedTasks.length > 0) {
-    totalSeconds = (props.timer.completedTasks
-      .reduce((acc, cur) => ({ taskLength: acc.taskLength + cur.taskLength })))
-      .taskLength;
-  } else {
-    totalSeconds = 0;
+class Timer extends Component {
+  constructor(props) {
+    super(props); 
+    
+    this.alarmAudio = React.createRef();
+    this.tickAudio = React.createRef();
   }
 
-  return (
-    <div id={styles.container}>
-      {props.timer.displaySettings ? <TimerSettings /> : null}
-      <div id={styles.header}>
-        <button 
-          className='icon-btn' 
-          id={styles.settingsButton} 
-          onClick={props.toggleTimerSettings}
-        >
-          <FontAwesomeIcon icon='ellipsis-v' />
-        </button>
-      </div>
-      <div id={styles.timer}>
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      console.log('setting interval');
+      this.intervalId = setInterval(() => this.tick(), 1000);
+      this.props.getTasks();
+    }
+  }
 
-        <ProgressRing id={styles.progressRing} />
-        <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
-        <div id={styles.taskLabel}>
-          {props.timer.currentTimer === 'Task' ? props.timer.taskName : props.timer.currentTimer}
-        </div>
+  componentDidUpdate(prevProps) {
+    if (!prevProps.auth.isAuthenticated && this.props.auth.isAuthenticated) {
+      console.log('setting interval');
+      this.intervalId = setInterval(() => this.tick(), 1000);
+    } else if (!this.props.auth.isAuthenticated && prevProps.auth.isAuthenticated) {
+      console.log('clearing interval');
+      this.props.stopTimer();
+      clearInterval(this.intervalId);
+    }
 
-        <div id={styles.controls}>
-          <button
-            className='icon-btn'
-            onClick={() => {
-              props.stopTimer();
-              props.resetCurrentTimer()
-            }}
-          >
-            <FontAwesomeIcon icon='undo-alt' />
-          </button>
-          {props.timer.active ? pauseButton : playButton}
-          <button
-            className='icon-btn'
-            onClick={() => {
-              props.stopTimer();
-              props.nextTimer();
-            }}
-          >
-            <FontAwesomeIcon icon='forward' />
-          </button>
-        </div>
-      </div>
+    // save any unsaved completed tasks to db
+    const timer = this.props.timer;
 
-      {
-        props.timer.loading ?
-          <span id={styles.loading}>Loading...</span> 
-        : 
-          <div id={styles.footer}>
-            <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-            <span>{hoursMinutes(totalSeconds)}</span>
-          </div>
+    if (prevProps.timer.completedTasks !== timer.completedTasks) {
+      const unsavedTasks = timer.completedTasks
+        .filter(task => !task.saved)
+        .map(task => ({
+            taskName: task.taskName,
+            taskLength: task.taskLength,
+            completedAt: task.completedAt
+        }));
+      
+      if (unsavedTasks.length > 0) {
+        console.log('unsavedTasks found. attempting to save');
+        this.props.saveCompletedTasks(unsavedTasks);
+      };
+    }
+  }
+
+  componentWillUnmount() {
+    console.log('clearing interval');
+    this.props.stopTimer();
+    clearInterval(this.intervalId);
+  }
+
+  tick() {
+    const timer = this.props.timer;
+
+    if (!timer.active) {
+      return;
+    }
+
+    if (timer.timeLeft <= 0) {
+      this.props.stopTimer();
+      this.playAudio(this.alarmAudio);
+
+      // if new day, reset completedTasks
+      const today = new Date().getDay();
+      
+      let lastRecord;
+
+      if (timer.completedTasks.length > 0) {
+        lastRecord = timer.completedTasks[timer.completedTasks.length-1].completedAt.getDay();
       }
-    </div>
-  );
+
+      if (lastRecord && lastRecord !== today) {
+        this.props.clearCompletedTasks();
+      }
+
+      // cache completed task
+      if (timer.currentTimer === 'Task') {
+        const task = {
+          taskName: timer.taskName,
+          taskLength: timer.taskLength,
+          completedAt: new Date(),
+          saved: false
+        };
+
+        this.props.addCompletedTask(task)
+      }
+
+      this.props.nextTimer();
+      this.props.startTimer();
+      return;
+    }
+
+    this.playAudio(this.tickAudio);
+    this.props.updatetimeLeft();
+  }
+
+  playAudio(audioElement) {
+    const audio = audioElement.current;
+
+    if (audio.currentSrc !== '' && audio.paused) {
+      audio.currentTime = 0;
+     audio.play();
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <audio ref={this.tickAudio} src={this.props.timer.tickSound} />
+        <audio ref={this.alarmAudio} src={this.props.timer.alarmSound} />
+      </div>
+    );
+  }
 }
 
 Timer.propTypes = {
+  auth: PropTypes.object.isRequired,
   timer: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
+  auth: state.auth,
   timer: state.timer
 });
 
 export default connect(
   mapStateToProps,
-  {
+  { 
     startTimer,
     stopTimer,
-    resetCurrentTimer,
+    updatetimeLeft,
     nextTimer,
-    toggleTimerSettings
+    resetCurrentTimer,
+    addCompletedTask,
+    clearCompletedTasks,
+    saveCompletedTasks,
+    updateSettings,
+    toggleTimerSettings,
+    getTasks
   }
 )(Timer);
