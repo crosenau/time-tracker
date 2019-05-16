@@ -17,7 +17,7 @@ import { digitalTime, hoursMinutes } from '../../utils/convertSeconds';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Timer.module.css'
 
-const TimerUI = props => {
+const Timer = props => {
   const playButton = 
     <button
       className='icon-btn'
@@ -32,6 +32,14 @@ const TimerUI = props => {
     >
       <FontAwesomeIcon icon='pause' />
     </button>;
+
+  const footerContent = props.timer.loading ?
+    <span>Loading...</span> :
+    <div id={styles.footer}>
+      <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
+      <span>{hoursMinutes(totalSeconds)}</span>
+    </div>;
+
 
   let totalSeconds;
 
@@ -85,15 +93,21 @@ const TimerUI = props => {
           </button>
         </div>
       </div>
-      <div id={styles.footer}>
-          <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-          <span>{hoursMinutes(totalSeconds)}</span>
-        </div>
+
+      {
+        props.timer.loading ?
+          <span id={styles.loading}>Loading...</span> 
+        : 
+          <div id={styles.footer}>
+            <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
+            <span>{hoursMinutes(totalSeconds)}</span>
+          </div>
+      }
     </div>
   );
 }
 
-TimerUI.propTypes = {
+Timer.propTypes = {
   timer: PropTypes.object.isRequired
 }
 
@@ -110,4 +124,4 @@ export default connect(
     nextTimer,
     toggleTimerSettings
   }
-)(TimerUI);
+)(Timer);

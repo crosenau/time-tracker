@@ -11,7 +11,8 @@ import {
   clearCompletedTasks,
   saveCompletedTasks,
   updateSettings,
-  toggleTimerSettings
+  toggleTimerSettings,
+  getTasks
 } from '../../actions/timerActions';
 
 class Timer extends Component {
@@ -26,6 +27,7 @@ class Timer extends Component {
     if (this.props.auth.isAuthenticated) {
       console.log('setting interval');
       this.intervalId = setInterval(() => this.tick(), 1000);
+      this.props.getTasks();
     }
   }
 
@@ -150,6 +152,7 @@ export default connect(
     clearCompletedTasks,
     saveCompletedTasks,
     updateSettings,
-    toggleTimerSettings
+    toggleTimerSettings,
+    getTasks
   }
 )(Timer);

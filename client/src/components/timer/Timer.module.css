@@ -64,6 +64,12 @@
   justify-content: space-between;
 }
 
+#loading {
+  color: white;
+  justify-self: end;
+  align-self: center;
+}
+
 @media (max-width: 500px), (max-height: 500px) {
   #container {
     margin: 0rem;

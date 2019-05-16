@@ -11,7 +11,8 @@ import {
   CLEAR_COMPLETED_TASKS,
   UPDATE_COMPLETED_TASKS,
   UPDATE_SETTINGS,
-  TOGGLE_TIMER_SETTINGS
+  TOGGLE_TIMER_SETTINGS,
+  TIMER_LOADING
 } from './types';
 
 export function startTimer() {
@@ -69,6 +70,7 @@ export function saveCompletedTasks(tasks) {
           completedAt: new Date(task.completedAt),
           saved: true
         }));
+
         dispatch({
           type: UPDATE_COMPLETED_TASKS,
           payload: savedTasks
@@ -98,4 +100,41 @@ export function updateErrors(errors) {
     type: UPDATE_ERRORS,
     payload: errors
   };
+}
+
+export function getTasks() {
+  return function(dispatch) {
+    dispatch({
+      type: TIMER_LOADING
+    });
+
+    const now = new Date();
+    const startDate = new Date(
+      now.getFullYear(), 
+      now.getMonth(), 
+      now.getDate()
+    );
+  
+    axios
+      .get('/api/tasks/load', {
+        params: {
+          start: startDate
+        }
+      })
+      .then(res => {
+        const tasks = res.data.map(task => ({
+          ...task,
+          completedAt: new Date(task.completedAt),
+          saved: true
+        }));
+
+        console.log('Today\'s tasks: ', tasks);
+
+        dispatch({
+          type: UPDATE_COMPLETED_TASKS,
+          payload: tasks
+        });
+      })
+      .catch(err => console.log(err));
+  }
 }

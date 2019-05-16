@@ -9,6 +9,7 @@ import {
   UPDATE_COMPLETED_TASKS,
   UPDATE_SETTINGS,
   TOGGLE_TIMER_SETTINGS,
+  TIMER_LOADING
 } from '../actions/types';
 
 const task = 'Task';
@@ -31,6 +32,7 @@ const initialState = {
   timeLeft: 25 * 60,
   startTime: null,
   timeLeftAtStart: null,
+  loading: false
 };
 
 export default function(state = initialState, action) {
@@ -120,6 +122,12 @@ export default function(state = initialState, action) {
         completedTasks: []
       };
     }
+    case TIMER_LOADING: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
     case UPDATE_COMPLETED_TASKS: {
       const updatedTasks = [...action.payload];
       const savedDates = updatedTasks.map(task => Number(task.completedAt));
@@ -132,7 +140,8 @@ export default function(state = initialState, action) {
 
       return {
         ...state,
-        completedTasks: updatedTasks
+        completedTasks: updatedTasks,
+        loading: false
       };
     }
     case UPDATE_SETTINGS: {
