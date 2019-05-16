@@ -35,6 +35,7 @@ class Timer extends Component {
     if (!prevProps.auth.isAuthenticated && this.props.auth.isAuthenticated) {
       console.log('setting interval');
       this.intervalId = setInterval(() => this.tick(), 1000);
+      this.props.getTasks();
     } else if (!this.props.auth.isAuthenticated && prevProps.auth.isAuthenticated) {
       console.log('clearing interval');
       this.props.stopTimer();

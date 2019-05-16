@@ -128,8 +128,6 @@ export function getTasks() {
           saved: true
         }));
 
-        console.log('Today\'s tasks: ', tasks);
-
         dispatch({
           type: UPDATE_COMPLETED_TASKS,
           payload: tasks
