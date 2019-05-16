@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import {
   UPDATE_ERRORS,
-  TASKS_LOADING,
-  UPDATE_TASKS,
+  CHART_LOADING,
+  UPDATE_CHART_TASKS,
   UPDATE_CHART_SETTINGS,
   TOGGLE_CHART_SETTINGS
 } from './types';
@@ -12,7 +12,7 @@ export function getTasks(data) {
   return function(dispatch) {
     // Set loading state
     dispatch({
-      type: TASKS_LOADING
+      type: CHART_LOADING
     });
 
     axios
@@ -29,7 +29,7 @@ export function getTasks(data) {
         }))
 
         dispatch({
-          type: UPDATE_TASKS,
+          type: UPDATE_CHART_TASKS,
           payload: tasks
         });
       })

@@ -1,6 +1,6 @@
 import {
-  TASKS_LOADING,
-  UPDATE_TASKS,
+  CHART_LOADING,
+  UPDATE_CHART_TASKS,
   UPDATE_CHART_SETTINGS,
   TOGGLE_CHART_SETTINGS
 } from "../actions/types";
@@ -27,13 +27,13 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case TASKS_LOADING: {
+    case CHART_LOADING: {
       return {
         ...state,
         loading: true
       };
     }
-    case UPDATE_TASKS: {
+    case UPDATE_CHART_TASKS: {
       return {
         ...state,
         tasks: action.payload,
