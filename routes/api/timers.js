@@ -35,12 +35,21 @@ function filterDoc(doc) {
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const newTimer = new Timer({
+    const query = { userId: req.user[0]._id };
+    const newTimer = {
       userId: req.user[0]._id,
       ...req.body
-    });
+    };
+    const opts = {
+      new: true,
+      upsert: true
+    };
 
-    const saveResult = await newTimer.save(); 
+    const saveResult = await Timer.findOneAndUpdate(
+      query,
+      newTimer,
+      opts
+    ); 
     const savedTimer = filterDoc(saveResult);
 
     return res.status(200).json(savedTimer);
@@ -57,7 +66,7 @@ router.get('/load', passport.authenticate('jwt', { session: false }), async (req
     const response = filterDoc(timer);
 
     if (!response) {
-      return res.status(404).send('Not Found');
+      return res.status(404).send('No timer settings found for this user');
     }
 
     return res.status(200).json(response);

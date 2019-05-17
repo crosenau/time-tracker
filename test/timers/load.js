@@ -28,13 +28,13 @@ describe('API ROUTING FOR /api/timers/load', function() {
   });
 
   context('GET request with JWT for user that does NOT have existing timer settings', function() {
-    it('should return status 404 and "Not Found"', async function() {
+    it('should return status 404 and "No timer settings found for this user"', async function() {
       const response = await chai.request(server)
         .get('/api/timers/load')
         .set('Authorization', token);
 
       expect(response.status).to.equal(404);
-      expect(response.text).to.equal('Not Found');
+      expect(response.text).to.equal('No timer settings found for this user');
     });
   });
 
