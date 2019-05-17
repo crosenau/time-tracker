@@ -36,6 +36,10 @@ const TimerSchema = new Schema({
     type: String,
     required: true
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 const Timer = mongoose.model('Timers', TimerSchema);

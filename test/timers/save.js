@@ -23,7 +23,7 @@ describe('API ROUTING FOR /api/timers/save', function() {
 
     const testTask = await Timer.findOneAndDelete({ taskLength: 500 });
   
-    expect(testTask.name).to.equal('Test');
+    expect(testTask.taskName).to.equal('Test');
   });
 
   context('POST with valid timer settings object', function() {
@@ -34,8 +34,8 @@ describe('API ROUTING FOR /api/timers/save', function() {
         .send({
           taskName: 'Test',
           taskLength: 500,
-          shortBreakLength: 300,
-          longBreakLength: 900,
+          shortBreakLength: 500,
+          longBreakLength: 500,
           setLength: 4,
           goal: 12,
           alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1556684851/Pomodoro%20Clock/220763__ross-stack__kitchen-egg-timer-ring-04_amp.mp3',
@@ -48,21 +48,22 @@ describe('API ROUTING FOR /api/timers/save', function() {
         const data = JSON.parse(response.text);
 
         expect(data).to.be.an('object');
+        expect(Object.keys(data)).to.have.lengthOf(8);
         expect(data).to.have.a.property('taskName');
         expect(data.taskName).to.be.a('string');
         expect(data.taskName).to.equal('Test');
 
         expect(data).to.have.a.property('taskLength');
         expect(data.taskLength).to.be.a('number');
-        expect(data.taskName).to.equal(1500);
+        expect(data.taskLength).to.equal(500);
 
         expect(data).to.have.a.property('shortBreakLength');
         expect(data.shortBreakLength).to.be.a('number');
-        expect(data.shortBreakLength).to.equal(300);
+        expect(data.shortBreakLength).to.equal(500);
 
         expect(data).to.have.a.property('longBreakLength');
         expect(data.longBreakLength).to.be.a('number');
-        expect(data.longBreakLength).to.equal(900);
+        expect(data.longBreakLength).to.equal(500);
 
         expect(data).to.have.a.property('setLength');
         expect(data.setLength).to.be.a('number');

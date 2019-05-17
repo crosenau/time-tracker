@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 
 const users = require('./routes/api/users');
 const tasks = require('./routes/api/tasks');
+const timers = require('./routes/api/timers');
+
 const keys = require('./config/keys');
 
 const app = express();
@@ -24,6 +26,7 @@ mongoose.connect(keys.connectionString, { useNewUrlParser: true })
 
     app.use('/api/users', users);
     app.use('/api/tasks', tasks);
+    app.use('/api/timers', timers);
 
     const port = keys.port || 5000;
 
