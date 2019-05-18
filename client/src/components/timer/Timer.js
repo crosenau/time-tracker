@@ -10,9 +10,9 @@ import {
   addCompletedTask,
   clearCompletedTasks,
   saveCompletedTasks,
-  updateSettings,
   toggleTimerSettings,
-  getTasks
+  getTasks,
+  getTimer,
 } from '../../actions/timerActions';
 
 class Timer extends Component {
@@ -26,7 +26,9 @@ class Timer extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       console.log('setting interval');
+
       this.intervalId = setInterval(() => this.tick(), 1000);
+      this.props.getTimer();
       this.props.getTasks();
     }
   }
@@ -34,7 +36,9 @@ class Timer extends Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.auth.isAuthenticated && this.props.auth.isAuthenticated) {
       console.log('setting interval');
+
       this.intervalId = setInterval(() => this.tick(), 1000);
+      this.props.getTimer();
       this.props.getTasks();
     } else if (!this.props.auth.isAuthenticated && prevProps.auth.isAuthenticated) {
       console.log('clearing interval');
@@ -44,8 +48,9 @@ class Timer extends Component {
 
     // save any unsaved completed tasks to db
     const timer = this.props.timer;
+    const prevTimer = prevProps.timer;
 
-    if (prevProps.timer.completedTasks !== timer.completedTasks) {
+    if (prevTimer.completedTasks !== timer.completedTasks) {
       const unsavedTasks = timer.completedTasks
         .filter(task => !task.saved)
         .map(task => ({
@@ -59,6 +64,25 @@ class Timer extends Component {
         this.props.saveCompletedTasks(unsavedTasks);
       };
     }
+
+    // Check if active timer has changed settings and reset it
+    let timerChanged = false; 
+
+    if (timer.currentTimer === 'Task' && timer.taskLength !== prevTimer.taskLength) {
+      timerChanged = true;
+    } else if (
+      timer.currentTimer === 'Break' && timer.shortBreakLength !== prevTimer.shortBreakLength) {
+      timerChanged = true;
+    } else if (timer.currentTimer === 'Long Break' && timer.longBreakLength !== prevTimer.longBreakLength) {
+      timerChanged = true;
+    }
+
+    if (timerChanged && timer.active) {
+      this.props.stopTimer();
+    }
+
+    timerChanged && this.props.resetCurrentTimer();
+
   }
 
   componentWillUnmount() {
@@ -117,7 +141,7 @@ class Timer extends Component {
 
     if (audio.currentSrc !== '' && audio.paused) {
       audio.currentTime = 0;
-     audio.play();
+      audio.play();
     }
   }
 
@@ -152,8 +176,8 @@ export default connect(
     addCompletedTask,
     clearCompletedTasks,
     saveCompletedTasks,
-    updateSettings,
     toggleTimerSettings,
-    getTasks
+    getTasks,
+    getTimer
   }
 )(Timer);

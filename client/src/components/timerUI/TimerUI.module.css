@@ -66,8 +66,12 @@
 
 #loading {
   color: white;
-  justify-self: end;
-  align-self: center;
+  font-size: 3rem;
+  flex: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 500px), (max-height: 500px) {

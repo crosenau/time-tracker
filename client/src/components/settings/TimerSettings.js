@@ -7,7 +7,7 @@ import {
   updatetimeLeft,
   nextTimer,
   resetCurrentTimer,
-  updateSettings,
+  saveSettings,
   toggleTimerSettings,
   updateErrors
 } from '../../actions/timerActions';
@@ -54,7 +54,9 @@ class TimerSettings extends Component {
       [event.target.id]: event.target.value
     });
 
-    this.props.updateErrors(errors);
+    if (!(isEmpty(this.props.errors) && isEmpty(errors))) {
+      this.props.updateErrors(errors);
+    }
 
     this.setState({
       [event.target.id]: event.target.value,
@@ -87,23 +89,7 @@ class TimerSettings extends Component {
       tickSound: this.state.tickSound
     };
 
-    const { taskLength, shortBreakLength, longBreakLength, currentTimer } = this.props.timer;
-    let timerChanged = false; 
-
-    if (currentTimer === 'Task' && taskLength !== settings.taskLength) {
-      timerChanged = true;
-    } else if (currentTimer === 'Break' && shortBreakLength !== settings.shortBreakLength) {
-      timerChanged = true;
-    } else if (currentTimer === 'Long Break' && longBreakLength !== settings.longBreakLength) {
-      timerChanged = true;
-    }
-
-    if (timerChanged && this.props.timer.active) {
-      this.props.stopTimer();
-    }
-
-    this.props.updateSettings(settings);
-    timerChanged && this.props.resetCurrentTimer();
+    this.props.saveSettings(settings);
     this.props.toggleTimerSettings();
   }
 
@@ -324,7 +310,7 @@ export default connect(
     updatetimeLeft,
     nextTimer,
     resetCurrentTimer,
-    updateSettings,
+    saveSettings,
     toggleTimerSettings,
     updateErrors
   }

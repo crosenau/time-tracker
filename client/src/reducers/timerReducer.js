@@ -9,7 +9,8 @@ import {
   UPDATE_COMPLETED_TASKS,
   UPDATE_SETTINGS,
   TOGGLE_TIMER_SETTINGS,
-  TIMER_LOADING
+  TIMER_LOADING,
+  TIMER_LOADED
 } from '../actions/types';
 
 const task = 'Task';
@@ -32,10 +33,10 @@ const initialState = {
   timeLeft: 25 * 60,
   startTime: null,
   timeLeftAtStart: null,
-  loading: false
+  loading: 0
 };
 
-export default function(state = initialState, action) {
+export default function(state = initialState, action) {  
   switch (action.type) {
     case START_TIMER: {
       if (state.active) break;
@@ -89,15 +90,18 @@ export default function(state = initialState, action) {
       let { timeLeft, currentTimer, taskLength, shortBreakLength, longBreakLength } = state;
 
       switch (currentTimer) {
-        case task:
+        case task: {
           timeLeft = taskLength;
           break;
-        case shortBreak:
+        }
+        case shortBreak: {
           timeLeft = shortBreakLength;
           break;
-        case longBreak:
+        }
+        case longBreak: {
           timeLeft = longBreakLength;
           break;
+        }
       }
 
       return {
@@ -122,12 +126,6 @@ export default function(state = initialState, action) {
         completedTasks: []
       };
     }
-    case TIMER_LOADING: {
-      return {
-        ...state,
-        loading: true
-      };
-    }
     case UPDATE_COMPLETED_TASKS: {
       const updatedTasks = [...action.payload];
       const savedDates = updatedTasks.map(task => Number(task.completedAt));
@@ -141,7 +139,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         completedTasks: updatedTasks,
-        loading: false
       };
     }
     case UPDATE_SETTINGS: {
@@ -154,6 +151,18 @@ export default function(state = initialState, action) {
       return {
         ...state,
         displaySettings: !state.displaySettings
+      };
+    }
+    case TIMER_LOADING: {
+      return {
+        ...state,
+        loading: state.loading + 1
+      };
+    }
+    case TIMER_LOADED: {
+      return {
+        ...state,
+        loading: state.loading - 1
       };
     }
     default: 

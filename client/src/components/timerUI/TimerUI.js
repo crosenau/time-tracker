@@ -55,46 +55,49 @@ const TimerUI = props => {
           <FontAwesomeIcon icon='ellipsis-v' />
         </button>
       </div>
-      <div id={styles.timer}>
-
-        <ProgressRing id={styles.progressRing} />
-        <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
-        <div id={styles.taskLabel}>
-          {props.timer.currentTimer === 'Task' ? props.timer.taskName : props.timer.currentTimer}
-        </div>
-
-        <div id={styles.controls}>
-          <button
-            className='icon-btn'
-            onClick={() => {
-              props.stopTimer();
-              props.resetCurrentTimer()
-            }}
-          >
-            <FontAwesomeIcon icon='undo-alt' />
-          </button>
-          {props.timer.active ? pauseButton : playButton}
-          <button
-            className='icon-btn'
-            onClick={() => {
-              props.stopTimer();
-              props.nextTimer();
-            }}
-          >
-            <FontAwesomeIcon icon='forward' />
-          </button>
-        </div>
-      </div>
-
       {
         props.timer.loading ?
-          <span id={styles.loading}>Loading...</span> 
-        : 
-          <div id={styles.footer}>
-            <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-            <span>{hoursMinutes(totalSeconds)}</span>
+          <div id={styles.loading}>
+            <span>Loading...</span>
+          </div> :
+
+          <div id={styles.timer}>
+            <ProgressRing id={styles.progressRing} />
+            <div id={styles.altTimeDisplay}>{digitalTime(props.timer.timeLeft)}</div>
+            <div id={styles.taskLabel}>
+              {props.timer.currentTimer === 'Task' ? props.timer.taskName : props.timer.currentTimer}
+            </div>
+
+            <div id={styles.controls}>
+              <button
+                className='icon-btn'
+                onClick={() => {
+                  props.stopTimer();
+                  props.resetCurrentTimer()
+                }}
+              >
+                <FontAwesomeIcon icon='undo-alt' />
+              </button>
+              {props.timer.active ? pauseButton : playButton}
+              <button
+                className='icon-btn'
+                onClick={() => {
+                  props.stopTimer();
+                  props.nextTimer();
+                }}
+              >
+                <FontAwesomeIcon icon='forward' />
+              </button>
+            </div>
           </div>
+
       }
+
+      <div id={styles.footer}>
+        <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
+        <span>{hoursMinutes(totalSeconds)}</span>
+      </div>
+
     </div>
   );
 }
