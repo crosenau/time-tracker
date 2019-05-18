@@ -29,12 +29,10 @@ const TimerSchema = new Schema({
     required: true
   },
   alarmSound: {
-    type: String,
-    required: true
+    type: String
   },
   tickSound: {
-    type: String,
-    required: true
+    type: String
   },
   userId: {
     type: Schema.Types.ObjectId,
