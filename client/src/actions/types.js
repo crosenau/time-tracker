@@ -1,3 +1,5 @@
+export const USER_LOGOUT = 'USER_LOGOUT';
+
 export const UPDATE_ERRORS = 'UPDATE_ERRORS';
 
 export const USER_LOADING = 'USER_LOADING';

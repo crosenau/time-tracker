@@ -5,7 +5,8 @@ import jwt_decode from 'jwt-decode';
 import {
   UPDATE_ERRORS,
   SET_CURRENT_USER,
-  USER_LOADING
+  USER_LOADING,
+  USER_LOGOUT
 } from './types';
 
 export const registerUser = (userData, history) => dispatch => {
@@ -56,6 +57,7 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem('jwtToken');
   setAuthToken(false);
   dispatch(setCurrentUser({}));
+  dispatch({ type: USER_LOGOUT })
 };
 
 export const clearErrors = () => {
