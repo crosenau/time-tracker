@@ -6,14 +6,20 @@ import {
 } from "../actions/types";
 
 const now = new Date();
+
+now.setHours(23);
+now.setMinutes(59);
+now.setSeconds(59);
+now.setMilliseconds(999);
+
 const lastMonth = new Date(
-  now.getFullYear(), 
-  now.getMonth(), 
-  now.getDate() -30, 
-  now.getHours(), 
-  now.getMinutes(), 
-  now.getSeconds(), 
-  now.getMilliseconds()
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate() -30,
+  0,
+  0,
+  0, 
+  0
 );
 
 const initialState = {
