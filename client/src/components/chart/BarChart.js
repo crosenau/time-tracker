@@ -69,16 +69,18 @@ class BarChart extends Component {
 
     // consolidate task objects into individual day objects with total times for each task performed that day
     const dataset = [];
-    const { startDate } = this.props.chart;
+    const { startDate, endDate } = this.props.chart;
     
-    let day = { date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 1) };
+    let day = { date: startDate };
+
     taskLabels.forEach(label => day[label] = 0);
 
     filteredTasks.forEach((task, i) => {
       while (day.date.toDateString() !== task.completedAt.toDateString()) {
+        dataset.push(day);
+
         const nextDay = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + 1);
 
-        dataset.push(day);
         day = { date: nextDay };
 
         for (let label of taskLabels) {
@@ -88,15 +90,20 @@ class BarChart extends Component {
 
       day[task.taskName] += task.taskLength;
 
-      if (i === filteredTasks.length -1) {
+      if (i === filteredTasks.length - 1) {
         dataset.push(day);
+
+        const nextDay = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + 1);
+
+        day = { date: nextDay };
       }
     });
 
-    while (day.date < this.props.chart.endDate) {
+    while (day.date < endDate) {
+      dataset.push(day);
+
       const nextDay = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate() + 1);
 
-      dataset.push(day);
       day = { date: nextDay };
     }
 
@@ -283,13 +290,6 @@ class BarChart extends Component {
           const label = d[0];
           const totalMilliseconds = d[1];
           const avgMilliseconds = d[1] / dataset.length;
-
-          /*
-          console.log('dataset: ', dataset);
-          console.log('ms: ', d[1]);
-          console.log('totalTime: ', totalTime);
-          console.log('avgTime: ', avgTime);
-          */
 
           const info = [
             label,
