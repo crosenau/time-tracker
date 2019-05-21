@@ -12,7 +12,7 @@ import {
 import ProgressRing from './ProgressRing';
 import TimerSettings from '../settings/TimerSettings';
 
-import { digitalTime, hoursMinutes } from '../../utils/convertSeconds';
+import { digitalTime, hoursMinutes } from '../../utils/formatMilliseconds';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './TimerUI.module.css'
@@ -33,14 +33,14 @@ const TimerUI = props => {
       <FontAwesomeIcon icon='pause' />
     </button>;
 
-  let totalSeconds;
+  let totalMilliseconds;
 
   if (props.timer.completedTasks.length > 0) {
-    totalSeconds = (props.timer.completedTasks
+    totalMilliseconds = (props.timer.completedTasks
       .reduce((acc, cur) => ({ taskLength: acc.taskLength + cur.taskLength })))
       .taskLength;
   } else {
-    totalSeconds = 0;
+    totalMilliseconds = 0;
   }
 
   return (
@@ -95,7 +95,7 @@ const TimerUI = props => {
 
       <div id={styles.footer}>
         <span>Goal: {props.timer.completedTasks.length}/{props.timer.goal}</span>
-        <span>{hoursMinutes(totalSeconds)}</span>
+        <span>{hoursMinutes(totalMilliseconds)}</span>
       </div>
 
     </div>

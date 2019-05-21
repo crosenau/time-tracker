@@ -1,3 +1,5 @@
+import parseMilliseconds from 'parse-ms';
+
 function leadingZero(num) {
   if (String(num).length < 2) {
     return '0' + String(num);
@@ -6,16 +8,17 @@ function leadingZero(num) {
   return String(num);
 }
 
-export function digitalTime(seconds) {
-  const min = Math.floor(seconds / 60);
-  const sec = seconds % 60;
+export function digitalTime(ms) {
+  const time  = parseMilliseconds(ms);
 
-  return `${leadingZero(min)}:${leadingZero(sec)}`;
-}
+  return `${leadingZero(time.minutes)}:${leadingZero(time.seconds)}`;
+};
 
-export function hoursMinutes(seconds) {
-  const hours = Math.floor(seconds / 60 / 60);
-  const minutes = Math.floor(seconds / 60) % 60;
+export function hoursMinutes(ms) {
+  const time = parseMilliseconds(ms);
+
+  const hours = time.days ? time.days * 24 + time.hours : time.hours;
+  const minutes = time.minutes;
 
   return `${hours}h ${minutes}min`;
 };

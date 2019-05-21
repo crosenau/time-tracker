@@ -10,10 +10,10 @@ import {
   ADD_COMPLETED_TASK,
   CLEAR_COMPLETED_TASKS,
   UPDATE_COMPLETED_TASKS,
-  UPDATE_SETTINGS,
+  UPDATE_TIMER_SETTINGS,
   TOGGLE_TIMER_SETTINGS,
-  TIMER_LOADING,
-  TIMER_LOADED,
+  TIMER_SYNCING,
+  TIMER_SYNCED,
 } from './types';
 
 export function startTimer() {
@@ -60,33 +60,38 @@ export function clearCompletedTasks() {
 }
 
 export function saveCompletedTasks(tasks) {
-  return function(dispatch) {
+  return async function(dispatch) {
     // set saving task state?
+    dispatch({
+      type: TIMER_SYNCING
+    });
 
-    axios
-      .post('/api/tasks/save', tasks)
-      .then(res => {
-        const savedTasks = res.data.map(task => ({
-          ...task,
-          completedAt: new Date(task.completedAt),
-          saved: true
-        }));
+    try {
+      const response = await axios.post('/api/tasks/save', tasks)
+      const savedTasks = response.data.map(task => ({
+        ...task,
+        completedAt: new Date(task.completedAt),
+        saved: true
+      }));
 
-        dispatch({
-          type: UPDATE_COMPLETED_TASKS,
-          payload: savedTasks
-        });
-      })
-      .catch(err => {
-        console.error(err);
+      dispatch({
+        type: UPDATE_COMPLETED_TASKS,
+        payload: savedTasks
       });
+    } catch (err) {
+        console.error(err);
+    } finally {
+      dispatch({
+        type: TIMER_SYNCED
+      });
+    }
   }
 }
 
 export function saveSettings(settings) {
   return async function(dispatch) {
     dispatch({
-      type: TIMER_LOADING
+      type: TIMER_SYNCING
     });
 
     try {
@@ -95,12 +100,12 @@ export function saveSettings(settings) {
       console.log(err.response);
     } finally {
       dispatch({
-        type: UPDATE_SETTINGS,
+        type: UPDATE_TIMER_SETTINGS,
         payload: settings
       });
 
       dispatch({
-        type: TIMER_LOADED
+        type: TIMER_SYNCED
       });
     }
   };
@@ -122,7 +127,7 @@ export function updateErrors(errors) {
 export function getTasks() {
   return async function(dispatch) {
     dispatch({
-      type: TIMER_LOADING
+      type: TIMER_SYNCING
     });
 
     const now = new Date();
@@ -154,7 +159,7 @@ export function getTasks() {
       console.log(err);
     } finally {
       dispatch({
-        type: TIMER_LOADED
+        type: TIMER_SYNCED
       });
     }
   }
@@ -163,7 +168,7 @@ export function getTasks() {
 export function getTimer() {
   return async function(dispatch) {
     dispatch({
-      type: TIMER_LOADING
+      type: TIMER_SYNCING
     });
 
     try {
@@ -171,14 +176,14 @@ export function getTimer() {
       console.log(response);
 
       dispatch({
-        type: UPDATE_SETTINGS,
+        type: UPDATE_TIMER_SETTINGS,
         payload: response.data
       });
     } catch(err) {
       console.log(err.response.request.response);
     } finally {
       dispatch({
-        type: TIMER_LOADED,
+        type: TIMER_SYNCED,
       });
     }
   }

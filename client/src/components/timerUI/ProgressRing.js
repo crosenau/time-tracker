@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { digitalTime } from '../../utils/convertSeconds';
+import { digitalTime } from '../../utils/formatMilliseconds';
 
 import styles from './ProgressRing.module.css';
 

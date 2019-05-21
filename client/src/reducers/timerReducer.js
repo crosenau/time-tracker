@@ -1,3 +1,5 @@
+import toMilliseconds from '@sindresorhus/to-milliseconds';
+
 import {
   START_TIMER,
   UPDATE_TIME_LEFT,
@@ -7,10 +9,10 @@ import {
   ADD_COMPLETED_TASK,
   CLEAR_COMPLETED_TASKS,
   UPDATE_COMPLETED_TASKS,
-  UPDATE_SETTINGS,
+  UPDATE_TIMER_SETTINGS,
   TOGGLE_TIMER_SETTINGS,
-  TIMER_LOADING,
-  TIMER_LOADED
+  TIMER_SYNCING,
+  TIMER_SYNCED
 } from '../actions/types';
 
 const task = 'Task';
@@ -19,9 +21,9 @@ const longBreak = 'Long Break';
 
 const initialState = {
   taskName: 'Work',
-  shortBreakLength: 5 * 60,
-  longBreakLength: 15 * 60,
-  taskLength: 25 * 60,
+  shortBreakLength: toMilliseconds({ minutes: 5 }),
+  longBreakLength: toMilliseconds({ minutes: 15}),
+  taskLength: toMilliseconds({ minutes: 25 }),
   setLength: 4,
   goal: 12,
   alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1556684851/Pomodoro%20Clock/333629__jgreer__chime-sound_amp.mp3',
@@ -30,10 +32,10 @@ const initialState = {
   displaySettings: false,
   currentTimer: task,
   active: false,
-  timeLeft: 25 * 60,
+  timeLeft: toMilliseconds({ minutes: 25 }),
   startTime: null,
-  timeLeftAtStart: null,
-  loading: 0
+  timeLeftAtStart: null,  
+  syncing: 0
 };
 
 export default function(state = initialState, action) {  
@@ -54,11 +56,11 @@ export default function(state = initialState, action) {
       };
     }
     case UPDATE_TIME_LEFT: {
-      const secondsElapsed = Math.round((Date.now() - state.startTime) / 1000);
+      const elapsed = Date.now() - state.startTime;
       
       return {
         ...state,
-        timeLeft: state.timeLeftAtStart - secondsElapsed
+        timeLeft: state.timeLeftAtStart - elapsed
       };
     }
     case NEXT_TIMER: {
@@ -141,7 +143,7 @@ export default function(state = initialState, action) {
         completedTasks: updatedTasks,
       };
     }
-    case UPDATE_SETTINGS: {
+    case UPDATE_TIMER_SETTINGS: {
       return {
         ...state,
         ...action.payload
@@ -153,16 +155,16 @@ export default function(state = initialState, action) {
         displaySettings: !state.displaySettings
       };
     }
-    case TIMER_LOADING: {
+    case TIMER_SYNCING: {
       return {
         ...state,
-        loading: state.loading + 1
+        syncing: state.syncing + 1
       };
     }
-    case TIMER_LOADED: {
+    case TIMER_SYNCED: {
       return {
         ...state,
-        loading: state.loading - 1
+        syncing: state.syncing - 1
       };
     }
     default: 

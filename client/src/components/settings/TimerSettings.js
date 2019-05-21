@@ -12,6 +12,9 @@ import {
   updateErrors
 } from '../../actions/timerActions';
 
+
+import parseMilliseconds from 'parse-ms';
+import toMilliseconds from '@sindresorhus/to-milliseconds';
 import isEmpty from 'is-empty';
 
 import alarmSounds from './alarmSounds';
@@ -28,9 +31,9 @@ class TimerSettings extends Component {
 
     this.state = {
       taskName: timer.taskName,
-      taskLength: String(timer.taskLength / 60),
-      shortBreakLength: String(timer.shortBreakLength / 60),
-      longBreakLength: String(timer.longBreakLength / 60),
+      taskLength: String(parseMilliseconds(timer.taskLength).minutes),
+      shortBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
+      longBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,
@@ -80,9 +83,9 @@ class TimerSettings extends Component {
   save() {
     let settings = {
       taskName: this.state.taskName,
-      taskLength: Number(this.state.taskLength) * 60,
-      shortBreakLength: Number(this.state.shortBreakLength) * 60,
-      longBreakLength: Number(this.state.longBreakLength) * 60,
+      taskLength: toMilliseconds({ minutes: Number(this.state.taskLength) }),
+      shortBreakLength: toMilliseconds({ minutes: Number(this.state.shortBreakLength) }),
+      longBreakLength: toMilliseconds({ minutes: Number(this.state.longBreakLength) }),
       setLength: Number(this.state.setLength),
       goal: Number(this.state.goal),
       alarmSound: this.state.alarmSound,
@@ -103,9 +106,9 @@ class TimerSettings extends Component {
 
     this.setState({
       taskName: timer.taskName,
-      taskLength: String(timer.taskLength / 60),
-      shortBreakLength: String(timer.shortBreakLength / 60),
-      longBreakLength: String(timer.longBreakLength / 60),
+      taskLength: String(parseMilliseconds(timer.taskLength).minutes),
+      shortBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
+      longBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,

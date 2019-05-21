@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as d3 from 'd3';
-
-import { hoursMinutes } from '../../utils/convertSeconds';
+import parseMilliseconds from 'parse-ms';
+import { hoursMinutes } from '../../utils/formatMilliseconds';
 
 import styles from './BarChart.module.css';
 
@@ -69,8 +69,9 @@ class BarChart extends Component {
 
     // consolidate task objects into individual day objects with total times for each task performed that day
     const dataset = [];
+    const { startDate } = this.props.chart;
     
-    let day = { date: new Date(this.props.chart.startDate.toDateString()) };
+    let day = { date: new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 1) };
     taskLabels.forEach(label => day[label] = 0);
 
     filteredTasks.forEach((task, i) => {
@@ -208,11 +209,10 @@ class BarChart extends Component {
         .attr('height', d => yScale(d[0]) - yScale(d[1]))
         
         .on('mouseover', (d) => {
-          const totalSecs = d[1] - d[0];
-          const totalTime = hoursMinutes(totalSecs);
+          const totalMilliseconds = d[1] - d[0];
 
           const data = [
-            totalTime,
+            hoursMinutes(totalMilliseconds),
             d.data.date.toDateString()
           ];
 
@@ -246,8 +246,11 @@ class BarChart extends Component {
       .text(dataset[dataset.length-1].date.toDateString())
 
     const yAxis = d3.axisLeft(yScale)
-      .ticks(d3.max(series, d => d3.max(d, d => d[1])) / 60 / 60)
-      .tickFormat(val => `${Math.floor(val / 60 / 60)}h`)
+      .ticks(d3.max(series, d => parseMilliseconds(d3.max(d, d => d[1])).hours))
+      .tickFormat(val => {
+        const time = parseMilliseconds(val);
+        return `${time.hours}h`
+      })
       .tickSizeOuter(0);
       
     chart.append('g')
@@ -278,13 +281,20 @@ class BarChart extends Component {
           const y = `${d3.event.clientY + 32}px`;
 
           const label = d[0];
-          const secs = d[1]
-          const avgSecs = d[1] / dataset.length;
+          const totalMilliseconds = d[1];
+          const avgMilliseconds = d[1] / dataset.length;
+
+          /*
+          console.log('dataset: ', dataset);
+          console.log('ms: ', d[1]);
+          console.log('totalTime: ', totalTime);
+          console.log('avgTime: ', avgTime);
+          */
 
           const info = [
             label,
-            `Daily avg: ${hoursMinutes(avgSecs)}`,
-            `Total: ${hoursMinutes(secs)}`,
+            `Daily avg: ${hoursMinutes(avgMilliseconds)}`,
+            `Total: ${hoursMinutes(totalMilliseconds)}`
           ];
 
           tooltip
