@@ -41,6 +41,12 @@ class ChartSettings extends Component {
   }
 
   handleDateChange(date, id) {
+    if (id === 'startDate') {
+      date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0);
+    } else {
+      date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+    }
+
     const { errors, isValid } = this.validateInput({
       ...this.state,
       [id]: date
