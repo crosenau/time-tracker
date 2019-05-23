@@ -1,5 +1,3 @@
-import toMilliseconds from '@sindresorhus/to-milliseconds';
-
 import {
   START_TIMER,
   UPDATE_TIME_LEFT,
@@ -15,6 +13,10 @@ import {
   TIMER_SYNCED
 } from '../actions/types';
 
+import toMilliseconds from '@sindresorhus/to-milliseconds';
+
+import alarmSounds from '../components/settings/alarmSounds';
+
 const task = 'Task';
 const shortBreak = 'Break';
 const longBreak = 'Long Break';
@@ -26,8 +28,8 @@ const initialState = {
   taskLength: toMilliseconds({ minutes: 25 }),
   setLength: 4,
   goal: 12,
-  alarmSound: 'https://res.cloudinary.com/carpol/video/upload/v1556684851/Pomodoro%20Clock/333629__jgreer__chime-sound_amp.mp3',
-  tickSound: '',
+  alarmSound: alarmSounds[0].url,
+  tickSound: null,
   completedTasks: [],
   displaySettings: false,
   currentTimer: task,

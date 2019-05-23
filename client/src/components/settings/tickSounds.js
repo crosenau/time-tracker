@@ -1,7 +1,9 @@
+import labWatch from '../../assets/sounds/250920__thalamus-lab__watch.mp3';
+
 export default [
   {
-    name: 'Metronome',
-    url: '  https://res.cloudinary.com/carpol/video/upload/v1556684851/Pomodoro%20Clock/54406__korgms2000b__metronome-click_amp.mp3'
+    name: 'Lab Watch',
+    url: labWatch
   },
   { 
     name: 'none',

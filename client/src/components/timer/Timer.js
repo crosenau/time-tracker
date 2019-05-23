@@ -16,13 +16,6 @@ import {
 } from '../../actions/timerActions';
 
 class Timer extends Component {
-  constructor(props) {
-    super(props); 
-    
-    this.alarmAudio = React.createRef();
-    this.tickAudio = React.createRef();
-  }
-
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       console.log('setting interval');
@@ -82,7 +75,6 @@ class Timer extends Component {
     }
 
     timerChanged && this.props.resetCurrentTimer();
-
   }
 
   componentWillUnmount() {
@@ -98,9 +90,8 @@ class Timer extends Component {
       return;
     }
 
-    if (timer.timeLeft <= 0) {
+    if (timer.timeLeft < 1000) {
       this.props.stopTimer();
-      this.playAudio(this.alarmAudio);
 
       // if new day, reset completedTasks
       const today = new Date().getDay();
@@ -132,26 +123,11 @@ class Timer extends Component {
       return;
     }
 
-    this.playAudio(this.tickAudio);
     this.props.updatetimeLeft();
   }
 
-  playAudio(audioElement) {
-    const audio = audioElement.current;
-
-    if (audio.currentSrc !== '' && audio.paused) {
-      audio.currentTime = 0;
-      audio.play();
-    }
-  }
-
   render() {
-    return (
-      <div>
-        <audio ref={this.tickAudio} src={this.props.timer.tickSound} />
-        <audio ref={this.alarmAudio} src={this.props.timer.alarmSound} />
-      </div>
-    );
+    return null;
   }
 }
 

@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Timer from './components/timer/Timer';
+import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 import Navbar from './components/navbar/Navbar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -75,6 +76,7 @@ class App extends Component {
         <Router>
           <div className="App">
             <Timer />
+            <AudioPlayer />
             <Route path='/' component={Navbar} />
             <div id='app-body'>
               { /*<Route exact path={['/', '/login', '/register']} component={Landing} /> */}
