@@ -32,8 +32,8 @@ class TimerSettings extends Component {
     this.state = {
       taskName: timer.taskName,
       taskLength: String(parseMilliseconds(timer.taskLength).minutes),
-      shortBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
-      longBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
+      shortBreakLength: String(parseMilliseconds(timer.shortBreakLength).minutes),
+      longBreakLength: String(parseMilliseconds(timer.longBreakLength).minutes),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,
@@ -52,6 +52,8 @@ class TimerSettings extends Component {
   }
 
   handleChange(event) {
+
+    console.log(event.target);
     const { errors, isValid } = this.validateInput({
       ...this.state,
       [event.target.id]: event.target.value
@@ -107,8 +109,8 @@ class TimerSettings extends Component {
     this.setState({
       taskName: timer.taskName,
       taskLength: String(parseMilliseconds(timer.taskLength).minutes),
-      shortBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
-      longBreakLength: String(parseMilliseconds(timer.taskLength).minutes),
+      shortBreakLength: String(parseMilliseconds(timer.shortBreakLength).minutes),
+      longBreakLength: String(parseMilliseconds(timer.longBreakLength).minutes),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,
