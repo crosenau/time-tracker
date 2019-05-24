@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
@@ -10,6 +11,7 @@ const tasks = require('./routes/api/tasks');
 const timers = require('./routes/api/timers');
 
 const keys = require('./config/keys');
+const env = require('./config/env');
 
 const app = express();
 
@@ -27,6 +29,14 @@ mongoose.connect(keys.connectionString, { useNewUrlParser: true })
     app.use('/api/users', users);
     app.use('/api/tasks', tasks);
     app.use('/api/timers', timers);
+
+    if (env === 'production') {
+      app.use(express.static(path.join(__dirname, 'client/build')));
+
+      app.get('/*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+      });
+    }
 
     const port = keys.port || 5000;
 
