@@ -3,14 +3,14 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './auth.module.css';
-import screenshot1 from '../../assets/images/landing.png';
+import landing2 from '../../assets/images/landing2.png'
 
 const Landing = (props) => {
   return (
     <div className={styles.intro}>
         <img
           id={styles.image}
-          src={screenshot1}
+          src={landing2}
           alt='Bar Chart'
         />
 
@@ -36,7 +36,7 @@ const Landing = (props) => {
             <FontAwesomeIcon icon={'chart-line'} />
           </span>
           <span className={styles.text}>
-            Log and track your time
+            Log your time
           </span>
         </div>
       </div>

@@ -12,8 +12,7 @@ import store from './store';
 import Timer from './components/timer/Timer';
 import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 import Navbar from './components/navbar/Navbar';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
+import Auth from './components/auth/Auth';
 import Chart from './components/chart/Chart';
 import TimerUI from './components/timerUI/TimerUI';
 
@@ -79,9 +78,7 @@ class App extends Component {
             <AudioPlayer />
             <Route path='/' component={Navbar} />
             <div id='app-body'>
-              { /*<Route exact path={['/', '/login', '/register']} component={Landing} /> */}
-              <Route exact path={['/', '/login']} component={Login} />
-              <Route exact path='/register' component={Register} />
+              <Route exact path={['/', '/login', '/register']} component={Auth} />
               <PrivateRoute path='/chart' component={Chart} />
               <PrivateRoute path='/timer' component={TimerUI} />
             </div>

@@ -4,6 +4,50 @@
   flex: 100%;
 }
 
+.intro {
+  background-color: #3a3a3a;
+  padding: 4rem;
+  display: flex;
+  flex: 1 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.list {
+  color: white;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.bullet {
+  margin-right: 0.5rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#image {
+  filter: drop-shadow(1rem 1rem 1rem black);
+  width: 90%;
+  height: auto;
+  object-fit: scale-down;
+  margin: 0;
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+
 .formContainer {
   background-color: #66859b;
   color: white;
@@ -16,10 +60,14 @@
 
 .elementsContainer {
   flex: 1;
-  margin: 3rem;
+  margin: 2rem;
   display: flex;
   flex-direction: column;
   align-items: left;
+}
+
+.elementsContainer form {
+  width: 100%;
 }
 
 .fieldContainer {
@@ -35,6 +83,7 @@
 
 .formContainer h2 {
   font-size: 3rem;
+  width: 100%;
 }
 
 .submitBtn {
@@ -55,44 +104,6 @@
 
 .formContainer a {
   color: rgb(253, 198, 253);
-}
-
-.intro {
-  background-color: #3a3a3a;
-  padding: 4rem;
-  display: flex;
-  flex: 1 0;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.list {
-  color: white;
-  font-size: 1.2rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: flex-start;
-}
-
-.item {
-  display: flex;
-  flex-direction: row;
-  margin-right: 1.5rem;
-}
-
-.bullet {
-  margin-right: 0.5rem;
-  display: flex;
-  justify-content: flex-start;
-}
-
-#image {
-  width: 90%;
-  height: auto;
-  object-fit: scale-down;
-  margin: 0;
-  padding: 0;
 }
 
 
