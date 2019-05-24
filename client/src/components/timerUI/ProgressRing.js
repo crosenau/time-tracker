@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { digitalTime } from '../../utils/formatMilliseconds';
+import { digitalTime, toSeconds } from '../../utils/formatMilliseconds';
 
 import styles from './ProgressRing.module.css';
 
@@ -48,13 +48,21 @@ class ProgressRing extends Component {
   }
 
   percentRemaining() {
-    switch (this.props.timer.currentTimer) {
+    const { timer } = this.props;
+    const timeLeft = toSeconds(timer.timeLeft);
+    const taskLength = toSeconds(timer.taskLength);
+    const shortBreakLength = toSeconds(timer.shortBreakLength);
+    const longBreakLength = toSeconds(timer.longBreakLength);
+
+    console.log(taskLength);
+
+    switch (timer.currentTimer) {
      case 'Task':
-       return (this.props.timer.timeLeft / this.props.timer.taskLength) * 100;
+       return (timeLeft / taskLength) * 100;
      case 'Break':
-       return (this.props.timer.timeLeft / this.props.timer.shortBreakLength) * 100;
+       return (timeLeft / shortBreakLength) * 100;
      case 'Long Break':
-       return (this.props.timer.timeLeft / this.props.timer.longBreakLength) * 100;
+       return (timeLeft / longBreakLength) * 100;
     }
   }
 
