@@ -213,8 +213,7 @@ class BarChart extends Component {
         .attr('x', d => xScale(d.data.date))
         .attr('y', d => yScale(d[1]))
         .attr('width', xScale.bandwidth())
-        .attr('height', d => yScale(d[0]) - yScale(d[1]))
-        
+        .attr('height', d => yScale(d[0]) - yScale(d[1]) ? yScale(d[0]) - yScale(d[1]) : 0)
         .on('mouseover', (d) => {
           const totalMilliseconds = d[1] - d[0];
 
