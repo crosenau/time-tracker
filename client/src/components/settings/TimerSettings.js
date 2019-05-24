@@ -12,9 +12,9 @@ import {
   updateErrors
 } from '../../actions/timerActions';
 
-
-import parseMilliseconds from 'parse-ms';
 import toMilliseconds from '@sindresorhus/to-milliseconds';
+import { toMinutes } from '../../utils/formatMilliseconds';
+
 import isEmpty from 'is-empty';
 
 import alarmSounds from './alarmSounds';
@@ -31,9 +31,9 @@ class TimerSettings extends Component {
 
     this.state = {
       taskName: timer.taskName,
-      taskLength: String(parseMilliseconds(timer.taskLength).minutes),
-      shortBreakLength: String(parseMilliseconds(timer.shortBreakLength).minutes),
-      longBreakLength: String(parseMilliseconds(timer.longBreakLength).minutes),
+      taskLength: String(toMinutes(timer.taskLength)),
+      shortBreakLength: String(toMinutes(timer.shortBreakLength)),
+      longBreakLength: String(toMinutes(timer.longBreakLength)),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,
@@ -108,9 +108,9 @@ class TimerSettings extends Component {
 
     this.setState({
       taskName: timer.taskName,
-      taskLength: String(parseMilliseconds(timer.taskLength).minutes),
-      shortBreakLength: String(parseMilliseconds(timer.shortBreakLength).minutes),
-      longBreakLength: String(parseMilliseconds(timer.longBreakLength).minutes),
+      taskLength: String(toMinutes(timer.taskLength)),
+      shortBreakLength: String(toMinutes(timer.shortBreakLength)),
+      longBreakLength: String(toMinutes(timer.longBreakLength)),
       setLength: timer.setLength,
       goal: timer.goal,
       alarmSound: timer.alarmSound,
