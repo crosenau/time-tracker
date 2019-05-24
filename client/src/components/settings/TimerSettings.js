@@ -52,8 +52,6 @@ class TimerSettings extends Component {
   }
 
   handleChange(event) {
-
-    console.log(event.target);
     const { errors, isValid } = this.validateInput({
       ...this.state,
       [event.target.id]: event.target.value
