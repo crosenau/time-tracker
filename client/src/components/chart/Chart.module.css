@@ -21,7 +21,8 @@
 #settingsButton {
   font-size: 1.5rem;
   width: 1.5rem;
-  align-self: end;
+  justify-self: flex-end;
+  align-self: flex-end;
 }
 
 #loading {

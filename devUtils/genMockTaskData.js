@@ -2,7 +2,7 @@
 
 const length = 1000;
 const startDate = new Date(2018, 0, 1);
-const endDate = new Date(2018, 11, 31);
+const endDate = new Date(2019, 4, 15);
 
 const tasks = [];
 
@@ -11,7 +11,9 @@ function randomSelect(arr) {
 }
 
 function randomTaskLength() {
-  return Math.ceil((Math.random()* 60 * 60) / 60) * 60;
+  return Math.ceil(
+    (Math.random() * 60 * 60) / 60
+  ) * 60 * 1000;
 }
 
 function randomDateBetween(start, end) {

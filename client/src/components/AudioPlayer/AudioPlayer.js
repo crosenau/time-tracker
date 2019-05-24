@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import webAudioTouchUnlock from 'web-audio-touch-unlock';
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext);
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 class AudioPlayer extends Component {
   componentDidMount() {
@@ -36,13 +36,7 @@ class AudioPlayer extends Component {
 
   async unlockWebAudio() {
     try {
-      const unlocked = await webAudioTouchUnlock(audioCtx);
-
-      if (unlocked) {
-        console.log('unlocked');
-      } else {
-        console.log('no unlock necessary');
-      }
+      await webAudioTouchUnlock(audioCtx);
     } catch(err) {
       console.log(err);
     }

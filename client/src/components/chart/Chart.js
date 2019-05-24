@@ -47,7 +47,7 @@ class Chart extends Component {
       <div id={styles.container}>
         {this.props.chart.displaySettings ? <ChartSettings /> : null}
         <div id={styles.header}>
-          <h2>Stats</h2>
+          <h2>Task Log</h2>
           <button className='icon-btn' id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>

@@ -61,7 +61,6 @@ export function clearCompletedTasks() {
 
 export function saveCompletedTasks(tasks) {
   return async function(dispatch) {
-    // set saving task state?
     dispatch({
       type: TIMER_SYNCING
     });
@@ -173,7 +172,6 @@ export function getTimer() {
 
     try {
       const response = await axios.get('/api/timers/load');
-      console.log(response);
 
       dispatch({
         type: UPDATE_TIMER_SETTINGS,

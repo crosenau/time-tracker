@@ -54,15 +54,16 @@ class ProgressRing extends Component {
     const shortBreakLength = toSeconds(timer.shortBreakLength);
     const longBreakLength = toSeconds(timer.longBreakLength);
 
-    console.log(taskLength);
-
     switch (timer.currentTimer) {
-     case 'Task':
-       return (timeLeft / taskLength) * 100;
-     case 'Break':
-       return (timeLeft / shortBreakLength) * 100;
-     case 'Long Break':
-       return (timeLeft / longBreakLength) * 100;
+      case 'Task': {
+        return (timeLeft / taskLength) * 100;
+      }
+      case 'Break': {
+        return (timeLeft / shortBreakLength) * 100;
+      }
+      case 'Long Break': {
+        return (timeLeft / longBreakLength) * 100;
+      }
     }
   }
 

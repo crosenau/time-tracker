@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -18,8 +18,6 @@ import {
 class Timer extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      console.log('setting interval');
-
       this.intervalId = setInterval(() => this.tick(), 1000);
       this.props.getTimer();
       this.props.getTasks();
@@ -28,13 +26,10 @@ class Timer extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.auth.isAuthenticated && this.props.auth.isAuthenticated) {
-      console.log('setting interval');
-
       this.intervalId = setInterval(() => this.tick(), 1000);
       this.props.getTimer();
       this.props.getTasks();
     } else if (!this.props.auth.isAuthenticated && prevProps.auth.isAuthenticated) {
-      console.log('clearing interval');
       this.props.stopTimer();
       clearInterval(this.intervalId);
     }
@@ -53,7 +48,6 @@ class Timer extends Component {
         }));
       
       if (unsavedTasks.length > 0) {
-        console.log('unsavedTasks found. attempting to save');
         this.props.saveCompletedTasks(unsavedTasks);
       };
     }
@@ -78,7 +72,6 @@ class Timer extends Component {
   }
 
   componentWillUnmount() {
-    console.log('clearing interval');
     this.props.stopTimer();
     clearInterval(this.intervalId);
   }
