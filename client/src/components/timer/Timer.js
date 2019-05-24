@@ -90,7 +90,7 @@ class Timer extends Component {
       return;
     }
 
-    if (timer.timeLeft < 1000) {
+    if (timer.timeLeft < 1) {
       this.props.stopTimer();
 
       // if new day, reset completedTasks

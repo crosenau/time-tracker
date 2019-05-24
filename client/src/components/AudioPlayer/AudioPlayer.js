@@ -26,7 +26,7 @@ class AudioPlayer extends Component {
     }
 
     if (prevTimer.timeLeft > timer.timeLeft && timer.active) {
-      if (timer.timeLeft < 1000 && timer.alarmSound) {
+      if (timer.timeLeft < 1 && timer.alarmSound) {
         this.playSound(this.alarm);
       } else if (timer.tickSound) {
         this.playSound(this.tick);
@@ -76,7 +76,7 @@ class AudioPlayer extends Component {
     }
 
     const copy = audioBuffer.slice(0);
-    
+
     audioCtx.decodeAudioData(copy, buffer => {
       const source = audioCtx.createBufferSource();
     
