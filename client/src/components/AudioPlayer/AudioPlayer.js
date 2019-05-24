@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import axios from 'axios';
-
 import webAudioTouchUnlock from 'web-audio-touch-unlock';
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
