@@ -36,7 +36,7 @@ const initialState = {
   active: false,
   timeLeft: toMilliseconds({ minutes: 25 }),
   startTime: null,
-  timeLeftAtStart: null,  
+  timeLeftAtStart: null,
   syncing: 0
 };
 
@@ -58,11 +58,9 @@ export default function(state = initialState, action) {
       };
     }
     case UPDATE_TIME_LEFT: {
-      const elapsed = Date.now() - state.startTime;
-      
       return {
         ...state,
-        timeLeft: state.timeLeftAtStart - elapsed
+        timeLeft: action.payload
       };
     }
     case NEXT_TIMER: {

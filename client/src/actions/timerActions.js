@@ -28,9 +28,10 @@ export function stopTimer() {
   };
 }
 
-export function updatetimeLeft() {
+export function updateTimeLeft(ms) {
   return {
-    type: UPDATE_TIME_LEFT
+    type: UPDATE_TIME_LEFT,
+    payload: ms
   };
 }
 
