@@ -86,16 +86,6 @@
   width: 100%;
 }
 
-.submitBtn {
-  color: white;
-  background-color: #111;
-  font-size: 1rem;
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  margin-right: 1rem;
-  border: none;
-  cursor: pointer;
-}
-
 .error {
   color: #ffc7a6;
   font-size: 1rem;

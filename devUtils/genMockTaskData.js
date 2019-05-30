@@ -1,8 +1,8 @@
 'use strict';
 
 const length = 1000;
-const startDate = new Date(2018, 0, 1);
-const endDate = new Date(2019, 4, 15);
+const startDate = new Date(2018, 5, 1);
+const endDate = new Date(2019, 5, 28);
 
 const tasks = [];
 
@@ -13,7 +13,7 @@ function randomSelect(arr) {
 function randomTaskLength() {
   return Math.ceil(
     (Math.random() * 60 * 60) / 60
-  ) * 60 * 1000;
+  ) * 120 * 1000;
 }
 
 function randomDateBetween(start, end) {

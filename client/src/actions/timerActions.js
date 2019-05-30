@@ -16,174 +16,148 @@ import {
   TIMER_SYNCED,
 } from './types';
 
-export function startTimer() {
-  return {
-    type: START_TIMER
-  };
-}
+export const startTimer = () => ({
+  type: START_TIMER
+});
 
-export function stopTimer() {
-  return {
-    type: STOP_TIMER
-  };
-}
+export const stopTimer = () => ({
+  type: STOP_TIMER
+});
 
-export function updateTimeLeft(ms) {
-  return {
-    type: UPDATE_TIME_LEFT,
-    payload: ms
-  };
-}
+export const updateTimeLeft = ms => ({
+  type: UPDATE_TIME_LEFT,
+  payload: ms
+});
 
-export function nextTimer() {
-  return {
-    type: NEXT_TIMER
-  }
-}
+export const nextTimer = () => ({
+  type: NEXT_TIMER
+});
 
-export function resetCurrentTimer() {
-  return {
-    type: RESET_CURRENT_TIMER
-  };
-}
+export const resetCurrentTimer = () => ({
+  type: RESET_CURRENT_TIMER
+});
 
-export function addCompletedTask(task) {
-  return {
-    type: ADD_COMPLETED_TASK,
-    payload: task
-  };
-}
+export const addCompletedTask = task => ({
+  type: ADD_COMPLETED_TASK,
+  payload: task
+});
 
-export function clearCompletedTasks() {
-  return {
-    type: CLEAR_COMPLETED_TASKS
-  };
-}
+export const clearCompletedTasks = () => ({
+  type: CLEAR_COMPLETED_TASKS
+});
 
-export function saveCompletedTasks(tasks) {
-  return async function(dispatch) {
+export const saveCompletedTasks = tasks => async dispatch => {
+  dispatch({
+    type: TIMER_SYNCING
+  });
+
+  try {
+    const response = await axios.post('/api/tasks/save', tasks)
+    const savedTasks = response.data.map(task => ({
+      ...task,
+      completedAt: new Date(task.completedAt),
+      saved: true
+    }));
+
     dispatch({
-      type: TIMER_SYNCING
+      type: UPDATE_COMPLETED_TASKS,
+      payload: savedTasks
+    });
+  } catch (err) {
+      console.error(err);
+  } finally {
+    dispatch({
+      type: TIMER_SYNCED
+    });
+  }
+};
+
+export const saveSettings = settings => async dispatch => {
+  dispatch({
+    type: TIMER_SYNCING
+  });
+
+  try {
+    await axios.post('api/timers/save', settings);
+  } catch(err) {
+    console.log(err.response);
+  } finally {
+    dispatch({
+      type: UPDATE_TIMER_SETTINGS,
+      payload: settings
     });
 
-    try {
-      const response = await axios.post('/api/tasks/save', tasks)
-      const savedTasks = response.data.map(task => ({
-        ...task,
-        completedAt: new Date(task.completedAt),
-        saved: true
-      }));
-
-      dispatch({
-        type: UPDATE_COMPLETED_TASKS,
-        payload: savedTasks
-      });
-    } catch (err) {
-        console.error(err);
-    } finally {
-      dispatch({
-        type: TIMER_SYNCED
-      });
-    }
-  }
-}
-
-export function saveSettings(settings) {
-  return async function(dispatch) {
     dispatch({
-      type: TIMER_SYNCING
+      type: TIMER_SYNCED
     });
-
-    try {
-      await axios.post('api/timers/save', settings);
-    } catch(err) {
-      console.log(err.response);
-    } finally {
-      dispatch({
-        type: UPDATE_TIMER_SETTINGS,
-        payload: settings
-      });
-
-      dispatch({
-        type: TIMER_SYNCED
-      });
-    }
-  };
-}
-
-export function toggleTimerSettings() {
-  return {
-    type: TOGGLE_TIMER_SETTINGS
-  };
-}
-
-export function updateErrors(errors) {
-  return {
-    type: UPDATE_ERRORS,
-    payload: errors
-  };
-}
-
-export function getTasks() {
-  return async function(dispatch) {
-    dispatch({
-      type: TIMER_SYNCING
-    });
-
-    const now = new Date();
-    const startDate = new Date(
-      now.getFullYear(), 
-      now.getMonth(), 
-      now.getDate()
-    );
-  
-    try {
-      const response = await axios
-        .get('/api/tasks/load', {
-          params: {
-            start: startDate
-          }
-        });
-
-      const tasks = response.data.map(task => ({
-        ...task,
-        completedAt: new Date(task.completedAt),
-        saved: true
-      }));
-
-      dispatch({
-        type: UPDATE_COMPLETED_TASKS,
-        payload: tasks
-      });
-    } catch(err) {
-      console.log(err);
-    } finally {
-      dispatch({
-        type: TIMER_SYNCED
-      });
-    }
   }
-}
+};
 
-export function getTimer() {
-  return async function(dispatch) {
+export const toggleTimerSettings = () => ({
+  type: TOGGLE_TIMER_SETTINGS
+});
+
+export const updateErrors = errors => ({
+  type: UPDATE_ERRORS,
+  payload: errors
+});
+
+export const getTasks = () => async dispatch => {
+  dispatch({
+    type: TIMER_SYNCING
+  });
+
+  const now = new Date();
+  const startDate = new Date(
+    now.getFullYear(), 
+    now.getMonth(), 
+    now.getDate()
+  );
+
+  try {
+    const response = await axios
+      .get('/api/tasks/load', {
+        params: {
+          start: startDate
+        }
+      });
+
+    const tasks = response.data.map(task => ({
+      ...task,
+      completedAt: new Date(task.completedAt),
+      saved: true
+    }));
+
     dispatch({
-      type: TIMER_SYNCING
+      type: UPDATE_COMPLETED_TASKS,
+      payload: tasks
     });
-
-    try {
-      const response = await axios.get('/api/timers/load');
-
-      dispatch({
-        type: UPDATE_TIMER_SETTINGS,
-        payload: response.data
-      });
-    } catch(err) {
-      console.log(err.response.request.response);
-    } finally {
-      dispatch({
-        type: TIMER_SYNCED,
-      });
-    }
+  } catch(err) {
+    console.log(err);
+  } finally {
+    dispatch({
+      type: TIMER_SYNCED
+    });
   }
-}
+};
+
+export const getTimer = () => async dispatch => {
+  dispatch({
+    type: TIMER_SYNCING
+  });
+
+  try {
+    const response = await axios.get('/api/timers/load');
+
+    dispatch({
+      type: UPDATE_TIMER_SETTINGS,
+      payload: response.data
+    });
+  } catch(err) {
+    console.log(err.response.request.response);
+  } finally {
+    dispatch({
+      type: TIMER_SYNCED,
+    });
+  }
+};

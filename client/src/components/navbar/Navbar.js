@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import styles from './Navbar.module.css';
+import styles from '../../styles/Navbar.module.css';
 
 
 class Navbar extends Component {
@@ -89,4 +89,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logoutUser }
-)(Navbar);
+)(withRouter(Navbar));

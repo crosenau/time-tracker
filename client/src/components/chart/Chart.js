@@ -11,7 +11,8 @@ import BarChart from './BarChart';
 import ChartSettings from '../settings/ChartSettings';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './Chart.module.css';
+import styles from '../../styles/Chart.module.css';
+import appStyles from '../../styles/App.module.css';
 
 class Chart extends Component {
   componentDidMount() {
@@ -48,7 +49,7 @@ class Chart extends Component {
         {this.props.chart.displaySettings ? <ChartSettings /> : null}
         <div id={styles.header}>
           <h2>Task Log</h2>
-          <button className='icon-btn' id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
+          <button className={appStyles.iconButton} id={styles.settingsButton} onClick={this.props.toggleChartSettings}>
             <FontAwesomeIcon icon='ellipsis-v' />
           </button>
         </div>

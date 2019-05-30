@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import parseMilliseconds from 'parse-ms';
 import { hoursMinutes } from '../../utils/formatMilliseconds';
 
-import styles from './BarChart.module.css';
+import styles from '../../styles/BarChart.module.css';
 
 class BarChart extends Component {
   constructor(props) {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import styles from './auth.module.css';
+import styles from '../../styles/auth.module.css';
 import landing2 from '../../assets/images/landing2.png'
 
 const Landing = (props) => {

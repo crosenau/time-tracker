@@ -15,19 +15,20 @@ import TimerSettings from '../settings/TimerSettings';
 import { digitalTime, hoursMinutes } from '../../utils/formatMilliseconds';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './TimerUI.module.css'
+import styles from '../../styles/TimerUI.module.css'
+import appStyles from '../../styles/App.module.css';
 
 const TimerUI = props => {
   const playButton = 
     <button
-      className='icon-btn'
+      className={appStyles.iconButton}
       onClick={props.startTimer}
     >
       <FontAwesomeIcon icon='play' />
     </button>;
   const pauseButton =
     <button
-      className='icon-btn'
+      className={appStyles.iconButton}
       onClick={props.stopTimer}
     >
       <FontAwesomeIcon icon='pause' />
@@ -48,7 +49,7 @@ const TimerUI = props => {
       {props.timer.displaySettings ? <TimerSettings /> : null}
       <div id={styles.header}>
         <button 
-          className='icon-btn' 
+          className={appStyles.iconButton} 
           id={styles.settingsButton} 
           onClick={props.toggleTimerSettings}
         >
@@ -56,7 +57,7 @@ const TimerUI = props => {
         </button>
       </div>
       {
-        props.timer.loading ?
+        props.timer.syncing ?
           <div id={styles.loading}>
             <span>Loading...</span>
           </div> :
@@ -70,7 +71,7 @@ const TimerUI = props => {
 
             <div id={styles.controls}>
               <button
-                className='icon-btn'
+                className={appStyles.iconButton}
                 onClick={() => {
                   props.stopTimer();
                   props.resetCurrentTimer()
@@ -80,7 +81,7 @@ const TimerUI = props => {
               </button>
               {props.timer.active ? pauseButton : playButton}
               <button
-                className='icon-btn'
+                className={appStyles.iconButton}
                 onClick={() => {
                   props.stopTimer();
                   props.nextTimer();

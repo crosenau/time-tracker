@@ -16,7 +16,7 @@ import Auth from './components/auth/Auth';
 import Chart from './components/chart/Chart';
 import TimerUI from './components/timerUI/TimerUI';
 
-import './App.css';
+import styles from './styles/App.module.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { 
   faEllipsisV,
@@ -73,11 +73,11 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <div className="App">
+          <div className={styles.app}>
             <Timer />
             <AudioPlayer />
-            <Route path='/' component={Navbar} />
-            <div id='app-body'>
+            <Navbar />
+            <div id={styles.appBody}>
               <Route exact path={['/', '/login', '/register']} component={Auth} />
               <PrivateRoute path='/chart' component={Chart} />
               <PrivateRoute path='/timer' component={TimerUI} />

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser, clearErrors } from '../../actions/authActions';
 
-import styles from './auth.module.css'
+import styles from '../../styles/auth.module.css'
+import appStyles from '../../styles/App.module.css';
 
 class Login extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class Login extends Component {
               <span className={styles.error}>{errors.password}</span>
             </div>
             <button
-              className={styles.submitBtn}
+              className={appStyles.darkButton}
               type='submit'
             >
               Log in

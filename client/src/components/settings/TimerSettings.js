@@ -20,8 +20,10 @@ import isEmpty from 'is-empty';
 import alarmSounds from './alarmSounds';
 import tickSounds from './tickSounds';
 
-import styles from './settings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from '../../styles/settings.module.css';
+import appStyles from '../../styles/App.module.css';
+
 
 class TimerSettings extends Component {
   constructor(props) {
@@ -126,7 +128,7 @@ class TimerSettings extends Component {
           <div id={styles.header}>
             <h2>Settings</h2>
             <button
-              className='icon-btn'
+              className={appStyles.iconButton}
               onClick={this.cancel}
             >
               <FontAwesomeIcon icon={'times'} />
@@ -283,11 +285,11 @@ class TimerSettings extends Component {
           <div className={styles.section}>
             {
               this.state.isValid ?
-               <button onClick={this.save}>Save</button> :
-               <button disabled>Save</button>
+               <button className={appStyles.darkButton} onClick={this.save}>Save</button> :
+               <button className={appStyles.darkButton} disabled>Save</button>
             }            
-            <button onClick={this.cancel}>Cancel</button>
-            <button>Defaults</button>
+            <button className={appStyles.darkButton} onClick={this.cancel}>Cancel</button>
+            <button className={appStyles.darkButton}>Defaults</button>
           </div>
         </div>
       </div>

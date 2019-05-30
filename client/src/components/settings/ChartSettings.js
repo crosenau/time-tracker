@@ -11,9 +11,10 @@ import isEmpty from 'is-empty';
 
 import DatePicker from 'react-datepicker';
 
-import styles from './settings.module.css';
 import "react-datepicker/dist/react-datepicker.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from '../../styles/settings.module.css';
+import appStyles from '../../styles/App.module.css';
 
 class ChartSettings extends Component {
   constructor(props) {
@@ -41,21 +42,23 @@ class ChartSettings extends Component {
   }
 
   handleDateChange(date, id) {
+    let formattedDate;
+
     if (id === 'startDate') {
-      date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0);
+      formattedDate = date ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0) : null;
     } else {
-      date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+      formattedDate = date ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999) : null;
     }
 
     const { errors, isValid } = this.validateInput({
       ...this.state,
-      [id]: date
+      [id]: formattedDate
     });
 
     this.props.updateErrors(errors);
 
     this.setState({
-      [id]: date,
+      [id]: formattedDate,
       isValid
     });
   }
@@ -133,7 +136,7 @@ class ChartSettings extends Component {
           <div id={styles.header}>
             <h2>Settings</h2>
               <button
-                className='icon-btn'
+                className={appStyles.iconButton}
                 onClick={this.cancel}
               >
                 <FontAwesomeIcon icon={'times'} />
@@ -195,10 +198,10 @@ class ChartSettings extends Component {
           <div className={styles.section}>
             {
               this.state.isValid ?
-                <button onClick={this.save}>Save</button> :
-                <button disabled>Save</button>
+                <button className={appStyles.darkButton} onClick={this.save}>Save</button> :
+                <button className={appStyles.darkButton} disabled>Save</button>
             }
-            <button onClick={this.cancel}>Cancel</button>
+            <button className={appStyles.darkButton} onClick={this.cancel}>Cancel</button>
           </div>
 
         </div>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { digitalTime, toSeconds } from '../../utils/formatMilliseconds';
 
-import styles from './ProgressRing.module.css';
+import styles from '../../styles/ProgressRing.module.css';
 
 class ProgressRing extends Component {
   renderProgressRing() {

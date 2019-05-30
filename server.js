@@ -20,7 +20,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 let server;
 
-mongoose.connect(keys.connectionString, { useNewUrlParser: true })
+mongoose.connect(
+  keys.connectionString, 
+  { 
+    useNewUrlParser: true, 
+    useFindAndModify: false
+  }
+)
   .then(() => {
     console.log('Successfully connected to database');
     app.use(passport.initialize());

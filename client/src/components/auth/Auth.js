@@ -6,7 +6,7 @@ import Intro from './Intro';
 import Login from './Login';
 import Register from './Register';
 
-import styles from './auth.module.css';
+import styles from '../../styles/auth.module.css';
 
 class Auth extends Component {
   componentDidMount() {
