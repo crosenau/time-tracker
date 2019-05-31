@@ -29,7 +29,7 @@ const initialState = {
   setLength: 4,
   goal: 12,
   alarmSound: alarmSounds[0].url,
-  tickSound: null,
+  tickSound: '',
   completedTasks: [],
   displaySettings: false,
   currentTimer: task,
