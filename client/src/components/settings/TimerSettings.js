@@ -44,9 +44,10 @@ class TimerSettings extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.resetFields = this.resetFields.bind(this);
+    this.revert = this.revert.bind(this);
     this.save = this.save.bind(this);
     this.cancel = this.cancel.bind(this);
+    this.defaults = this.defaults.bind(this);
   }
 
   componentWillUnmount() {
@@ -99,11 +100,11 @@ class TimerSettings extends Component {
   }
 
   cancel() {
-    this.resetFields();
+    this.revert();
     this.props.toggleTimerSettings();
   }
 
-  resetFields() {
+  revert() {
     const { timer } = this.props;
 
     this.setState({
@@ -117,6 +118,22 @@ class TimerSettings extends Component {
       tickSound: timer.tickSound,
       isValid: true
     });
+  }
+
+  defaults() {
+    this.setState({
+      taskName: 'Work',
+      taskLength: '25',
+      shortBreakLength: '5',
+      longBreakLength: '15',
+      setLength: '4',
+      goal: '12',
+      alarmSound: alarmSounds[0].url,
+      tickSound: '',
+      isValid: true
+    });
+
+    this.props.updateErrors({});
   }
 
   render() {
@@ -289,7 +306,7 @@ class TimerSettings extends Component {
                <button className={appStyles.darkButton} disabled>Save</button>
             }            
             <button className={appStyles.darkButton} onClick={this.cancel}>Cancel</button>
-            <button className={appStyles.darkButton}>Defaults</button>
+            <button className={appStyles.darkButton} onClick={this.defaults}>Defaults</button>
           </div>
         </div>
       </div>
