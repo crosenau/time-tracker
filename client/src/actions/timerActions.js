@@ -113,12 +113,21 @@ export const getTasks = () => async dispatch => {
     now.getMonth(), 
     now.getDate()
   );
+  const endDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    999
+  );
 
   try {
     const response = await axios
       .get('/api/tasks/load', {
         params: {
-          start: startDate
+          start: startDate,
+          end: endDate
         }
       });
 
