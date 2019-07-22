@@ -78,6 +78,35 @@
   flex: 100%;
 }
 
+/*
+Overwrite DatePicker styles
+*/
+
+:global(.react-datepicker__month-container) {
+  background-color: #555;
+}
+
+:global(.react-datepicker__header) {
+  background-color: #444;
+}
+
+:global(.react-datepicker__current-month) {
+  color: white;
+}
+
+:global(.react-datepicker__day-name) {
+  color: white;
+}
+
+:global(.react-datepicker__day--selected) {
+  background-color: black;
+}
+
+:global(.react-datepicker__day) {
+  color: white;
+}
+
+
 @media (max-width: 500px), (max-height: 500px) {
   #settings {
     flex-basis: 100%;
