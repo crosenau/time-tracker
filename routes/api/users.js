@@ -3,7 +3,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const keys = require('../../config/keys');
+//const keys = require('../../config/keys');
 
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
       const newToken = await new Promise((resolve, reject) => { 
         jwt.sign(
           payload,
-          keys.secretOrKey,
+          process.env.SECRET_OR_KEY,
           { expiresIn: 31556926 },
           (err, token) => {
             if (err) reject(err);

@@ -12,9 +12,6 @@ const users = require('./routes/api/users');
 const tasks = require('./routes/api/tasks');
 const timers = require('./routes/api/timers');
 
-//const keys = require('./config/keys');
-//const env = require('./config/env');
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -23,7 +20,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 let server;
 
 mongoose.connect(
-  //keys.connectionString, 
   process.env.CONNECTION_STRING,
   { 
     useNewUrlParser: true, 
