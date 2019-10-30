@@ -1,2 +1,7 @@
+/client/build.zip
+/devUtils/input.csv
+/devUtils/input.tsv
+/devUtils/output.json
 /node_modules
 /config/
+/.env

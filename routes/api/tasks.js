@@ -8,6 +8,7 @@ const Task = require('../../models/Task');
 
 router.post('/save', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
+    console.log(req.body);
     req.body.map(task => {
       task.userId = req.user[0]._id
     });

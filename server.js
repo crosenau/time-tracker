@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -10,8 +12,8 @@ const users = require('./routes/api/users');
 const tasks = require('./routes/api/tasks');
 const timers = require('./routes/api/timers');
 
-const keys = require('./config/keys');
-const env = require('./config/env');
+//const keys = require('./config/keys');
+//const env = require('./config/env');
 
 const app = express();
 
@@ -21,7 +23,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 let server;
 
 mongoose.connect(
-  keys.connectionString, 
+  //keys.connectionString, 
+  process.env.CONNECTION_STRING,
   { 
     useNewUrlParser: true, 
     useFindAndModify: false
@@ -36,7 +39,7 @@ mongoose.connect(
     app.use('/api/tasks', tasks);
     app.use('/api/timers', timers);
 
-    if (env === 'production') {
+    if (process.env.ENV === 'production') {
       app.use(express.static(path.join(__dirname, 'client/build')));
 
       app.get('/*', (req, res) => {
@@ -44,7 +47,7 @@ mongoose.connect(
       });
     }
 
-    const port = keys.port || 5000;
+    const port = process.env.PORT || 5000;
 
     server = app.listen(port, () => {
       console.log(`Server listening on port ${port}`);

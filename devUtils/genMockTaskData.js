@@ -6,8 +6,8 @@ const { promisify } = require('util');
 const writeFile = promisify(fs.writeFile);
 
 const length = 1000;
-const startDate = new Date(2018, 5, 1);
-const endDate = new Date(2019, 5, 28);
+const startDate = new Date(2018, 11, 1);
+const endDate = new Date(2019, 11, 28);
 
 const tasks = [];
 
